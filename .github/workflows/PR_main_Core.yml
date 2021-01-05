@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  CORE_PATH: src/core/Lightning.Core/
+  CORE_PATH: src/core/Lightning.Core
 
 jobs:
   build:
