@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  Node_PATH: src/node/Lightning.Node/
+  Node_PATH: src/node/Lightning.Node
 
 jobs:
   build:
