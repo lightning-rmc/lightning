@@ -25,3 +25,4 @@ jobs:
       working-directory: ${{env.CORE_PATH}}
     - name: Build
       run: dotnet build --no-restore
+      working-directory: ${{env.CORE_PATH}}
