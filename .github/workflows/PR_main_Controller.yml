@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  Node_PATH: src/node/Lightning.Node/
+  CONTROLLER_PATH: src/node/Lightning.Node
 
 jobs:
   build:
@@ -19,9 +19,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: {{secrets.DOTNET_PROJECT_VERSION}}
+        dotnet-version: 5.0.101
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ${{env.CORE_PATH}}
+      working-directory: ${{env.CONTROLLER_PATH}}
     - name: Build
       run: dotnet build --no-restore
+      working-directory: ${{env.CONTROLLER_PATH}}
