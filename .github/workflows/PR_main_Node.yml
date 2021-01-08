@@ -1,4 +1,4 @@
-name: Healthcheck Node Library
+name: "Healthcheck: Node"
 
 on:
   push:

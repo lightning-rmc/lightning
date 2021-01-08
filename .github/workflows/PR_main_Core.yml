@@ -1,4 +1,4 @@
-name: Healthcheck Core Library
+name: "Healthcheck: Core Library"
 
 on:
   push:

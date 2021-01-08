@@ -1,4 +1,4 @@
-name: Healthcheck Controller Library
+name: "Healthcheck: Controller"
 
 on:
   push:
