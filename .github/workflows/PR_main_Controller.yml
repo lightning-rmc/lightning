@@ -1,26 +1,26 @@
-# name: "Healthcheck: Controller"
+name: "Healthcheck: Controller"
 
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-# env:
-#   CONTROLLER_PATH: src/node/Lightning.Node
+env:
+  CONTROLLER_PATH: src/node/Lightning.Node
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: Setup .NET
-#       uses: actions/setup-dotnet@v1
-#       with:
-#         dotnet-version: 5.0.101
-#     - name: Restore dependencies
-#       run: dotnet restore
-#       working-directory: ${{env.CONTROLLER_PATH}}
-#     - name: Build
-#       run: dotnet build --no-restore
-#       working-directory: ${{env.CONTROLLER_PATH}}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.101
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ${{env.CONTROLLER_PATH}}
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: ${{env.CONTROLLER_PATH}}
