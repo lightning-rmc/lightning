@@ -2,6 +2,32 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.32.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.32.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.32.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\protos\EditSync.proto" GrpcServices="Both">
+      <Link>protos\EditSync.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\protos\FileSync.proto" GrpcServices="Both">
+      <Link>protos\FileSync.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\protos\LiveSync.proto" GrpcServices="Both">
+      <Link>protos\LiveSync.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\protos\TimeSync.proto" GrpcServices="Both">
+      <Link>protos\TimeSync.proto</Link>
+    </Protobuf>
+  </ItemGroup>
 
 </Project>

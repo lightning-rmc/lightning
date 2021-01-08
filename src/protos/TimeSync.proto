@@ -1,0 +1,9 @@
+syntax = "proto3";
+option csharp_namespace = "Lihtning.Core.Dummy. Generated";
+
+package Lightning;
+
+service GrpcTimeSychronizationBaseService {
+
+}
+
