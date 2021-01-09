@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -16,14 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\protos\EditSync.proto" GrpcServices="Both">
-      <Link>protos\EditSync.proto</Link>
+    <Protobuf Include="..\..\protos\ControlFlow.proto" GrpcServices="Both">
+      <Link>Protos\ControlFlow.proto</Link>
     </Protobuf>
-    <Protobuf Include="..\..\protos\FileSync.proto" GrpcServices="Both">
-      <Link>protos\FileSync.proto</Link>
+    <Protobuf Include="..\..\protos\LayerEdit.proto" GrpcServices="Both">
+      <Link>protos\LayerEdit.proto</Link>
     </Protobuf>
-    <Protobuf Include="..\..\protos\LiveSync.proto" GrpcServices="Both">
-      <Link>protos\LiveSync.proto</Link>
+    <Protobuf Include="..\..\protos\MediaSync.proto" GrpcServices="Both">
+      <Link>protos\MediaSync.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\protos\General.proto" GrpcServices="None">
+      <Link>Protos\General.proto</Link>
     </Protobuf>
     <Protobuf Include="..\..\protos\TimeSync.proto" GrpcServices="Both">
       <Link>protos\TimeSync.proto</Link>

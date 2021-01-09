@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package Lightning;
+
+message GeneralRequest {
+	string nodeName = 1; // Maybe with a "*" get all updates, alternative get the name with a HttpContext?
+}

@@ -1,9 +1,0 @@
-syntax = "proto3";
-option csharp_namespace = "Lightning.Core.Dummy.Generated";
-
-package Lightning;
-
-service GrpcFileSychronizationBaseService {
-
-}
-

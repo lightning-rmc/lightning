@@ -1,0 +1,24 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "General.proto";
+
+option csharp_namespace = "Lightning.Core.LayerEdit.Generated";
+
+package Lightning;
+
+service GrpcEditSychronizationBaseService {
+	rpc GetEditChangeStream(GeneralRequest) returns (stream EditChangeMessage) {}
+}
+
+message EditChangeMessage {
+	enum Type {
+		input = 0;
+		layer = 1;
+		output = 2;
+		general = 3;
+	}
+	Type type = 1;
+	int32 layerNumber = 2;
+	string paramName = 3;
+	string value = 4; //Maybe change to Any? not sure
+}

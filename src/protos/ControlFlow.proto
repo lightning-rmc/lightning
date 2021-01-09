@@ -1,9 +1,27 @@
 syntax = "proto3";
-option csharp_namespace = "Lightning.Core.Dummy.Generated";
+import "google/protobuf/empty.proto";
+import "General.proto";
+
+option csharp_namespace = "Lightning.Core.ControlFlow.Generated";
 
 package Lightning;
 
 service GrpcControlFlowBaseService {
-
+	rpc GetNodeStateStream(GeneralRequest) returns (stream NodeStateMessage) {} // Maybe change name to "Connect"
+	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }
 
+message NodeStateMessage {
+	enum State {
+		Disconnected = 0;
+		Black = 1;
+		Info = 2;
+		Live = 3;
+	}
+	State state = 1;
+}
+
+message LayerActivationMessage {
+	int32 layer = 1;
+	bool active = 2;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "General.proto";
+
+option csharp_namespace = "Lightning.Core.MediaSync.Generated";
+
+package Lightning;
+
+service GrpcMediaSychronizationBaseService {
+
+}
+
