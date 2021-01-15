@@ -41,7 +41,7 @@ Mögliche maßnahmen beim auseinander driften von dem Controller Takt und Node T
 
 - __Harte Sychronisation__: der Takt von der Node gleicht sich sofort mit der des Controllers an, egal wie groß der Framedrop ist.
   Nachteil ist, es kann zu vielen Rucklern kommen die das schauen unangenehm machen können.
-- __Toleranz Sychronsiation__: Um diesen Rucklern vor zu beugen wird bei einer Minalabweichung nichts unternommen. Erst wenn die beiden Zeiten stark auseinander driften wird eine harte Sychronisation vorgenommen:
+- __Toleranz Sychronsiation__: Um diesen Rucklern vor zu beugen wird bei einer Minimalabweichung nichts unternommen. Erst wenn die beiden Zeiten stark auseinander driften wird eine harte Sychronisation vorgenommen.
 - __Weiche Sychronisation__: Dabei wird nicht Hart sychronsiert sollten die beiden Zeiten auseinander Driften, wird durch ein schnelleres/langsameres Abspielen versucht die Zeit anzupassen.
   Dabei werden einzelnen Frames dann übersprungen oder länger dagestellt.
 
