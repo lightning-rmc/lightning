@@ -6,8 +6,3 @@
 - [Controlflow](controlflow.md)
 - [Medien](media.md)
 - [Nodes](node.md)
-
-dev => entwicklen
-fix => bug lösen
-doc => doku/design
-pipe => pipeline
