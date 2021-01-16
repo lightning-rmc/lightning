@@ -2,9 +2,9 @@ name: "Healthcheck: Core Library"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main,develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main,develop ]
 
 env:
   CORE_PATH: src/core/Lightning.Core
