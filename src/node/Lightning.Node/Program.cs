@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using Lightning.Core.Rendering;
+using Microsoft.Extensions.DependencyInjection;
+using Lightning.Node;
 
-namespace Lightning.Node
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
-    }
-}
+var host = Host.CreateDefaultBuilder()
+               .ConfigureServices((c, s) =>
+               {
+                   s.AddRendering();
+                   s.AddHostedService<BootStrapper>();
+               })
+               .UseConsoleLifetime();
+await host.RunConsoleAsync();
+
+
