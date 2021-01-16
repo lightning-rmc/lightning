@@ -2,9 +2,9 @@ name: "Healthcheck: Node"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main,develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main,develop ]
 
 env:
   NODE_PATH: src/node/Lightning.Node
