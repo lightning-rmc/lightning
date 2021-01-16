@@ -2,9 +2,9 @@ name: "Healthcheck: Controller"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main,develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main,develop ]
 
 env:
   CONTROLLER_PATH: src/node/Lightning.Node
