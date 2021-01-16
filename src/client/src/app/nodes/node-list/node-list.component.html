@@ -1,0 +1,10 @@
+<div class="node" *ngFor="let node of nodes" [routerLink]="node.id" routerLinkActive="node-selected">
+	<span
+		class="node-state"
+		[class.node-state__online]="node.state === 'online'"
+		[class.node-state__offline]="node.state === 'offline'"
+		[class.node-state__error]="node.state === 'error'"
+		[class.node-state__syncing]="node.state === 'syncing'"
+	></span>
+	<span class="node-name">{{ node.name }}</span>
+</div>
