@@ -7,7 +7,7 @@ var host = Host.CreateDefaultBuilder()
                .ConfigureServices((c, s) =>
                {
                    s.AddRendering();
-                   s.AddHostedService<BootStrapper>();
+                   s.AddHostedService<NodeBootStrapper>();
                })
                .UseConsoleLifetime();
 await host.RunConsoleAsync();

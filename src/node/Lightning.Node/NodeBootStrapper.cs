@@ -1,4 +1,4 @@
-﻿using Lightning.Core.Rendering;
+using Lightning.Core.Rendering;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node
 {
-    public class BootStrapper : IHostedService
+    public class NodeBootStrapper : IHostedService
     {
         private readonly IRenderHost _renderHost;
-        private readonly ILogger<BootStrapper>? _logger;
+        private readonly ILogger<NodeBootStrapper>? _logger;
 
-        public BootStrapper(IRenderHost renderHost, ILogger<BootStrapper>? logger = null)
+        public NodeBootStrapper(IRenderHost renderHost, ILogger<NodeBootStrapper>? logger = null)
         {
             _renderHost = renderHost;
             _logger = logger;

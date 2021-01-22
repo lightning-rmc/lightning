@@ -7,21 +7,24 @@ option csharp_namespace = "Lightning.Core.ControlFlow.Generated";
 package Lightning;
 
 service GrpcControlFlowBaseService {
-	rpc GetNodeStateStream(GeneralRequest) returns (stream NodeStateMessage) {} // Maybe change name to "Connect"
+	rpc GetNodeStateStream(GeneralRequest) returns (stream NodeStateMessage) {} 
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }
 
+
+
 message NodeStateMessage {
 	enum State {
-		Disconnected = 0;
-		Black = 1;
-		Info = 2;
+		Offline = 0;
+		Info = 1;
+		Edit = 2;
 		Live = 3;
+		Error = 4;
 	}
 	State state = 1;
 }
 
 message LayerActivationMessage {
-	int32 layer = 1;
+	string layerId = 1;
 	bool active = 2;
 }
