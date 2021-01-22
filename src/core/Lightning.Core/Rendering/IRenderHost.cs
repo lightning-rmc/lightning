@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace Lightning.Core.Rendering
 {
-    public interface IRenderHost : IDisposable
+    public interface IRenderHost
     {
         bool IsRunning { get; }
 
