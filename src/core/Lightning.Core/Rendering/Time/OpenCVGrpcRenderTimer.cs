@@ -1,52 +1,63 @@
 using Lightning.Core.Configuration;
+using Microsoft.Extensions.Logging;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Time
 {
-	public class GrpcRenderTimer : IRenderTimer
+	public class OpenCVGrpcRenderTimer : IRenderTimer
 	{
 		private readonly RenderConfiguration _configuration;
+		private readonly ILogger<OpenCVGrpcRenderTimer>? _logger;
 		private Thread _innerClock;
 		private float _timerInterpolation;
 		private int _timerTick;
 
-		public GrpcRenderTimer(IConfigurationHandler<RenderConfiguration> configurationHandler)
+		public OpenCVGrpcRenderTimer(IConfigurationHandler<RenderConfiguration> configurationHandler, ILogger<OpenCVGrpcRenderTimer>? logger = null)
 		{
 			_configuration = configurationHandler.GetConfiguration();
 			_timerInterpolation = 1;
 			_timerTick = 0;
+			_logger = logger;
 		}
 
 
 		public bool IsRunning { get; private set; }
 
 
-		public async IAsyncEnumerable<int> GetTimerStream()
+		public IEnumerable<int> GetTimerStream()
 		{
 			// Note: Waiting until the Timer is started
 			//		 To get sure the stream does not close directly
 			while (!IsRunning)
 			{
-				await Task.Delay(10);
+				Cv2.WaitKey(10);
 			}
 
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 			while (IsRunning)
 			{
+				_timerTick++;
 				yield return _timerTick;
+
+				//Calculate next duration
 				var duration = stopwatch.ElapsedMilliseconds;
-                stopwatch.Reset();
+				stopwatch.Reset();
 				var sleepDuration = (1000 / _configuration.FramesPerSecond) - (int)duration;
-				sleepDuration = Math.Max(sleepDuration,0);
-				//TODO: Logging
-				await Task.Delay(sleepDuration);
+				//Note: 1 for Cv2.WaitKey(), 0 would block the thread until a key-press.
+				sleepDuration = Math.Max(sleepDuration, 1);
+
+
+				if (_logger?.IsEnabled(LogLevel.Debug) ?? false)
+				{
+					_logger?.LogDebug($"Timer tick: '{_timerTick}' at time {DateTime.UtcNow}");
+				}
+
+				Cv2.WaitKey(sleepDuration);
 			}
 		}
 
