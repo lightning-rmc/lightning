@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lightning.Node
+namespace Lightning.Node.Host
 {
     public class NodeBootStrapper : IHostedService
     {

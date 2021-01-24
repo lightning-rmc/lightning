@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30709.64
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Controller", "controller\Lightning.Controller\Lightning.Controller.csproj", "{5713F4A8-6706-4916-B9C2-0C9B2D6D5ED9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Core", "core\Lightning.Core\Lightning.Core.csproj", "{42259DF3-97AE-4EC1-9160-8E38EC44FDBC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node", "node\Lightning.Node\Lightning.Node.csproj", "{1D087ED0-CDCD-492E-AF8B-5F3D58565F91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Controller", "controller\Lightning.Controller\Lightning.Controller.csproj", "{CE5D08A4-683B-4C1A-A6F6-82BEDE672BF8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Controller.Host", "controller\Lightning.Controller.Host\Lightning.Controller.Host.csproj", "{5A8696EC-7BD6-48D6-9248-D46663B877A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node", "node\Lightning.Node\Lightning.Node.csproj", "{C2E2AA5C-965D-4E9C-91C2-AE5F4172ABFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node.Host", "node\Lightning.Node.Host\Lightning.Node.Host.csproj", "{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +19,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5713F4A8-6706-4916-B9C2-0C9B2D6D5ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5713F4A8-6706-4916-B9C2-0C9B2D6D5ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5713F4A8-6706-4916-B9C2-0C9B2D6D5ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5713F4A8-6706-4916-B9C2-0C9B2D6D5ED9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42259DF3-97AE-4EC1-9160-8E38EC44FDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42259DF3-97AE-4EC1-9160-8E38EC44FDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42259DF3-97AE-4EC1-9160-8E38EC44FDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42259DF3-97AE-4EC1-9160-8E38EC44FDBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D087ED0-CDCD-492E-AF8B-5F3D58565F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D087ED0-CDCD-492E-AF8B-5F3D58565F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D087ED0-CDCD-492E-AF8B-5F3D58565F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D087ED0-CDCD-492E-AF8B-5F3D58565F91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE5D08A4-683B-4C1A-A6F6-82BEDE672BF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5D08A4-683B-4C1A-A6F6-82BEDE672BF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE5D08A4-683B-4C1A-A6F6-82BEDE672BF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE5D08A4-683B-4C1A-A6F6-82BEDE672BF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A8696EC-7BD6-48D6-9248-D46663B877A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A8696EC-7BD6-48D6-9248-D46663B877A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A8696EC-7BD6-48D6-9248-D46663B877A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A8696EC-7BD6-48D6-9248-D46663B877A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2E2AA5C-965D-4E9C-91C2-AE5F4172ABFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2E2AA5C-965D-4E9C-91C2-AE5F4172ABFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E2AA5C-965D-4E9C-91C2-AE5F4172ABFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E2AA5C-965D-4E9C-91C2-AE5F4172ABFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

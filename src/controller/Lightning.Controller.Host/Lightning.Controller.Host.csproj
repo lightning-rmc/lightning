@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\core\Lightning.Core\Lightning.Core.csproj" />
+    <ProjectReference Include="..\Lightning.Controller\Lightning.Controller.csproj" />
   </ItemGroup>
 
 </Project>
