@@ -1,2 +1,4 @@
-<app-node-list class="node-list" [nodes]="nodes" (selectNode)="selectedNode = $event"></app-node-list>
-<router-outlet></router-outlet>
+<app-node-list class="node-list" [nodes]="nodes"></app-node-list>
+<div class="node-details">
+	<router-outlet></router-outlet>
+</div>

@@ -8,8 +8,4 @@
     <ProjectReference Include="..\Lightning.Controller\Lightning.Controller.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Hubs\" />
-  </ItemGroup>
-
 </Project>

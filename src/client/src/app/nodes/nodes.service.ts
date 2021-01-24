@@ -1,10 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Node } from './models/Node';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { environment as env } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class NodesService {
+
+	private connection: HubConnection;
+
+	constructor() {
+		this.connection = new HubConnectionBuilder()
+			.withAutomaticReconnect()
+			.withUrl(`${env.server.base}/hubs/nodes`)
+			.build();
+
+		this.connect();
+	}
 
 	nodes: Node[] = [
 		{
@@ -34,6 +47,10 @@ export class NodesService {
 		},
 	];
 
+
+	private async connect() {
+		await this.connection.start();
+	}
 
 	async getNodes(): Promise<Node[]> {
 		return this.nodes;

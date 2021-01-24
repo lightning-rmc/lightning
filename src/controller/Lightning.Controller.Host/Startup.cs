@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lightning.Controller.Host.Hubs;
+using Lightning.Controller.Lifetime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,9 @@ namespace Lightning.Controller.Host
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddSignalR();
+			services.AddCors();
+			services.AddSingleton<INodeLifetimeService, NodeLifetimeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -27,7 +32,13 @@ namespace Lightning.Controller.Host
             }
 
             app.UseRouting();
-
+			app.UseCors(builder =>
+			{
+				builder.WithOrigins("http://localhost:4200")
+					.AllowAnyHeader()
+					.AllowAnyMethod()
+					.AllowCredentials();
+			});
 
 
             app.UseEndpoints(endpoints =>
@@ -36,6 +47,7 @@ namespace Lightning.Controller.Host
                 {
                     await context.Response.WriteAsync("Hello World!");
                 });
+				endpoints.MapHub<NodesHub>("/hubs/nodes");
             });
         }
     }

@@ -1,28 +1,28 @@
 $icon-size: 1.4rem;
 
-$node-color: #3D4146;
+$node-color: #3d4146;
 
 :host {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
+	background: #23272a;
+	padding: 2rem;
 }
-
 
 .node {
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
-	padding: 0.75rem;
+	padding: 0.75rem 1rem;
 	background-color: $node-color;
-	border-radius: $icon-size;
+	border-radius: 0.5rem;
 	cursor: pointer;
 	outline: none;
 
 	&.node-selected {
-		background-color: lighten($node-color, 10%);
-		box-shadow: inset 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+		background-color: lighten($node-color, 8%);
 	}
 
 	.node-state {
@@ -31,7 +31,6 @@ $node-color: #3D4146;
 		background-color: #fff;
 		border-radius: 50%;
 		flex-shrink: 0;
-
 
 		$s: 65%;
 		$l: 55%;
