@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
 {
-	public static class LifeTimeServiceExtensions
+	public static class LifetimeServiceExtensions
 	{
 		public static Task ConnectNodeAsync(this INodeLifetimeService lifetimeService, string nodeId)
 			=> lifetimeService.UpdateNodeStateAsync(NodeState.Info, nodeId);

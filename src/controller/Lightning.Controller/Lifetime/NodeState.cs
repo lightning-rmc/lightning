@@ -1,23 +1,27 @@
+using Lightning.Core.Lifetime.Generated;
+
 namespace Lightning.Controller.Lifetime
 {
 	public enum NodeState : byte
 	{
-		/// <summary>
-		/// Node is disconnected from controller.
-		/// </summary>
-		Offline = 1,
+		
 		/// <summary>
 		/// Node shows debug information on output screen.
 		/// </summary>
-		Info = 2,
+		Info = 0,
 		/// <summary>
 		/// Rendertree can be modified, output screen is blank.
 		/// </summary>
-		Edit = 3,
+		Edit = 1,
 		/// <summary>
 		/// Node is on air and shows content. Rendertree is fixed.
 		/// </summary>
-		Live = 4,
+		Live = 2,
+		/// <summary>
+		/// Node is disconnected from controller.
+		/// </summary>
+		Offline = 3,
+
 
 		/// <summary>
 		/// Not in use Today.

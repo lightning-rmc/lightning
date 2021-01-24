@@ -2,11 +2,11 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "General.proto";
 
-option csharp_namespace = "Lightning.Core.ControlFlow.Generated";
+option csharp_namespace = "Lightning.Core.Lifetime.Generated";
 
 package Lightning;
 
-service GrpcControlFlowBaseService {
+service GrpcLifeTimeBaseService {
 	rpc Connect(GeneralRequest) returns (stream NodeStateMessage) {} 
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }
@@ -15,11 +15,10 @@ service GrpcControlFlowBaseService {
 
 message NodeStateMessage {
 	enum State {
-		Offline = 0;
-		Info = 1;
-		Edit = 2;
-		Live = 3;
-		Error = 4;
+		Info = 0;
+		Edit = 1;
+		Live = 2;
+		Error = 255;
 	}
 	State state = 1;
 }
