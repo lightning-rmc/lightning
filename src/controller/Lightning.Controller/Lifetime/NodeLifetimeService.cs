@@ -16,9 +16,15 @@ namespace Lightning.Controller.Lifetime
 			_logger = logger;
 		}
 
-		public IAsyncEnumerable<NodeState> GetNodeStateStream(string nodeId)
+		public bool AuthenticateNode(string nodeId)
 		{
 			throw new System.NotImplementedException();
+		}
+
+		public IAsyncEnumerable<NodeState> GetNodeStatesAllAsync(string nodeId)
+		{
+			//throw new System.NotImplementedException();
+			return null!;
 		}
 
 		public Task UpdateNodeStateAsync(NodeState state, string? nodeId = null)

@@ -8,8 +8,14 @@ namespace Lightning.Controller.Lifetime
 {
 	public interface INodeLifetimeService
 	{
-		IAsyncEnumerable<NodeState> GetNodeStateStream(string nodeId);
+
+		//TODO: Change return type to ResponseObject?
+		//TODO: Change argument to more useful data, e.g. max display size or fps
+		bool AuthenticateNode(string nodeId); 
+
+		IAsyncEnumerable<NodeState> GetNodeStatesAllAsync(string nodeId);
 
 		Task UpdateNodeStateAsync(NodeState state, string? nodeId = null);
+
 	}
 }

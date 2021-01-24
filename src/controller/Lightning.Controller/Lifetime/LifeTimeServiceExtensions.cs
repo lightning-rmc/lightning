@@ -10,13 +10,13 @@ namespace Lightning.Controller.Lifetime
 		public static Task DisconnectNodeAsync(this INodeLifetimeService lifetimeService, string nodeId)
 			=> lifetimeService.UpdateNodeStateAsync(NodeState.Offline, nodeId);
 
-		public static Task GoLiveAsync(this INodeLifetimeService lifetimeService, string nodeId)
-			=> lifetimeService.UpdateNodeStateAsync(NodeState.Live, nodeId);
+		public static Task GoLiveAsync(this INodeLifetimeService lifetimeService)
+			=> lifetimeService.UpdateNodeStateAsync(NodeState.Live, null);
 
-		public static Task StartEditAsync(this INodeLifetimeService lifetimeService, string nodeId)
-			=> lifetimeService.UpdateNodeStateAsync(NodeState.Edit, nodeId);
+		public static Task StartEditAsync(this INodeLifetimeService lifetimeService)
+			=> lifetimeService.UpdateNodeStateAsync(NodeState.Edit, null);
 
-		public static Task ShowNodeInfoAsync(this INodeLifetimeService lifetimeService, string nodeId)
+		public static Task ShowNodeInfoAsync(this INodeLifetimeService lifetimeService, string? nodeId = null)
 			=> lifetimeService.UpdateNodeStateAsync(NodeState.Info, nodeId);
 	}
 }

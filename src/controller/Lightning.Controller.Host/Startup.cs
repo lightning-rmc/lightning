@@ -28,6 +28,8 @@ namespace Lightning.Controller.Host
 
             app.UseRouting();
 
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>

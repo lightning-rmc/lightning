@@ -7,7 +7,7 @@ option csharp_namespace = "Lightning.Core.ControlFlow.Generated";
 package Lightning;
 
 service GrpcControlFlowBaseService {
-	rpc GetNodeStateStream(GeneralRequest) returns (stream NodeStateMessage) {} 
+	rpc Connect(GeneralRequest) returns (stream NodeStateMessage) {} 
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }
 
