@@ -8,9 +8,10 @@
 .node-list {
 	width: 15rem;
 	flex-shrink: 0;
+	overflow-y: auto;
 }
 
 .node-details {
 	flex-grow: 1;
-	padding: 2rem;
+	height: 100%;
 }

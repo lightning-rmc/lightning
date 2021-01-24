@@ -21,6 +21,8 @@ namespace Lightning.Controller.Host
 			services.AddSignalR();
 			services.AddCors();
 			services.AddControllerServices();
+			services.AddControllers();
+			services.AddGrpc();
 		}
 
 

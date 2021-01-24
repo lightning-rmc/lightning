@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Node } from '../models/Node';
+import { NodeState } from '../models/NodeState';
 
 @Component({
 	selector: 'app-node-list',
@@ -12,6 +13,7 @@ export class NodeListComponent implements OnInit {
 	@Input() nodes?: Node[];
 
 	ngOnInit(): void {}
+	NodeState = NodeState;
 
 	@Output() selectNode = new EventEmitter<Node>();
 }

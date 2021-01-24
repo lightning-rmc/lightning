@@ -1,5 +1,10 @@
+import { NodeState } from "./NodeState";
+
 export type Node = {
 	id: string;
 	name: string;
-	state: 'online' | 'offline' | 'error' | 'syncing';
+	state: NodeState
 }
+
+
+
