@@ -34,6 +34,7 @@ namespace Lightning.Core.Rendering
                 };
                 IsRunning = true;
                 _renderThread.Start();
+				_timer.StartTimer();
                 _logger?.LogDebug("RenderHost is started.");
             }
             else
@@ -46,8 +47,8 @@ namespace Lightning.Core.Rendering
         {
             using Window window = new("screen");
             using var capture = new VideoCapture("Alone_low.mp4");
-			var timerStream = _timer.GetTimerStream().GetAsyncEnumerator();
-            while (timerStream.MoveNextAsync().Result && IsRunning)
+			var timerStream = _timer.GetTimerStream().GetEnumerator();
+            while (timerStream.MoveNext() && IsRunning)
             {
 				var ticks = timerStream.Current;
 

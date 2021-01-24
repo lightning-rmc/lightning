@@ -8,4 +8,10 @@
     <ProjectReference Include="..\Lightning.Node\Lightning.Node.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Alone_low.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
