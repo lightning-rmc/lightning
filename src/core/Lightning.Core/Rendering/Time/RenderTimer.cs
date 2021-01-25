@@ -1,6 +1,5 @@
 using Lightning.Core.Configuration;
 using Microsoft.Extensions.Logging;
-using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,7 +33,7 @@ namespace Lightning.Core.Rendering.Time
 			//		 To get sure the stream does not close directly
 			while (!IsRunning)
 			{
-				Cv2.WaitKey(10);
+				await Task.Delay(10);
 			}
 
 			var stopwatch = new Stopwatch();
