@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	public abstract class OpenCVLayerBase : ILayer<Mat>
+	public abstract class LayerBase<TFrame> : ILayer<TFrame>
 	{
 
-		protected OpenCVLayerBase(string name)
+		protected LayerBase(string name)
 		{
 			Name = name;
 		}
@@ -19,7 +19,7 @@ namespace Lightning.Core.Rendering.Layers
 
 		public virtual bool IsActive { get; protected set; }
 
-		public void Process(Mat frame, int tick)
+		public void Process(TFrame frame, int tick)
 		{
 			if (CanProcess(frame, tick))
 			{
@@ -28,8 +28,8 @@ namespace Lightning.Core.Rendering.Layers
 			ProcessChilds(frame, tick);
 		}
 
-		protected abstract Mat InternalProcess(Mat frame, int tick);
-		protected abstract void ProcessChilds(Mat frame,int tick);
-		protected virtual bool CanProcess(Mat frame, int tick) => IsActive;
+		protected abstract TFrame InternalProcess(TFrame frame, int tick);
+		protected abstract void ProcessChilds(TFrame frame,int tick);
+		protected virtual bool CanProcess(TFrame frame, int tick) => IsActive;
 	}
 }

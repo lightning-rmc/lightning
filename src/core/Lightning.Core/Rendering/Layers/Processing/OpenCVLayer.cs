@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	internal class BasicLayer : OpenCVLayerBase
+	internal class OpenCVLayer : LayerBase<Mat>
 	{
 		private readonly ILayer<Mat> _child;
 
-		public BasicLayer(string name, ILayer<Mat> child)
+		public OpenCVLayer(string name, ILayer<Mat> child)
 			: base(name)
 		{
 			_child = child;

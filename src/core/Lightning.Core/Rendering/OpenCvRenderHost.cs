@@ -47,7 +47,7 @@ namespace Lightning.Core.Rendering
 			}
 		}
 
-		public void Process(object? o)
+		private void Process(object? o)
 		{
 			var layer = o as ILayer<Mat> ?? throw new ArgumentException(null, nameof(o));
 			InnerProcess(layer).Wait();

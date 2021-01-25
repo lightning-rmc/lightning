@@ -11,16 +11,16 @@ namespace Lightning.Core.Rendering
 {
 	public class OpenCVRenderTreeBuilder : IRenderTreeBuilder<Mat>
 	{
-		private readonly IWindowHost<Mat> windowHost;
+		private readonly IWindowHost<Mat> _windowHost;
 
 		public OpenCVRenderTreeBuilder(IWindowHost<Mat> windowHost)
 		{
-			this.windowHost = windowHost;
+			_windowHost = windowHost;
 		}
 
 		public ILayer<Mat> BuildTree()
 		{
-			return new DummyLayer(windowHost);
+			return new DummyLayer(_windowHost);
 		}
 	}
 }
