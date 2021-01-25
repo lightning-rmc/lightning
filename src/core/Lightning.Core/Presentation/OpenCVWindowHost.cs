@@ -33,9 +33,13 @@ namespace Lightning.Core.Presentation
 				_isWindowShowing = true;
 				_frameChannel = Channel.CreateUnbounded<Mat>(new UnboundedChannelOptions
 				{
-					SingleReader = true
+					SingleReader = true,
+					//Note: Not sure if it is a single Writer? Maybe not
+					//SingleWriter = true 
 				});
-				//Note: Opencv needs a custome Ui thread, we pipe the mat frame with the channel into the ui thread
+
+				//Note: Opencv needs a own Ui thread, we pipe the mat frame with the channel into the ui thread.
+				//		For decoupling it from the renderhost
 				new Thread(() =>
 				{
 					_window = new Window("lighting_window", WindowMode.Normal);

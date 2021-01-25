@@ -35,7 +35,7 @@ namespace Lightning.Core
 			if (services is null)
 				throw new ArgumentNullException(nameof(services));
 
-			services.TryAddSingleton<IRenderTimer, OpenCVGrpcRenderTimer>();
+			services.TryAddSingleton<IRenderTimer, RenderTimer>();
 			return services;
 		}
 

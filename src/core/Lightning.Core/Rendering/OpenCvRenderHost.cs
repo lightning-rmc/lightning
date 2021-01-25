@@ -6,6 +6,7 @@ using OpenCvSharp;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
@@ -32,7 +33,8 @@ namespace Lightning.Core.Rendering
 				IsRunning = true;
 				var layer = _treeBuilder.BuildTree();
 
-				new Thread(Process)
+				new Thread(
+					o => Process(o as ILayer<Mat> ?? throw new ArgumentException(null, nameof(o))).Wait())
 				{
 					Priority = ThreadPriority.AboveNormal,
 					IsBackground = true
@@ -46,19 +48,10 @@ namespace Lightning.Core.Rendering
 			}
 		}
 
-		private void Process(object? layer)
+		private async Task Process(ILayer<Mat> root)
 		{
-			var root = layer as ILayer<Mat> ?? throw new ArgumentException(nameof(layer));
-			//using Window window = new("screen");
-			//using var capture = new VideoCapture("Alone_low.mp4");
-			//capture.Read(image);
-			//if (image.Empty())
-			//	break;
-			//window.ShowImage(image);
-			var timerStream = _timer.GetTimerStream().GetEnumerator();
-			while (timerStream.MoveNext() && IsRunning)
+			await foreach (var ticks in _timer.GetTimerTicksAllAsync())
 			{
-				var ticks = timerStream.Current;
 				using var image = new Mat();
 				root.Process(image, ticks);
 			}

@@ -12,6 +12,7 @@ namespace Lightning.Core.Rendering.Time
 		void StartTimer();
 		void StopTimer();
 
-		IEnumerable<int> GetTimerStream();
+
+		IAsyncEnumerable<int> GetTimerTicksAllAsync();
 	}
 }
