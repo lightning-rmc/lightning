@@ -27,14 +27,13 @@ namespace Lightning.Core.Rendering
 
 		public void Start()
 		{
-			//TODO: Maybe Lock for secure one run only?
+			//TODO: Maybe Lock for secure, that it starts only one time?
 			if (!IsRunning)
 			{
 				IsRunning = true;
 				var layer = _treeBuilder.BuildTree();
 
-				new Thread(
-					o => Process(o as ILayer<Mat> ?? throw new ArgumentException(null, nameof(o))).Wait())
+				new Thread(Process)
 				{
 					Priority = ThreadPriority.AboveNormal,
 					IsBackground = true
@@ -48,14 +47,22 @@ namespace Lightning.Core.Rendering
 			}
 		}
 
-		private async Task Process(ILayer<Mat> root)
+		public void Process(object? o)
 		{
-			await foreach (var ticks in _timer.GetTimerTicksAllAsync())
+			var layer = o as ILayer<Mat> ?? throw new ArgumentException(null, nameof(o));
+			InnerProcess(layer).Wait();
+
+			async Task InnerProcess(ILayer<Mat> root)
 			{
-				using var image = new Mat();
-				root.Process(image, ticks);
+				await foreach (var ticks in _timer.GetTimerTicksAllAsync())
+				{
+					using var image = new Mat();
+					root.Process(image, ticks);
+				}
 			}
 		}
+
+		
 
 		public void Stop()
 		{
