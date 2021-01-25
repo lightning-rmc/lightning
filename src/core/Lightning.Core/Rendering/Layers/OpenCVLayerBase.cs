@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	public abstract class LayerBase : ILayer
+	public abstract class OpenCVLayerBase : ILayer<Mat>
 	{
 
-		protected LayerBase(string name)
+		protected OpenCVLayerBase(string name)
 		{
 			Name = name;
 		}

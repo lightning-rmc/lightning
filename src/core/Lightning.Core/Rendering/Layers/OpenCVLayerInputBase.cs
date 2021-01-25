@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	public class LayerInputBase : ILayerInput
+	public abstract class OpenCVLayerInputBase : ILayerInput<Mat>
 	{
-
-		public LayerInputBase(string name)
+		protected OpenCVLayerInputBase(string name)
 		{
 			Name = name;
 		}
 
 		public string Name { get; }
 
-		public Mat Process(int tick)
+		public virtual Mat Process(int tick)
 		{
-			return Mat.Zeros(0,0,MatType.CV_16SC3);
+			return Mat.Zeros(0, 0, MatType.CV_16SC3);
 		}
 	}
 }

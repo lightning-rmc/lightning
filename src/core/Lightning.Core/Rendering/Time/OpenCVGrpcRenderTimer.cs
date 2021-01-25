@@ -12,7 +12,6 @@ namespace Lightning.Core.Rendering.Time
 	{
 		private readonly RenderConfiguration _configuration;
 		private readonly ILogger<OpenCVGrpcRenderTimer>? _logger;
-		private Thread _innerClock;
 		private float _timerInterpolation;
 		private int _timerTick;
 
@@ -41,7 +40,6 @@ namespace Lightning.Core.Rendering.Time
 			stopwatch.Start();
 			while (IsRunning)
 			{
-				_timerTick++;
 				yield return _timerTick;
 
 				//Calculate next duration
@@ -51,10 +49,9 @@ namespace Lightning.Core.Rendering.Time
 				//Note: 1 for Cv2.WaitKey(), 0 would block the thread until a key-press.
 				sleepDuration = Math.Max(sleepDuration, 1);
 
-
 				if (_logger?.IsEnabled(LogLevel.Debug) ?? false)
 				{
-					_logger?.LogDebug($"Timer tick: '{_timerTick}' at time {DateTime.UtcNow}");
+					_logger?.LogDebug("Timer run waits duration: '{duration}ms' and inner Timer tick: '{_timerTick}' at time {DateTime.UtcNow}", sleepDuration, _timerTick, DateTime.UtcNow);
 				}
 
 				Cv2.WaitKey(sleepDuration);
@@ -68,7 +65,7 @@ namespace Lightning.Core.Rendering.Time
 				//TODO: Logging
 				_timerTick = 0;
 				IsRunning = true;
-				_innerClock = new Thread(() =>
+				new Thread(() =>
 				{
 					while (IsRunning)
 					{
@@ -77,7 +74,7 @@ namespace Lightning.Core.Rendering.Time
 						_timerTick++;
 						Thread.Sleep((int)(1000 / (_configuration.FramesPerSecond * _timerInterpolation)));
 					}
-				});
+				}).Start();
 			}
 			else
 			{

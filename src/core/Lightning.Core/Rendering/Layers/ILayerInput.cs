@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Rendering.Layers
+namespace Lightning.Core.Rendering
 {
-	public interface ILayerInput
+	public interface ILayerInput<out TFrame>
 	{
 		string Name { get; }
 
-		Mat Process(int tick);
+		TFrame Process(int tick);
 	}
 }

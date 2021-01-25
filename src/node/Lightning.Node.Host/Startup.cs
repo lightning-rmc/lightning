@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Lightning.Core.Rendering;
+using Lightning.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +16,7 @@ namespace Lightning.Node.Host
         public void ConfigureServices(IServiceCollection services)
         {
 			services.AddRendering();
+			services.AddOpenCVWindowHost();
 			services.AddHostedService<NodeBootStrapper>();
         }
 

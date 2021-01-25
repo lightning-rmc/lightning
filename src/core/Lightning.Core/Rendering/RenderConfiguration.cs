@@ -9,7 +9,7 @@ namespace Lightning.Core.Rendering
     public class RenderConfiguration
     {
 
-        public int FramesPerSecond { get; set; }
+		public int FramesPerSecond { get; set; }
         public int RenderWidth { get; set; }
         public int RenderHeight { get; set; }
 

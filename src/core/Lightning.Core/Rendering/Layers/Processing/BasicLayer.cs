@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	public class BasicLayer : LayerBase
+	internal class BasicLayer : OpenCVLayerBase
 	{
-		private readonly ILayer _child;
+		private readonly ILayer<Mat> _child;
 
-		public BasicLayer(string name,ILayer child)
+		public BasicLayer(string name, ILayer<Mat> child)
 			: base(name)
 		{
 			_child = child;
 		}
 
-		protected override Mat InternalProcess(Mat frame,int tick)
+		protected override Mat InternalProcess(Mat frame, int tick)
 		{
 			return frame;
 		}

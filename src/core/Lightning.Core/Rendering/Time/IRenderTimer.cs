@@ -11,6 +11,7 @@ namespace Lightning.Core.Rendering.Time
 		bool IsRunning { get; }
 		void StartTimer();
 		void StopTimer();
+
 		IEnumerable<int> GetTimerStream();
 	}
 }
