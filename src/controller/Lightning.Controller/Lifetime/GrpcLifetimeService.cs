@@ -1,5 +1,5 @@
 using Grpc.Core;
-using Lightning.Core.Lifetime.Generated;
+using Lightning.Core.Generated;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
 {
-	public class GrpcLifetimeService : GrpcLifeTimeBaseService.GrpcLifeTimeBaseServiceBase
+	public class GrpcLifetimeService : GrpcLifeTimeService.GrpcLifeTimeServiceBase
 	{
 		private readonly INodeLifetimeService _lifetimeService;
 		private readonly ILogger<GrpcLifetimeService>? _logger;

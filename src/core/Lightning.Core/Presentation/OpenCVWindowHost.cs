@@ -40,12 +40,12 @@ namespace Lightning.Core.Presentation
 					//SingleWriter = true 
 				});
 
-				//Note: Opencv needs a own Ui thread, we pipe the mat frame with the channel into the ui thread.
-				//		For decoupling it from the renderhost
+				//Note: Opencv needs a own Ui thread, we pipe the mat frame with a channel into the ui thread.
+				//		For decoupling it from the renderhost and make it independent
 				new Thread(() =>
 				{
 					_window = new Window("lighting_window", WindowMode.Normal);
-					if (_featureFlags.Fullscreen)
+					if (!_featureFlags.DisableFullscreen)
 					{
 						_window.SetProperty(WindowProperty.Fullscreen, 1);
 					}

@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
-	public class OpenCvRenderHost : IRenderHost
+	public class RenderHost<TFrame> : IRenderHost
+		where TFrame : new()
 	{
 		private readonly IRenderTimer _timer;
-		private readonly IRenderTreeBuilder<Mat> _treeBuilder;
-		private readonly ILogger<OpenCvRenderHost>? _logger;
+		private readonly IRenderTreeBuilder<TFrame> _treeBuilder;
+		private readonly ILogger<RenderHost<TFrame>>? _logger;
 
-		public OpenCvRenderHost(IRenderTimer timer, IRenderTreeBuilder<Mat> treeBuilder, ILogger<OpenCvRenderHost>? logger = null)
+		public RenderHost(IRenderTimer timer, IRenderTreeBuilder<TFrame> treeBuilder, ILogger<RenderHost<TFrame>>? logger = null)
 		{
 			_timer = timer;
 			_treeBuilder = treeBuilder;
@@ -49,20 +50,20 @@ namespace Lightning.Core.Rendering
 
 		private void Process(object? o)
 		{
-			var layer = o as ILayer<Mat> ?? throw new ArgumentException(null, nameof(o));
+			var layer = o as ILayer<TFrame> ?? throw new ArgumentException(null, nameof(o));
 			InnerProcess(layer).Wait();
 
-			async Task InnerProcess(ILayer<Mat> root)
+			async Task InnerProcess(ILayer<TFrame> root)
 			{
 				await foreach (var ticks in _timer.GetTimerTicksAllAsync())
 				{
-					using var image = new Mat();
+					var image = new TFrame();
 					root.Process(image, ticks);
 				}
 			}
 		}
 
-		
+
 
 		public void Stop()
 		{

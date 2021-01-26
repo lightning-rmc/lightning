@@ -8,6 +8,7 @@ namespace Lightning.Core
 {
 	public class FeatureFlags
 	{
-		public bool Fullscreen { get; set; }
+		public bool DisableFullscreen { get; set; }
+		public bool NodeWithoutServer { get; set; }
 	}
 }
