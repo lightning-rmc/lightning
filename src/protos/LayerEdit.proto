@@ -2,11 +2,11 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "General.proto";
 
-option csharp_namespace = "Lightning.Core.LayerEdit.Generated";
+option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
-service GrpcEditSychronizationBaseService {
+service GrpcLayerEditService {
 	rpc GetEditChangeStream(GeneralRequest) returns (stream EditChangeMessage) {}
 }
 

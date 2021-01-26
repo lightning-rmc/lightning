@@ -2,11 +2,11 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "General.proto";
 
-option csharp_namespace = "Lightning.Core.Lifetime.Generated";
+option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
-service GrpcLifeTimeBaseService {
+service GrpcLifeTimeService {
 	rpc Connect(GeneralRequest) returns (stream NodeStateMessage) {} 
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }

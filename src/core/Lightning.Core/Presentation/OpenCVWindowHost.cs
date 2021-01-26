@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,16 @@ namespace Lightning.Core.Presentation
 	public class OpenCVWindowHost : IWindowHost<Mat>, IDisposable
 	{
 		private readonly ILogger<OpenCVWindowHost>? _logger;
+		private readonly FeatureFlags _featureFlags;
 		private Channel<Mat> _frameChannel;
 		private bool _isWindowShowing;
 		private Window _window;
 
-		public OpenCVWindowHost(ILogger<OpenCVWindowHost>? logger = null)
+		public OpenCVWindowHost(IOptions<FeatureFlags> featureFlagsOptions, ILogger<OpenCVWindowHost>? logger = null)
 		{
 			_isWindowShowing = false;
 			_logger = logger;
-
+			_featureFlags = featureFlagsOptions.Value;
 		}
 
 
@@ -43,7 +45,10 @@ namespace Lightning.Core.Presentation
 				new Thread(() =>
 				{
 					_window = new Window("lighting_window", WindowMode.Normal);
-					_window.SetProperty(WindowProperty.Fullscreen, 1);
+					if (_featureFlags.Fullscreen)
+					{
+						_window.SetProperty(WindowProperty.Fullscreen, 1);
+					}
 					WriteFrame(Mat.Zeros(new Size(1, 1), MatType.CV_16SC3));
 					//TODO: add Logging
 					while (_isWindowShowing)

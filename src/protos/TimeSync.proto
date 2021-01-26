@@ -2,11 +2,11 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "General.proto";
 
-option csharp_namespace = "Lihtning.Core.TimeSync.Generated";
+option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
-service GrpcTimeSychronizationBaseService {
+service GrpcTimeService {
 	rpc GetSychronisationStream(google.protobuf.Empty) returns (stream TimestampMessage) {}
 }
 

@@ -2,6 +2,7 @@ using Lightning.Core.Configuration;
 using Lightning.Core.Presentation;
 using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Time;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OpenCvSharp;
@@ -59,5 +60,11 @@ namespace Lightning.Core
 			return services;
 		}
 
+
+		public static IServiceCollection AddFeatureFlgs(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.Configure<FeatureFlags>(configuration.GetSection("FeatureFlags"));
+			return services;
+		}
 	}
 }
