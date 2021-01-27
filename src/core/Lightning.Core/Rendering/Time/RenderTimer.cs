@@ -27,13 +27,13 @@ namespace Lightning.Core.Rendering.Time
 		public bool IsRunning { get; private set; }
 
 
-		public async IAsyncEnumerable<int> GetTimerTicksAllAsync()
+		public IEnumerable<int> GetTimerTicks()
 		{
 			// Note: Waiting until the Timer is started
 			//		 To get sure the stream does not close directly
 			while (!IsRunning)
 			{
-				await Task.Delay(10);
+				Thread.Sleep(10);
 			}
 
 			var stopwatch = new Stopwatch();
@@ -45,16 +45,17 @@ namespace Lightning.Core.Rendering.Time
 				//Calculate next duration
 				var duration = stopwatch.ElapsedMilliseconds;
 				stopwatch.Reset();
+				stopwatch.Start();
 				var sleepDuration = (1_000 / _configuration.FramesPerSecond) - (int)duration;
 				//Note: for Cv2.WaitKey(), 0 would block the thread until a key-press, use instate 1.
 				sleepDuration = Math.Max(sleepDuration, 0);
 
 				if (_logger?.IsEnabled(LogLevel.Debug) ?? false)
 				{
-					_logger?.LogDebug("Timer run waits duration: '{duration}ms' and inner Timer tick: '{_timerTick}' at time {DateTime.UtcNow}", sleepDuration, _timerTick, DateTime.UtcNow);
+					_logger?.LogDebug("Timer run, sleepDuration: '{duration}ms', calcDuration '{duration}'  inner Timer tick: '{_timerTick}' at time {DateTime.UtcNow}", sleepDuration, duration, _timerTick, DateTime.UtcNow);
 				}
 
-				await Task.Delay(sleepDuration);
+				Thread.Sleep(sleepDuration);
 			}
 		}
 

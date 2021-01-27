@@ -50,16 +50,12 @@ namespace Lightning.Core.Rendering
 
 		private void Process(object? o)
 		{
-			var layer = o as ILayer<TFrame> ?? throw new ArgumentException(null, nameof(o));
-			InnerProcess(layer).Wait();
+			var root = o as ILayer<TFrame> ?? throw new ArgumentException(null, nameof(o));
 
-			async Task InnerProcess(ILayer<TFrame> root)
+			foreach (var ticks in _timer.GetTimerTicks())
 			{
-				await foreach (var ticks in _timer.GetTimerTicksAllAsync())
-				{
-					var image = new TFrame();
-					root.Process(image, ticks);
-				}
+				var image = new TFrame();
+				root.Process(image, ticks);
 			}
 		}
 

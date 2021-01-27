@@ -15,6 +15,7 @@ namespace Lightning.Core.Presentation
 	{
 		private readonly ILogger<OpenCVWindowHost>? _logger;
 		private readonly FeatureFlags _featureFlags;
+		private readonly Queue<Action> _dispatcherQueue;
 		private Channel<Mat> _frameChannel;
 		private bool _isWindowShowing;
 		private Window _window;
@@ -24,6 +25,7 @@ namespace Lightning.Core.Presentation
 			_isWindowShowing = false;
 			_logger = logger;
 			_featureFlags = featureFlagsOptions.Value;
+			_dispatcherQueue = new Queue<Action>();
 		}
 
 
@@ -51,15 +53,20 @@ namespace Lightning.Core.Presentation
 					}
 					WriteFrame(Mat.Zeros(new Size(1, 1), MatType.CV_16SC3));
 					//TODO: add Logging
+					Action callback;
 					while (_isWindowShowing)
 					{
-						if (_frameChannel.Reader.TryRead(out var frame))
+						//if (_frameChannel.Reader.TryRead(out var frame))
+						//{
+						//	_window.ShowImage(frame);
+						//	frame.Dispose();
+						//}
+						if (_dispatcherQueue.TryDequeue(out callback))
 						{
-							_window.ShowImage(frame);
-							frame.Dispose();
+							callback();
 						}
 						//TODO: Change to customizable parameter or use the FPS rate
-						Cv2.WaitKey(1);
+						Cv2.WaitKey(14);
 					}
 
 				}).Start();
@@ -90,7 +97,12 @@ namespace Lightning.Core.Presentation
 				//TODO: Maybe add Resize logic
 
 				//Note: can ignore if the write is successful
-				_frameChannel.Writer.TryWrite(mat);
+				_dispatcherQueue.Enqueue(() =>
+				{
+					_window.ShowImage(mat);
+					mat.Dispose();
+				});
+				//_frameChannel.Writer.TryWrite(mat);
 			}
 			//TODO: add logging
 		}
