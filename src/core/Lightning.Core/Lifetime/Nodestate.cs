@@ -1,10 +1,14 @@
-using Lightning.Core.Lifetime.Generated;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Core.Lifetime
 {
 	public enum NodeState : byte
 	{
-		
+
 		/// <summary>
 		/// Node shows debug information on output screen.
 		/// </summary>

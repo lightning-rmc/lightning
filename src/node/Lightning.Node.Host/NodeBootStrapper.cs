@@ -13,9 +13,8 @@ namespace Lightning.Node.Host
 		private readonly IWindowHost _windowHost;
 		private readonly ILogger<NodeBootStrapper>? _logger;
 
-		public NodeBootStrapper(IRenderHost renderHost, IWindowHost windowHost, ILogger<NodeBootStrapper>? logger = null)
+		public NodeBootStrapper(IWindowHost windowHost, ILogger<NodeBootStrapper>? logger = null)
 		{
-			_renderHost = renderHost;
 			_windowHost = windowHost;
 			_logger = logger;
 		}
@@ -23,7 +22,6 @@ namespace Lightning.Node.Host
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
 			_windowHost.ShowWindow();
-			_renderHost.Start();
 			return Task.CompletedTask;
 		}
 

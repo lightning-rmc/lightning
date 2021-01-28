@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lightning.Core;
+using Lightning.Core.Utils;
+using Lightning.Node.Lifetime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +29,7 @@ namespace Lightning.Node.Host
 			services.AddOpenCVWindowHost();
 			services.AddHostedService<NodeBootStrapper>();
 			services.AddFeatureFlgs(_configuration);
+			services.AddCreateOnStarup<NodeLifetimeController>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

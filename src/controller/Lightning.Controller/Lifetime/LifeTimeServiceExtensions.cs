@@ -1,3 +1,4 @@
+using Lightning.Core.Lifetime;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime

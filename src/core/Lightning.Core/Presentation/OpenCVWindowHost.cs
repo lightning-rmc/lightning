@@ -56,15 +56,15 @@ namespace Lightning.Core.Presentation
 					Action callback;
 					while (_isWindowShowing)
 					{
-						//if (_frameChannel.Reader.TryRead(out var frame))
-						//{
-						//	_window.ShowImage(frame);
-						//	frame.Dispose();
-						//}
-						if (_dispatcherQueue.TryDequeue(out callback))
+						if (_frameChannel.Reader.TryRead(out var frame))
 						{
-							callback();
+							_window.ShowImage(frame);
+							frame.Dispose();
 						}
+						//if (_dispatcherQueue.TryDequeue(out callback))
+						//{
+						//	callback();
+						//}
 						//TODO: Change to customizable parameter or use the FPS rate
 						Cv2.WaitKey(14);
 					}
@@ -97,12 +97,12 @@ namespace Lightning.Core.Presentation
 				//TODO: Maybe add Resize logic
 
 				//Note: can ignore if the write is successful
-				_dispatcherQueue.Enqueue(() =>
-				{
-					_window.ShowImage(mat);
-					mat.Dispose();
-				});
-				//_frameChannel.Writer.TryWrite(mat);
+				//_dispatcherQueue.Enqueue(() =>
+				//{
+				//	_window.ShowImage(mat);
+				//	mat.Dispose();
+				//});
+				_frameChannel.Writer.TryWrite(mat);
 			}
 			//TODO: add logging
 		}

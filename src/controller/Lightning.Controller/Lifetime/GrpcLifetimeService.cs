@@ -1,5 +1,6 @@
 using Grpc.Core;
 using Lightning.Core.Generated;
+using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

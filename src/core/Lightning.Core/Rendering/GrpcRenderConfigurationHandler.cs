@@ -16,7 +16,7 @@ namespace Lightning.Core.Rendering
 		{
 			_configuration = new RenderConfiguration
 			{
-				FramesPerSecond = 120
+				FramesPerSecond = 60
 			};
 		}
 
