@@ -24,7 +24,7 @@ namespace Lightning.Node.Host
 		{
 			_configuration = configuration;
 			_featureFlags = configuration
-							.GetSection("Featureflags")
+							.GetSection("FeatureFlags")
 							.Get<FeatureFlags>();
 		}
 
@@ -33,11 +33,10 @@ namespace Lightning.Node.Host
 			services.AddNodeCoreServices(_configuration);
 			if (_featureFlags.NodeWithoutServer)
 			{
-
 			}
 			else
 			{
-
+				services.AddGrpcRemoteServices();
 			}
 			services.AddHostedService<NodeBootStrapper>();
 		}

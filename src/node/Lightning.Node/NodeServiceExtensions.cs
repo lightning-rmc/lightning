@@ -20,12 +20,12 @@ namespace Lightning.Node
 			services.AddOpenCVWindowHost();
 			services.AddFeatureFlags(configuration);
 			services.AddCreateOnStartup<NodeLifetimeController>();
-			
 			return services;
 		}
 
 		public static IServiceCollection AddGrpcRemoteServices(this IServiceCollection services)
 		{
+			services.AddSingleton<IConnectionResolver, ConfigurationConnectionResolver>();
 			services.AddSingleton<IGrpcConnectionManager, GrpcConnectionManager>();
 			return services;
 		}
