@@ -1,16 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace Lightning.Node.Communications
 {
 	public class ConfigurationConnectionResolver : IConnectionResolver
 	{
+		private readonly IConfiguration _configuration;
+
+		public ConfigurationConnectionResolver(IConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		public Task<ConnectionInfo> GetConnectionInfoAsync(string? identifier = null)
 		{
-			throw new NotImplementedException();
+			var conf = _configuration.GetSection("ServerConenction");
+			return Task.FromResult<ConnectionInfo>(
+				new(conf.GetValue<string>("Adress"), conf.GetValue<int>("Port"), identifier ?? string.Empty));
 		}
+
+
 	}
 }

@@ -11,7 +11,7 @@ namespace Lightning.Core.Rendering.Layers
 		{
 			//_capture = new VideoCapture("Alone_low.mp4");
 			//_capture = new VideoCapture("Waterfall - 37088.mp4");
-			_capture = new VideoCapture("Waterfall - 37088 (1).mp4");
+			_capture = new VideoCapture("media/video_fullhd.mp4");
 			//_capture = new VideoCapture("Waterfall - 37088_2.mp4");
 			_windowHost = windowHost;
 		}

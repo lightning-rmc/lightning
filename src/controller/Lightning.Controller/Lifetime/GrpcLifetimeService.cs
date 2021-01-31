@@ -24,7 +24,7 @@ namespace Lightning.Controller.Lifetime
 		public override async Task Connect(GeneralRequest request, IServerStreamWriter<NodeStateMessage> responseStream, ServerCallContext context)
 		{
 			//TODO: get real Id
-			var id = string.Empty;
+			var id = "test";
 			var stream = _lifetimeService.GetNodeStatesAllAsync(id);
 
 			await foreach (var state in stream)

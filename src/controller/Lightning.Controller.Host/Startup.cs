@@ -23,6 +23,7 @@ namespace Lightning.Controller.Host
 			services.AddControllerServices();
 			services.AddControllers();
 			services.AddGrpc();
+			services.AddNodeLifetime();
 		}
 
 
@@ -48,6 +49,8 @@ namespace Lightning.Controller.Host
 
             app.UseEndpoints(endpoints =>
             {
+				//Grpc Services
+				endpoints.MapGrpcService<GrpcLifetimeService>();
 
 				//API Services
 				endpoints.MapControllers();
@@ -55,9 +58,7 @@ namespace Lightning.Controller.Host
 				//SignalR Services
 				endpoints.MapHub<NodesHub>("/hubs/nodes");
 
-				//Grpc Services
-				endpoints.MapGrpcService<GrpcLifetimeService>();
-            });
+			});
         }
     }
 }

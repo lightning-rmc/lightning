@@ -19,7 +19,10 @@ namespace Lightning.Controller.Lifetime
 		{
 			_nodeChannels = new Dictionary<string, Channel<NodeState>>();
 			_nodes = new Dictionary<string, NodeState>();
+			_logger = logger;
 			_allUpdatesChannel = Channel.CreateUnbounded<(string, NodeState)>();
+			//TODO: Remove Test Register
+			TryRegisterNode("test");
 		}
 
 		public bool TryRegisterNode(string nodeId)
@@ -41,6 +44,13 @@ namespace Lightning.Controller.Lifetime
 		{
 			if (_nodeChannels.ContainsKey(nodeId))
 			{
+
+				//TODO: Remove testcase
+				Task.Run(async () =>
+				{
+					await Task.Delay(5000);
+					await UpdateNodeStateAsync(NodeState.Live);
+				});
 				return _nodeChannels[nodeId].Reader.ReadAllAsync();
 			}
 			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");

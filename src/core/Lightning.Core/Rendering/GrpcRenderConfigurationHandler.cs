@@ -22,7 +22,7 @@ namespace Lightning.Core.Rendering
 
 		public Task ConnectAsync(CancellationToken token = default)
 		{
-			//Todo: place to connect to the gRPC Service 
+			//TODO: place to connect to the gRPC Service 
 			return Task.CompletedTask;
 		}
 

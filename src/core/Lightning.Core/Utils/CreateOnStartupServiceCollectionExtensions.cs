@@ -2,10 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lightning.Core.Utils
 {
@@ -16,7 +12,16 @@ namespace Lightning.Core.Utils
 		{
 			if (services is null)
 				throw new ArgumentNullException(nameof(services), string.Empty);
-			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService),typeof(CreateOnStarupBootstrapper), ServiceLifetime.Singleton));
+			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService), typeof(CreateOnStarupBootstrapper), ServiceLifetime.Singleton));
+			services.AddSingleton<ICreateOnStartup, TService>();
+			return services;
+		}
+
+		public static IServiceCollection AddCreateOnStarup<TService>(this IServiceCollection services, Func<IServiceProvider, TService> factory) where TService : class, ICreateOnStartup
+		{
+			if (services is null)
+				throw new ArgumentNullException(nameof(services), string.Empty);
+			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService), factory, ServiceLifetime.Singleton));
 			services.AddSingleton<ICreateOnStartup, TService>();
 			return services;
 		}

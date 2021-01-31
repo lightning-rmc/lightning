@@ -11,7 +11,7 @@ namespace Lightning.Node.Communications
 	public interface IGrpcConnectionManager : IDisposable
 	{
 		bool ServerFound { get; }
-		Task SearchForServerAsync(CancellationToken token = default);
+		Task SearchAndAuthenticateForServerAsync(CancellationToken token = default);
 
 		GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient();
 		GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient();

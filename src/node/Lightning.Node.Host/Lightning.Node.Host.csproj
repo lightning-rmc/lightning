@@ -13,10 +13,10 @@
     <None Update="Alone_low.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Waterfall - 37088 %281%29.mp4">
+    <None Update="Media\video_fullhd.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Waterfall - 37088.mp4">
+    <None Update="Media\vIdeo_4k.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

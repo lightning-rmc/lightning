@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lightning.Core;
 using Lightning.Core.Utils;
+using Lightning.Node.Communications;
 using Lightning.Node.Lifetime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +31,8 @@ namespace Lightning.Node.Host
 			services.AddHostedService<NodeBootStrapper>();
 			services.AddFeatureFlgs(_configuration);
 			services.AddCreateOnStarup<NodeLifetimeController>();
+			services.AddSingleton<IConnectionResolver, ConfigurationConnectionResolver>();
+			services.AddSingleton<IGrpcConnectionManager, GrpcConnectionManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

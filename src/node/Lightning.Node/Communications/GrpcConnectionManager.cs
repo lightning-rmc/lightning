@@ -26,24 +26,27 @@ namespace Lightning.Node.Communications
 
 		public GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcLayerEditService.GrpcLayerEditServiceClient>()
-				?? throw new InvalidOperationException($"First call  {nameof(SearchForServerAsync)} to get the Server Credentials");
+				?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcLifeTimeService.GrpcLifeTimeServiceClient>()
-				?? throw new InvalidOperationException($"First call {nameof(SearchForServerAsync)} to get the Server Credentials");
+				?? throw new InvalidOperationException($"First call {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcMediaService.GrpcMediaServiceClient>()
-					   ?? throw new InvalidOperationException($"First call  {nameof(SearchForServerAsync)} to get the Server Credentials");
+					   ?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcTimeService.GrpcTimeServiceClient>()
-				?? throw new InvalidOperationException($"First call  {nameof(SearchForServerAsync)} to get the Server Credentials");
+				?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
-		public async Task SearchForServerAsync(CancellationToken token = default)
+		public async Task SearchAndAuthenticateForServerAsync(CancellationToken token = default)
 		{
+			//TODO: Add authentication
+
 			var connectionInfo = await _connectionResolver.GetConnectionInfoAsync();
 			ServerFound = true;
+			//TODO: Maybe move https vs. http in configuration
 			var baseUri = new Uri($@"https://{connectionInfo.IpAdress}:{connectionInfo.Port}");
 			var colllection = new ServiceCollection();
 			colllection.AddGrpcClient<GrpcLayerEditService.GrpcLayerEditServiceClient>(opt =>

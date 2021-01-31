@@ -1,4 +1,4 @@
-using Lightning.Controller.Host.Controller.DTO;
+using Lightning.Controller.Host.DTO;
 using Lightning.Controller.Lifetime;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,18 +20,8 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 
-		[HttpGet]
+		[HttpGet("states")]
 		public IEnumerable<NodeDTO> GetNodes()
-		{
-			var nodes = _nodeLifetimeSerivce.GetAllNodeStates();
-			foreach (var node in nodes)
-			{
-				yield return new()
-				{
-					Id = node.NodeId,
-					State = node.State
-				};
-			}
-		}
+			=> _nodeLifetimeSerivce.GetAllNodeStates().Select(n => new NodeDTO(n.NodeId, "", n.State));
 	}
 }

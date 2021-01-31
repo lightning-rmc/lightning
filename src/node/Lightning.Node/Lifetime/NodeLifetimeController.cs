@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Lifetime
 {
+
+	//TODO: get public interface for interaction form other services
 	public class NodeLifetimeController : ICreateOnStartup
 	{
 		private readonly IRenderHost _renderHost;
@@ -59,17 +61,18 @@ namespace Lightning.Node.Lifetime
 
 		private void GoLive()
 		{
-			throw new NotImplementedException();
+			_renderHost.Start();
 		}
 
 		private void ShowBlankPage()
 		{
-			throw new NotImplementedException();
+			_renderHost.Stop();
+
 		}
 
 		private void ShowInfoMessage()
 		{
-			throw new NotImplementedException();
+
 		}
 	}
 }
