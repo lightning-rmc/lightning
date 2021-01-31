@@ -21,8 +21,8 @@ namespace Lightning.Core.Utils
 		{
 			if (services is null)
 				throw new ArgumentNullException(nameof(services), string.Empty);
-			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService), factory, ServiceLifetime.Singleton));
-			services.AddSingleton<ICreateOnStartup, TService>();
+			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService), typeof(CreateOnStartupBootstrapper), ServiceLifetime.Singleton));
+			services.AddSingleton<ICreateOnStartup>(factory);
 			return services;
 		}
 	}
