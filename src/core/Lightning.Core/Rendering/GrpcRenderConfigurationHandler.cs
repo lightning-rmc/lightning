@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
-	public class GrpcRenderConfigurationHandler : IConfigurationHandler<RenderConfiguration>, IDisposable
+	internal class GrpcRenderConfigurationHandler : IConfigurationHandler<RenderConfiguration>, IDisposable
 	{
 		private readonly RenderConfiguration _configuration;
 
@@ -16,7 +16,7 @@ namespace Lightning.Core.Rendering
 		{
 			_configuration = new RenderConfiguration
 			{
-				FramesPerSecond = 60
+				FramesPerSecond = 30
 			};
 		}
 

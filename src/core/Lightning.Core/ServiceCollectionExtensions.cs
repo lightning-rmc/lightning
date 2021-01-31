@@ -61,7 +61,7 @@ namespace Lightning.Core
 		}
 
 
-		public static IServiceCollection AddFeatureFlgs(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddFeatureFlags(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.Configure<FeatureFlags>(configuration.GetSection("FeatureFlags"));
 			return services;

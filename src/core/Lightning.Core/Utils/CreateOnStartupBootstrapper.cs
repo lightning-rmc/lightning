@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Utils
 {
-	public class CreateOnStarupBootstrapper : IHostedService
+	internal class CreateOnStartupBootstrapper : IHostedService
 	{
 
-		public CreateOnStarupBootstrapper(IEnumerable<ICreateOnStartup> _) { }
+		public CreateOnStartupBootstrapper(IEnumerable<ICreateOnStartup> _) { }
 
 		public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 

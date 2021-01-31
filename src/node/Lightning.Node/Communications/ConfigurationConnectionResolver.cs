@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Communications
 {
-	public class ConfigurationConnectionResolver : IConnectionResolver
+	internal class ConfigurationConnectionResolver : IConnectionResolver
 	{
 		private readonly IConfiguration _configuration;
 

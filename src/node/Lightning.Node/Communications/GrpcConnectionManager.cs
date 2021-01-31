@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Communications
 {
-	public class GrpcConnectionManager : IGrpcConnectionManager
+	internal class GrpcConnectionManager : IGrpcConnectionManager
 	{
 		private readonly IConnectionResolver _connectionResolver;
 		private ServiceProvider? _serviceProvider;

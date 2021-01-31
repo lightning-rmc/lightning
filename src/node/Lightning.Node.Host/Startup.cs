@@ -18,22 +18,29 @@ namespace Lightning.Node.Host
     public class Startup
     {
 		private readonly IConfiguration _configuration;
+		private readonly FeatureFlags _featureFlags;
 
 		public Startup(IConfiguration configuration)
 		{
 			_configuration = configuration;
+			_featureFlags = configuration
+							.GetSection("Featureflags")
+							.Get<FeatureFlags>();
 		}
 
         public void ConfigureServices(IServiceCollection services)
         {
-			services.AddRendering();
-			services.AddOpenCVWindowHost();
+			services.AddNodeCoreServices(_configuration);
+			if (_featureFlags.NodeWithoutServer)
+			{
+
+			}
+			else
+			{
+
+			}
 			services.AddHostedService<NodeBootStrapper>();
-			services.AddFeatureFlgs(_configuration);
-			services.AddCreateOnStarup<NodeLifetimeController>();
-			services.AddSingleton<IConnectionResolver, ConfigurationConnectionResolver>();
-			services.AddSingleton<IGrpcConnectionManager, GrpcConnectionManager>();
-        }
+		}
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

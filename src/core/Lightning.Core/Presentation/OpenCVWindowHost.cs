@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Presentation
 {
-	public class OpenCVWindowHost : IWindowHost<Mat>, IDisposable
+	internal class OpenCVWindowHost : IWindowHost<Mat>, IDisposable
 	{
 		private readonly ILogger<OpenCVWindowHost>? _logger;
 		private readonly FeatureFlags _featureFlags;
@@ -58,10 +58,6 @@ namespace Lightning.Core.Presentation
 							_window.ShowImage(frame);
 							frame.Dispose();
 						}
-						//if (_dispatcherQueue.TryDequeue(out callback))
-						//{
-						//	callback();
-						//}
 						//TODO: Change to customizable parameter or use the FPS rate
 						Cv2.WaitKey(16);
 					}

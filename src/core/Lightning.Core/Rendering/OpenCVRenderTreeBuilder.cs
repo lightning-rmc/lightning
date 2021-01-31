@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
-	public class OpenCVRenderTreeBuilder : IRenderTreeBuilder<Mat>
+	internal class OpenCVRenderTreeBuilder : IRenderTreeBuilder<Mat>
 	{
 		private readonly IWindowHost<Mat> _windowHost;
 

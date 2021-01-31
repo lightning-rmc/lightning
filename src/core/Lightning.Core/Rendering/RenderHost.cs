@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
-	public class RenderHost<TFrame> : IRenderHost
+	internal class RenderHost<TFrame> : IRenderHost
 		where TFrame : new()
 	{
 		private readonly IRenderTimer _timer;
@@ -36,7 +36,7 @@ namespace Lightning.Core.Rendering
 
 				new Thread(Process)
 				{
-					Priority = ThreadPriority.AboveNormal,
+					Priority = ThreadPriority.Highest,
 					IsBackground = true
 				}.Start(layer);
 				_timer.StartTimer();

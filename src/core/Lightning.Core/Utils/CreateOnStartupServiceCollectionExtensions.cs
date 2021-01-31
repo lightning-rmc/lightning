@@ -8,16 +8,16 @@ namespace Lightning.Core.Utils
 	public static class CreateOnStartupServiceCollectionExtensions
 	{
 
-		public static IServiceCollection AddCreateOnStarup<TService>(this IServiceCollection services) where TService : class, ICreateOnStartup
+		public static IServiceCollection AddCreateOnStartup<TService>(this IServiceCollection services) where TService : class, ICreateOnStartup
 		{
 			if (services is null)
 				throw new ArgumentNullException(nameof(services), string.Empty);
-			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService), typeof(CreateOnStarupBootstrapper), ServiceLifetime.Singleton));
+			services.TryAddEnumerable(new ServiceDescriptor(typeof(IHostedService), typeof(CreateOnStartupBootstrapper), ServiceLifetime.Singleton));
 			services.AddSingleton<ICreateOnStartup, TService>();
 			return services;
 		}
 
-		public static IServiceCollection AddCreateOnStarup<TService>(this IServiceCollection services, Func<IServiceProvider, TService> factory) where TService : class, ICreateOnStartup
+		public static IServiceCollection AddCreateOnStartup<TService>(this IServiceCollection services, Func<IServiceProvider, TService> factory) where TService : class, ICreateOnStartup
 		{
 			if (services is null)
 				throw new ArgumentNullException(nameof(services), string.Empty);
