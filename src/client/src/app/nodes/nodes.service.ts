@@ -3,6 +3,7 @@ import { Node } from './models/Node';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment as env } from 'src/environments/environment';
 import { NodeState } from './models/NodeState';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
@@ -10,8 +11,8 @@ import { NodeState } from './models/NodeState';
 export class NodesService {
 	private connection: HubConnection;
 
-	constructor() {
-		this.connection = new HubConnectionBuilder().withAutomaticReconnect().withUrl(`${env.server.base}/hubs/nodes`).build();
+	constructor(private http: HttpClient) {
+		this.connection = new HubConnectionBuilder().withAutomaticReconnect().withUrl(`${env.controller.url}/hubs/nodes`).build();
 
 		// this.connect();
 	}
@@ -50,6 +51,8 @@ export class NodesService {
 	}
 
 	async getNodes(): Promise<Node[]> {
-		return this.nodes;
+		const nodes = await this.http.get<Node[]>(`${env.api.url}/nodes`).toPromise();
+		return nodes;
+		// return this.nodes;
 	}
 }

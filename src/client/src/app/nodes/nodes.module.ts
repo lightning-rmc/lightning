@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 import { NodesRoutingModule } from './nodes-routing.module';
 import { NodesComponent } from './nodes.component';

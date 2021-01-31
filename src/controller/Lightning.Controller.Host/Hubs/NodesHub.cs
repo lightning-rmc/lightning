@@ -1,4 +1,5 @@
 using Lightning.Controller.Lifetime;
+using Lightning.Core.Lifetime;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;

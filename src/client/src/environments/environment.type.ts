@@ -1,6 +1,9 @@
 export type Environment = {
 	production: boolean;
-	server: {
-		base: string;
+	controller: {
+		url: string;
+	}
+	api: {
+		url: string;
 	}
 }

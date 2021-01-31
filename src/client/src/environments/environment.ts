@@ -6,8 +6,11 @@ import { Environment } from "./environment.type";
 
 export const environment: Environment = {
 	production: false,
-	server: {
-		base: 'http://localhost:5000'
+	controller: {
+		url: 'http://localhost:5000'
+	},
+	api: {
+		url: 'http://localhost:5000/api'
 	}
 };
 
