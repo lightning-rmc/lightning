@@ -20,7 +20,7 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 
-		[HttpGet("states")]
+		[HttpGet]
 		public IEnumerable<NodeDTO> GetNodes()
 			=> _nodeLifetimeSerivce.GetAllNodeStates().Select(n => new NodeDTO(n.NodeId, "", n.State));
 	}

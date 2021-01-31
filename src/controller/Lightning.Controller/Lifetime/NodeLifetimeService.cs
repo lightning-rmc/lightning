@@ -1,5 +1,6 @@
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Channels;
@@ -23,7 +24,23 @@ namespace Lightning.Controller.Lifetime
 			_allUpdatesChannel = Channel.CreateUnbounded<(string, NodeState)>();
 			//TODO: Remove Test Register
 			TryRegisterNode("test");
+
+
+			//TODO: Remove testcase
+			Task.Run(async () =>
+			{
+				//var rnd = new Random();
+				//while (true)
+				//{
+				//	await UpdateNodeStateAsync(rnd.NextDouble() > 0.5 ? NodeState.Live : NodeState.Error);
+				//	await Task.Delay(2000);
+				//}
+
+				await Task.Delay(5000);
+				await UpdateNodeStateAsync(NodeState.Live);
+			});
 		}
+
 
 		public bool TryRegisterNode(string nodeId)
 		{
@@ -37,6 +54,7 @@ namespace Lightning.Controller.Lifetime
 			return true;
 		}
 
+
 		public IAsyncEnumerable<(string NodeId, NodeState State)> GetAllNodeStatesAllAsync()
 			=> _allUpdatesChannel.Reader.ReadAllAsync();
 
@@ -44,17 +62,11 @@ namespace Lightning.Controller.Lifetime
 		{
 			if (_nodeChannels.ContainsKey(nodeId))
 			{
-
-				//TODO: Remove testcase
-				Task.Run(async () =>
-				{
-					await Task.Delay(5000);
-					await UpdateNodeStateAsync(NodeState.Live);
-				});
 				return _nodeChannels[nodeId].Reader.ReadAllAsync();
 			}
 			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 		}
+
 
 		public async Task UpdateNodeStateAsync(NodeState state, string? nodeId = null)
 		{
@@ -82,6 +94,7 @@ namespace Lightning.Controller.Lifetime
 
 		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
 			=> _nodes.Select(ns => (ns.Key, ns.Value));
+
 
 		public bool RemoveNode(string nodeId)
 		{

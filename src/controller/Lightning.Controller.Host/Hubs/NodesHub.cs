@@ -16,10 +16,10 @@ namespace Lightning.Controller.Host.Hubs
 		public NodesHub(INodeLifetimeService lifetimeService)
 		{
 			_lifetimeService = lifetimeService;
-			RegisterUpdates();
 		}
 
-		private async Task RegisterUpdates()
+
+		public async override Task OnConnectedAsync()
 		{
 			await foreach (var update in _lifetimeService.GetAllNodeStatesAllAsync())
 			{

@@ -1,1 +1,2 @@
-<ngx-file-drop dropZoneLabel="Drop files here to upload" (onFileDrop)="dropped($event)"></ngx-file-drop>
+<input type="file" multiple (change)="handleFileInput($event.target.files)">
+<button (click)="onSubmit()">Upload</button>

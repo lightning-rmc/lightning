@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Node } from '../models/Node';
+import { Node } from '../models/Node.type';
 
 @Component({
 	selector: 'app-node-details',

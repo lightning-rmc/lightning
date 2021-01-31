@@ -1,4 +1,4 @@
-import { NodeState } from "./NodeState";
+import { NodeState } from "./NodeState.enum";
 
 export type Node = {
 	id: string;

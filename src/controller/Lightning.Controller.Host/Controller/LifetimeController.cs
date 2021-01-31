@@ -15,7 +15,5 @@ namespace Lightning.Controller.Host.Controller
 		{
 
 		}
-
-
 	}
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Node } from './models/Node';
+import { Node } from './models/Node.type';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment as env } from 'src/environments/environment';
-import { NodeState } from './models/NodeState';
+import { NodeState } from './models/NodeState.enum';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,48 +12,30 @@ import { HttpClient } from '@angular/common/http';
 export class NodesService {
 	private connection: HubConnection;
 
-	constructor(private http: HttpClient) {
-		this.connection = new HubConnectionBuilder().withAutomaticReconnect().withUrl(`${env.controller.url}/hubs/nodes`).build();
+	private nodeStateChange = new Subject<{ id: string, state: NodeState }>();
+	public nodeStateChange$ = this.nodeStateChange.asObservable();
 
-		// this.connect();
+	constructor(private http: HttpClient) {
+		this.connection = new HubConnectionBuilder().withUrl(`${env.controller.url}/hubs/nodes`).build();
+
+		this.connect();
 	}
 
-	nodes: Node[] = [
-		{
-			id: 'test1',
-			name: 'Beamer links',
-			state: NodeState.Edit,
-		},
-		{
-			id: 'test2',
-			name: 'Beamer mitte',
-			state: NodeState.Error,
-		},
-		{
-			id: 'test3',
-			name: 'Beamer rechts',
-			state: NodeState.Info,
-		},
-		{
-			id: 'test4',
-			name: 'Beamer hinten',
-			state: NodeState.Info,
-		},
-		{
-			id: 'test5',
-			name: 'Node mit sehr langem Namen der wahrscheinlich nicht auf die UI passt',
-			state: NodeState.Live,
-		},
-	];
 
 	private async connect() {
-		await this.connection.start();
-		this.connection.on('nodeUpdate', (nodeId: string, state: any) => console.log({ nodeId, state }));
+		try {
+			await this.connection.start();
+			console.log('Connection to SignalR Hub established');
+
+			// Registering event handlers
+			this.connection.on('nodeStateUpdate', (nodeId: string, state: NodeState) => this.nodeStateChange.next({ id: nodeId, state }));
+		} catch (err) {
+			console.error('Connection to SignalR Hub failed', err);
+		}
 	}
 
 	async getNodes(): Promise<Node[]> {
 		const nodes = await this.http.get<Node[]>(`${env.api.url}/nodes`).toPromise();
 		return nodes;
-		// return this.nodes;
 	}
 }

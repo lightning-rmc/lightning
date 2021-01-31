@@ -1,5 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { Component, OnInit } from '@angular/core';
+import { MediaService } from './media.service';
 
 @Component({
 	selector: 'app-media',
@@ -7,29 +7,25 @@ import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 	styleUrls: ['./media.component.scss'],
 })
 export class MediaComponent implements OnInit {
-	constructor() {}
+	constructor(private service: MediaService) {}
+
+	files?: FileList;
 
 	ngOnInit() {}
 
-	async dropped(files: NgxFileDropEntry[]) {
-		for (const droppedFile of files) {
-			if (droppedFile.fileEntry.isFile) {
-				const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-				const file = await this.readFileAsync(fileEntry);
-				console.log(droppedFile.relativePath);
-				const formData = new FormData();
-				formData.append('file', file, droppedFile.relativePath);
-
-				// submit form for file upload
-			}
-		}
+	handleFileInput(files: FileList) {
+		this.files = files;
 	}
 
-	private readFileAsync(file: FileSystemFileEntry): Promise<File> {
-		return new Promise((resolve, reject) => {
-			file.file((file) => {
-				resolve(file);
-			});
-		});
+	async onSubmit() {
+		if (this.files && this.files.length > 0) {
+			const result = await this.service.uploadFiles(this.files);
+			let overallSuccess = true;
+			for (let file in result) {
+				overallSuccess = overallSuccess && result[file].success;
+			}
+			console.log('overall-success:', overallSuccess);
+			console.log(result);
+		}
 	}
 }
