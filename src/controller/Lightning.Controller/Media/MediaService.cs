@@ -32,16 +32,8 @@ namespace Lightning.Controller.Media
 				EnableRaisingEvents = true
 			};
 			Directory.CreateDirectory(_settings.StoragePath);
-			//_watcher.Created += OnFileChange;
-			//_watcher.Changed += OnFileChange;
 		}
 
-		//private void OnFileChange(object sender, FileSystemEventArgs e)
-		//{
-		//	_logger.LogInformation($"Filesystem change: ${e.ChangeType} ${e.Name}");
-		//	var hash = ComputeHash(e.FullPath);
-		//	_hashCache.Add((e.Name!, DateTime.Now), hash);
-		//}
 
 		public IEnumerable<Media> GetFiles()
 		{

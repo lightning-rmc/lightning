@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Lightning.Controller.Host
 {
@@ -35,7 +37,7 @@ namespace Lightning.Controller.Host
 		}
 
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<MediaSettings> mediaSettings)
         {
             if (env.IsDevelopment())
             {
@@ -49,10 +51,16 @@ namespace Lightning.Controller.Host
 				});
 			}
 
-
 			app.UseRouting();
 			//app.UseAuthentication();
 			//app.UseAuthorization();
+
+			app.UseFileServer(new FileServerOptions()
+			{
+				FileProvider = new PhysicalFileProvider(mediaSettings.Value.StoragePath),
+				RequestPath = "/media",
+				EnableDirectoryBrowsing = true
+			});
 
             app.UseEndpoints(endpoints =>
             {
@@ -64,7 +72,6 @@ namespace Lightning.Controller.Host
 
 				//SignalR Services
 				endpoints.MapHub<NodesHub>("/hubs/nodes");
-
 			});
         }
     }
