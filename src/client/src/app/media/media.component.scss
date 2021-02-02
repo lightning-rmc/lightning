@@ -2,3 +2,21 @@
 	display: block;
 	padding: 3rem;
 }
+
+
+.media-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 1rem;
+}
+
+.media {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 1rem;
+	border: 1px solid #111;
+	min-height: 100px;
+}

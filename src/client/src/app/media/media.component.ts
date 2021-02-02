@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MediaService } from './media.service';
+import { Media } from './models/Media.type';
 
 @Component({
 	selector: 'app-media',
@@ -9,9 +10,19 @@ import { MediaService } from './media.service';
 export class MediaComponent implements OnInit {
 	constructor(private service: MediaService) {}
 
-	files?: FileList;
+	@ViewChild('input')
+	inputElement!: ElementRef;
 
-	ngOnInit() {}
+	files?: FileList;
+	media: Media[] = [];
+
+	async ngOnInit() {
+		await this.loadMedia();
+	}
+
+	async loadMedia() {
+		this.media = await this.service.getAllMedia();
+	}
 
 	handleFileInput(files: FileList) {
 		this.files = files;
@@ -26,6 +37,8 @@ export class MediaComponent implements OnInit {
 			}
 			console.log('overall-success:', overallSuccess);
 			console.log(result);
+			this.inputElement.nativeElement.value = '';
+			await this.loadMedia();
 		}
 	}
 }

@@ -1,2 +1,9 @@
-<input type="file" multiple (change)="handleFileInput($event.target.files)">
-<button (click)="onSubmit()">Upload</button>
+<div class="header">
+	<input type="file" #input multiple (change)="handleFileInput($any($event.target).files)">
+	<button (click)="onSubmit()">Upload</button>
+</div>
+
+<h2>Media</h2>
+<div class="media-container">
+	<div class="media" *ngFor="let m of media">{{ m.name }}</div>
+</div>

@@ -22,9 +22,9 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 		[HttpGet]
-		public IEnumerable<Media.Media> GetStoredFiles()
+		public IEnumerable<Media.Media> GetStoredFiles(bool ignoreCache= false)
 		{
-			return _mediaService.GetFiles();
+			return _mediaService.GetFiles(ignoreCache);
 		}
 
 		[HttpPost("upload")]

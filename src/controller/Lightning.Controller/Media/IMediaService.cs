@@ -10,8 +10,10 @@ namespace Lightning.Controller.Media
 {
 	public interface IMediaService
 	{
-		IEnumerable<Media> GetFiles();
+		IEnumerable<Media> GetFiles(bool ignoreCache);
 
 		Task SaveFileAsync(IFormFile file);
+
+		IAsyncEnumerable<(string fileName, UpdateType updateType)> GetUpdates();
 	}
 }

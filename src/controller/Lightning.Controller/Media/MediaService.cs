@@ -1,14 +1,13 @@
 using Lightning.Core.Utils;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Linq;
-using System;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Channels;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace Lightning.Controller.Media
 {
@@ -20,12 +19,15 @@ namespace Lightning.Controller.Media
 		private readonly FileSystemWatcher _watcher;
 		private readonly ILogger _logger;
 
+		private readonly Channel<(string fileName, UpdateType updateType)> _updates;
+
 		public MediaService(IOptions<MediaSettings> mediaSettings, ILogger<MediaService> logger)
 		{
 			_logger = logger;
 			_md5 = MD5.Create();
 			_hashCache = new Dictionary<(string, DateTime), string>();
 			_settings = mediaSettings.Value;
+			_updates = Channel.CreateUnbounded<(string, UpdateType)>();
 			_watcher = new FileSystemWatcher()
 			{
 				Path = _settings.StoragePath,
@@ -35,20 +37,30 @@ namespace Lightning.Controller.Media
 		}
 
 
-		public IEnumerable<Media> GetFiles()
+		public IEnumerable<Media> GetFiles(bool ignoreCache = false)
 		{
 			var dirInfo = new DirectoryInfo(_settings.StoragePath);
 
 			foreach (var file in dirInfo.GetFiles())
 			{
 				var hashKey = (file.Name, file.LastWriteTime);
-				if (!_hashCache.TryGetValue(hashKey, out var hash))
+				if (!_hashCache.TryGetValue(hashKey, out var hash) || ignoreCache)
 				{
 					hash = ComputeHash(file.FullName);
-					_hashCache.Add(hashKey, hash);
+					_hashCache.TryAdd(hashKey, hash);
 				}
 
-				yield return new(file.Name, file.Extension, file.Length, file.CreationTime, file.LastWriteTime, hash.ToString());
+				var link = $"http://localhost:5000/media/{file.Name}";
+
+				yield return new(
+					file.Name,
+					file.Extension,
+					file.Length,
+					file.CreationTime,
+					file.LastWriteTime,
+					hash.ToString(),
+					new Uri(link)
+				);
 			}
 		}
 
@@ -57,7 +69,11 @@ namespace Lightning.Controller.Media
 			var filePath = Path.Combine(_settings.StoragePath, file.FileName);
 			using var stream = File.Create(filePath);
 			await file.CopyToAsync(stream);
+			await _updates.Writer.WriteAsync((file.FileName, UpdateType.ADDED));
 		}
+
+		public IAsyncEnumerable<(string fileName, UpdateType updateType)> GetUpdates()
+			=> _updates.Reader.ReadAllAsync();
 
 		private string ComputeHash(string fullName)
 		{

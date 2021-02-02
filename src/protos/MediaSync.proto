@@ -6,7 +6,21 @@ option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
-service GrpcMediaService {
+service MediaSyncService {
+	rpc GetMediaUpdates(MediaUpdateRequest) returns (stream MediaUpdateResponse);
+}
+
+enum UpdateType {
+	ADD = 0;
+	CHANGE = 1;
+	DELETE = 2;
+}
+
+message MediaUpdateRequest {
 
 }
 
+message MediaUpdateResponse {
+	string fileName = 1;
+	UpdateType updateType = 2;
+}
