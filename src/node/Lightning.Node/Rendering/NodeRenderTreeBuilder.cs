@@ -1,4 +1,5 @@
 using Lightning.Core.Presentation;
+using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Layers;
 using OpenCvSharp;
 using System;
@@ -7,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Rendering
+namespace Lightning.Node.Rendering
 {
-	internal class OpenCVRenderTreeBuilder : IRenderTreeBuilder<Mat>
+	internal class NodeRenderTreeBuilder : IRenderTreeBuilder<Mat>
 	{
 		private readonly IWindowHost<Mat> _windowHost;
 
-		public OpenCVRenderTreeBuilder(IWindowHost<Mat> windowHost)
+		public NodeRenderTreeBuilder(IWindowHost<Mat> windowHost)
 		{
 			_windowHost = windowHost;
 		}

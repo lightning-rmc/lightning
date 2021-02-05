@@ -3,7 +3,7 @@ using OpenCvSharp;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	internal class DummyLayer : ILayer<Mat>
+	public class DummyLayer : ILayer<Mat>
 	{
 		private readonly IWindowHost<Mat> _windowHost;
 		private readonly VideoCapture _capture;
