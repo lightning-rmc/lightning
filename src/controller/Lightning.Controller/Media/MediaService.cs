@@ -28,12 +28,12 @@ namespace Lightning.Controller.Media
 			_hashCache = new Dictionary<(string, DateTime), string>();
 			_settings = mediaSettings.Value;
 			_updates = Channel.CreateUnbounded<(string, UpdateType)>();
+			Directory.CreateDirectory(_settings.StoragePath);
 			_watcher = new FileSystemWatcher()
 			{
 				Path = _settings.StoragePath,
 				EnableRaisingEvents = true
 			};
-			Directory.CreateDirectory(_settings.StoragePath);
 		}
 
 
