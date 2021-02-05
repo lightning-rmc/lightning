@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using System.Xaml;
 
 namespace Lightning.Core.Presentation
 {
@@ -24,6 +25,7 @@ namespace Lightning.Core.Presentation
 			_isWindowShowing = false;
 			_logger = logger;
 			_featureFlags = featureFlagsOptions.Value;
+
 		}
 
 
