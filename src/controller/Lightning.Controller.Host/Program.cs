@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Portable.Xaml;
 using GenericHost = Microsoft.Extensions.Hosting.Host;
 
 namespace Lightning.Controller.Host

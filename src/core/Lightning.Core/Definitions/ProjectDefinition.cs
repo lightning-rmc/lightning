@@ -18,10 +18,14 @@ namespace Lightning.Core.Definitions
 	{
 		public ProjectDefinition()
 		{
-			Nodes = new NodeDefinitionCollection();
+			Nodes = new();
+			RenderTrees = new();
 		}
 
 		public NodeDefinitionCollection Nodes { get; set; }
+
+		public RenderTreeDefinitionCollection RenderTrees { get; set; }
+
 
 	}
 }

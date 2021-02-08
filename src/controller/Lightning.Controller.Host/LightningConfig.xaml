@@ -1,7 +1,5 @@
-<ProjectDefinition  xmlns="http://schemas.ligthing-rmc.com/project/definition">
+<ProjectDefinition  xmlns="clr-namespace:Lightning.Core.Definitions;assembly=Lightning.Core">
 	<ProjectDefinition.Nodes>
 		<NodeDefinition />
 	</ProjectDefinition.Nodes>
 </ProjectDefinition>
-
-

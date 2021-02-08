@@ -10,8 +10,5 @@ namespace Lightning.Core.Definitions
 	{
 
 		public RenderTreeDefinition RenderTree { get; set; } = new RenderTreeDefinition();
-
-
-
 	}
 }

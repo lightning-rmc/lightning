@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="LightingConfig.xaml">
+	  <None Update="LightningConfig.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

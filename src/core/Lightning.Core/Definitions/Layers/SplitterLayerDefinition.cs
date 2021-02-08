@@ -11,7 +11,7 @@ namespace Lightning.Core.Definitions.Layers
 	{
 		public SplitterLayerDefinition()
 		{
-			Childs = new LayerBaseDefinitionCollection();
+			Childs = new();
 		}
 
 

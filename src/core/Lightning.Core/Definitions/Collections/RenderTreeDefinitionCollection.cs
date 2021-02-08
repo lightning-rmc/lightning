@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions.Collections
 {
-	public class NodeDefinitionCollection : List<NodeDefinition>
+	public class RenderTreeDefinitionCollection : List<RenderTreeDefinition>
 	{
 	}
 }
