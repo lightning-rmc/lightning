@@ -18,7 +18,7 @@ message EditChangeMessage {
 		general = 3;
 	}
 	Type type = 1;
-	int32 layerNumber = 2;
+	string configId = 2;
 	string paramName = 3;
 	string value = 4; //Maybe change to Any? not sure
 }

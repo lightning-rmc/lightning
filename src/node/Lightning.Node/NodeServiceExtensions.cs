@@ -20,6 +20,9 @@ namespace Lightning.Node
 	{
 		public static IServiceCollection AddNodeServices(this IServiceCollection services, IConfiguration configuration)
 		{
+			if (services is null)
+				throw new ArgumentNullException(nameof(services));
+
 			services.AddNodeRendering();
 			services.AddOpenCVWindowHost();
 			services.AddFeatureFlags(configuration);
@@ -29,6 +32,9 @@ namespace Lightning.Node
 
 		public static IServiceCollection AddGrpcRemoteServices(this IServiceCollection services)
 		{
+			if (services is null)
+				throw new ArgumentNullException(nameof(services));
+
 			services.AddSingleton<IConnectionResolver, ConfigurationConnectionResolver>();
 			services.AddSingleton<IGrpcConnectionManager, GrpcConnectionManager>();
 			return services;
