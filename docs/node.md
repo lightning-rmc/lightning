@@ -1,16 +1,28 @@
 # Node
 
 ## States
-Eine Node befindet sich immer in einem der folgenden Stadien:
+Eine Node befindet sich immer in einem der folgenden Zustände:
 
-__Active__
-> Node ist online und registriert/konfiguriert
+```mermaid
+stateDiagram
+    Offline
+    Preparing
+    Ready
+    Live
+    Debug
+    Error
 
-__Needs Configuration__
-> Node ist online, muss aber noch konfiguriert werden und kann bis dahin nicht verwendet werden
-
-__Error__
-> Auf der Node liegt ein Fehler vor und kann daher nicht verwendet werden
-
-__Offline__
-> Die Node ist offline oder nicht erreichbar
+    [*] --> Offline
+    Offline --> Preparing
+    Offline --> Ready
+    Preparing --> Ready
+    Ready --> Debug
+    Ready --> Live
+    Ready --> Error
+    Live --> Ready
+    Live --> Error
+    Error --> Ready
+    Debug --> Ready
+    Debug --> Error
+    Error --> [*]
+```
