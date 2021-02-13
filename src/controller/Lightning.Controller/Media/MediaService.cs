@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -14,8 +15,7 @@ namespace Lightning.Controller.Media
 	internal class MediaService : IMediaService, ICreateOnStartup
 	{
 		private readonly MediaSettings _settings;
-		private readonly MD5 _md5;
-		private readonly Dictionary<(string Name, DateTime LastWrite), string> _hashCache;
+		private readonly ConcurrentDictionary<string, string> _hashCache;
 		private readonly FileSystemWatcher _watcher;
 		private readonly ILogger _logger;
 
@@ -24,8 +24,7 @@ namespace Lightning.Controller.Media
 		public MediaService(IOptions<MediaSettings> mediaSettings, ILogger<MediaService> logger)
 		{
 			_logger = logger;
-			_md5 = MD5.Create();
-			_hashCache = new Dictionary<(string, DateTime), string>();
+			_hashCache = new ConcurrentDictionary<string, string>();
 			_settings = mediaSettings.Value;
 			_updates = Channel.CreateUnbounded<(string, UpdateType)>();
 			_watcher = new FileSystemWatcher()
@@ -43,12 +42,7 @@ namespace Lightning.Controller.Media
 
 			foreach (var file in dirInfo.GetFiles())
 			{
-				var hashKey = (file.Name, file.LastWriteTime);
-				if (!_hashCache.TryGetValue(hashKey, out var hash) || ignoreCache)
-				{
-					hash = ComputeHash(file.FullName);
-					_hashCache.TryAdd(hashKey, hash);
-				}
+				var hash = _hashCache.GetOrAdd(file.Name, k => ComputeHash(file.FullName));
 
 				var link = $"http://localhost:5000/media/{file.Name}";
 
@@ -58,7 +52,7 @@ namespace Lightning.Controller.Media
 					file.Length,
 					file.CreationTime,
 					file.LastWriteTime,
-					hash.ToString(),
+					hash,
 					new Uri(link)
 				);
 			}
@@ -69,16 +63,21 @@ namespace Lightning.Controller.Media
 			var filePath = Path.Combine(_settings.StoragePath, file.FileName);
 			using var stream = File.Create(filePath);
 			await file.CopyToAsync(stream);
+			var hash = ComputeHash(filePath);
+			_hashCache.AddOrUpdate(file.Name, hash, (key, oldValue) => hash);
 			await _updates.Writer.WriteAsync((file.FileName, UpdateType.ADDED));
 		}
+
 
 		public IAsyncEnumerable<(string fileName, UpdateType updateType)> GetUpdates()
 			=> _updates.Reader.ReadAllAsync();
 
+
 		private string ComputeHash(string fullName)
 		{
+			using var md5 = MD5.Create();
 			using var stream = File.OpenRead(fullName);
-			var hash = _md5.ComputeHash(stream);
+			var hash = md5.ComputeHash(stream);
 			return BitConverter.ToString(hash);
 		}
 	}
