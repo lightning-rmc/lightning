@@ -30,7 +30,7 @@ namespace Lightning.Node.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-			services.AddNodeCoreServices(_configuration);
+			services.AddNodeServices(_configuration);
 			if (_featureFlags.NodeWithoutServer)
 			{
 			}

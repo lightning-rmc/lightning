@@ -15,7 +15,7 @@ namespace Lightning.Node.Communications
 
 		GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient();
 		GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient();
-		GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient();
+		//GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient();
 		GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient();
 
 	}

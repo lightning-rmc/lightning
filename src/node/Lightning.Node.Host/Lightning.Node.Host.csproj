@@ -16,7 +16,7 @@
     <None Update="Media\video_fullhd.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Media\vIdeo_4k.mp4">
+    <None Update="Media\video_4k.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

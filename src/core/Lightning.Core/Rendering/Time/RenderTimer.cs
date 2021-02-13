@@ -52,7 +52,7 @@ namespace Lightning.Core.Rendering.Time
 
 				if (_logger?.IsEnabled(LogLevel.Debug) ?? false)
 				{
-					_logger?.LogDebug("Timer run, sleepDuration: '{duration}ms', calcDuration '{duration}'  inner Timer tick: '{_timerTick}' at time {DateTime.UtcNow}", sleepDuration, duration, _timerTick, DateTime.UtcNow);
+					_logger?.ReportTimerCycle(sleepDuration, duration, _timerTick, DateTime.UtcNow);
 				}
 
 				Thread.Sleep(sleepDuration);

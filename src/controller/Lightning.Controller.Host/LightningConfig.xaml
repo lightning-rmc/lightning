@@ -1,0 +1,5 @@
+<ProjectDefinition  xmlns="clr-namespace:Lightning.Core.Definitions;assembly=Lightning.Core">
+	<ProjectDefinition.Nodes>
+		<NodeDefinition />
+	</ProjectDefinition.Nodes>
+</ProjectDefinition>

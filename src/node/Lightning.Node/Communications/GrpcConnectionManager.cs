@@ -32,9 +32,9 @@ namespace Lightning.Node.Communications
 			=> _serviceProvider?.GetRequiredService<GrpcLifeTimeService.GrpcLifeTimeServiceClient>()
 				?? throw new InvalidOperationException($"First call {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
-		public GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient()
-			=> _serviceProvider?.GetRequiredService<GrpcMediaService.GrpcMediaServiceClient>()
-					   ?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
+		//public GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient()
+		//	=> _serviceProvider?.GetRequiredService<GrpcMediaService.GrpcMediaServiceClient>()
+		//			   ?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcTimeService.GrpcTimeServiceClient>()
@@ -57,10 +57,10 @@ namespace Lightning.Node.Communications
 			{
 				opt.Address = baseUri;
 			});
-			colllection.AddGrpcClient<GrpcMediaService.GrpcMediaServiceClient>(opt =>
-			{
-				opt.Address = baseUri;
-			});
+			//colllection.AddGrpcClient<GrpcMediaService.GrpcMediaServiceClient>(opt =>
+			//{
+			//	opt.Address = baseUri;
+			//});
 			colllection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;

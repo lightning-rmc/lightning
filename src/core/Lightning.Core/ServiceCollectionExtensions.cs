@@ -27,7 +27,7 @@ namespace Lightning.Core
 			//TODO:  Make it transient or move it in RenderFactory or something similar.
 			//       To get the possibility for multi instances of a IRenderHost.
 			services.TryAddSingleton<IRenderHost, RenderHost<Mat>>();
-			services.TryAddSingleton<IRenderTreeBuilder<Mat>, OpenCVRenderTreeBuilder>();
+			services.AddGrpcTimer();
 			return services;
 		}
 
@@ -40,15 +40,7 @@ namespace Lightning.Core
 			return services;
 		}
 
-		public static IServiceCollection AddRendering(this IServiceCollection services)
-		{
-			if (services is null)
-				throw new ArgumentNullException(nameof(services));
 
-			services.AddRenderingCore();
-			services.AddGrpcTimer();
-			return services;
-		}
 
 		public static IServiceCollection AddOpenCVWindowHost(this IServiceCollection services)
 		{

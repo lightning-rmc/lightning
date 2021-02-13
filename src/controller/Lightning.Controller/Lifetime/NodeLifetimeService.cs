@@ -91,10 +91,8 @@ namespace Lightning.Controller.Lifetime
 			}
 		}
 
-
 		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
 			=> _nodes.Select(ns => (ns.Key, ns.Value));
-
 
 		public bool RemoveNode(string nodeId)
 		{

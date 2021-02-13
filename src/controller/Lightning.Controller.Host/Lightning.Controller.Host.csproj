@@ -9,4 +9,11 @@
 		<ProjectReference Include="..\Lightning.Controller\Lightning.Controller.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="LightningConfig.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
