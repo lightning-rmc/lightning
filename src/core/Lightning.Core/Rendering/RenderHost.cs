@@ -56,6 +56,10 @@ namespace Lightning.Core.Rendering
 			{
 				var image = new TFrame();
 				root.Process(image, ticks);
+				if (!IsRunning)
+				{
+					return;
+				}
 			}
 		}
 
@@ -66,6 +70,7 @@ namespace Lightning.Core.Rendering
 			if (IsRunning)
 			{
 				IsRunning = false;
+				_timer.StopTimer();
 				_logger?.LogDebug("RenderHost is stopped.");
 			}
 			else

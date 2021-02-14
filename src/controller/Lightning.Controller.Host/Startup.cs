@@ -34,6 +34,7 @@ namespace Lightning.Controller.Host
 			services.AddGrpc();
 			services.AddNodeLifetime();
 			services.AddMediaServices(_configuration);
+			services.AddHostedService<StartupBootStrapper>();
 		}
 
 

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -26,8 +27,6 @@ namespace Lightning.Controller.Lifetime
 			_nodeStates = new Dictionary<string, NodeState>();
 			_logger = logger;
 			//TODO: Remove Test Register
-
-
 			//TODO: Remove testcase
 			Task.Run(async () =>
 			{
@@ -37,8 +36,11 @@ namespace Lightning.Controller.Lifetime
 				//	await UpdateNodeStateAsync(rnd.NextDouble() > 0.5 ? NodeState.Live : NodeState.Error);
 				//	await Task.Delay(2000);
 				//}
-				await Task.Delay(5000);
-				TryRegisterNode("test");
+				await Task.Delay(3000);
+				await this.GoLiveAsync();
+				await Task.Delay(2000);
+				await this.GoReadyAsync();
+				await this.GoLiveAsync();
 			});
 		}
 

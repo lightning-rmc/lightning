@@ -1,4 +1,3 @@
-using Lightning.Core.Definitions.Layers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

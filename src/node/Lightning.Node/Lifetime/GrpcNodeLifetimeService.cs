@@ -84,6 +84,22 @@ namespace Lightning.Node.Lifetime
 			//TODO: Check Conditions if it can be set?
 			//TODO: Set to internal State...like ready, live, etc..
 
+			switch (command)
+			{
+				case NodeCommandRequest.GoLive:
+					_renderHost.Start();
+					break;
+				case NodeCommandRequest.GoReady:
+					_renderHost.Stop();
+					break;
+				case NodeCommandRequest.ShowInfo:
+					break;
+				case NodeCommandRequest.HideInfo:
+					break;
+				default:
+					break;
+			}
+
 			await _requestChannel.Writer.WriteAsync(command);
 		} 
 		#endregion
