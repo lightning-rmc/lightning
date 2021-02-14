@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Definitions.Layers
+namespace Lightning.Core.Definitions
 {
 	public abstract class InputLayerBaseDefinition
 	{

@@ -1,4 +1,4 @@
-﻿namespace Lightning.Core.Definitions.Layers
+namespace Lightning.Core.Definitions
 {
 	public class MergeProcessorDefinition
 	{

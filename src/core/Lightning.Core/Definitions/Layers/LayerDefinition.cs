@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Lightning.Core.Definitions.Layers
+namespace Lightning.Core.Definitions
 {
 	public class LayerDefinition : LayerBaseDefinition
 	{
