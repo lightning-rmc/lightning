@@ -23,8 +23,10 @@ namespace Lightning.Controller.Lifetime
 			_logger = logger;
 			_allUpdatesChannel = Channel.CreateUnbounded<(string, NodeState)>();
 			//TODO: Remove Test Register
-			TryRegisterNode("test");
-
+			TryRegisterNode("test-1");
+			TryRegisterNode("test-2");
+			TryRegisterNode("test-3");
+			TryRegisterNode("test-4");
 
 			//TODO: Remove testcase
 			Task.Run(async () =>

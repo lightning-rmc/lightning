@@ -6,7 +6,7 @@
 }
 
 .node-list {
-	width: 15rem;
+	flex-basis: 15rem;
 	flex-shrink: 0;
 	overflow-y: auto;
 }
@@ -14,5 +14,4 @@
 .node-details {
 	flex-grow: 1;
 	height: 100%;
-	padding: 2rem;
 }

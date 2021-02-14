@@ -1,4 +1,2 @@
-<app-node-list class="node-list" [nodes]="nodes"></app-node-list>
-<div class="node-details">
-	<router-outlet></router-outlet>
-</div>
+<app-node-list class="node-list" [nodes]="nodes" [selectedNode]="selectedNode" (selectNode)="selectedNode = $event"></app-node-list>
+<app-node-details class="node-details" *ngIf="selectedNode" [node]="selectedNode"></app-node-details>

@@ -8,10 +8,11 @@ import { NodeState } from '../models/NodeState.enum';
 	styleUrls: ['./node-list.component.scss'],
 })
 export class NodeListComponent implements OnInit {
-	constructor() {}
+	NodeState = NodeState;
 
 	@Input() nodes?: Node[];
+	@Input() selectedNode?: Node;
+	@Output() selectNode = new EventEmitter<Node>();
 
 	ngOnInit(): void {}
-	NodeState = NodeState;
 }

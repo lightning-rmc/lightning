@@ -1,1 +1,14 @@
-Test
+<div class="details">
+	<div class="property">
+		<div class="property__name">Id</div>
+		<div class="property__value">{{ node?.id }}</div>
+	</div>
+	<div class="property">
+		<div class="property__name">Name</div>
+		<div class="property__value">{{ node?.name }}</div>
+	</div>
+	<div class="property">
+		<div class="property__name">State</div>
+		<div class="property__value">{{ getStateName(node?.state) }}</div>
+	</div>
+</div>
