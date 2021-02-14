@@ -1,0 +1,29 @@
+@import "src/variables";
+
+:host {
+	display: block;
+	background: $submenu-bg;
+	border: $border;
+}
+
+
+.tabs {
+	display: flex;
+	flex-direction: row;
+	border-bottom: $border;
+	.tab {
+		padding: 1rem 2rem;
+		flex: 1 0;
+		text-align: center;
+		border-bottom: 2px solid transparent;
+
+		&:hover, &--active {
+			cursor: pointer;
+			border-bottom-color: $color-primary;
+		}
+	}
+}
+
+.outlet {
+	padding: 2rem;
+}

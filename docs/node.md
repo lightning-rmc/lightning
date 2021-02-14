@@ -1,16 +1,32 @@
 # Node
 
 ## States
-Eine Node befindet sich immer in einem der folgenden Stadien:
+Eine Node befindet sich immer in einem der folgenden Zustände:
 
-__Active__
-> Node ist online und registriert/konfiguriert
+```mermaid
+stateDiagram-v2
+    Offline
+    Preparing
+    Ready
+    Live
+    Error
 
-__Needs Configuration__
-> Node ist online, muss aber noch konfiguriert werden und kann bis dahin nicht verwendet werden
+    [*] --> Offline
+    Offline --> Preparing
+    Offline --> Ready
+    Preparing --> Ready
+    Ready --> Preparing
+    Ready --> Live
+    Ready --> Error
+    Live --> Ready
+    Live --> Error
+    Error --> Ready
+    Error --> [*]
+```
 
-__Error__
-> Auf der Node liegt ein Fehler vor und kann daher nicht verwendet werden
-
-__Offline__
-> Die Node ist offline oder nicht erreichbar
+Ein Zustandwechsel (bspw. von Ready nach Live oder von Live nach Ready) wird vom Controller über Commands gefordert. Diese Commands bestehen aus einem Enum der verschiedenen Befehle, welche von der Node interpretiert werden:
+- GoLive
+- GoReady
+- ShowInfo
+- HideInfo
+- _(RebootNode)_

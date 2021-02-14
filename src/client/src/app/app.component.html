@@ -1,11 +1,16 @@
 <div class="navbar">
 	<div class="navbar-top">
-		<svg class="navbar-top__icon" xmlns="http://www.w3.org/2000/svg" width="148.224" height="265.407" viewBox="0 0 148.224 265.407">
+		<svg #toggleButton (click)="isMenuOpen = !isMenuOpen" class="navbar-top__icon" xmlns="http://www.w3.org/2000/svg" width="148.224" height="265.407" viewBox="0 0 148.224 265.407">
 			<path
 				d="M669.317,4070.417l-59.605,147.9h70.781L639.515,4335.04l116.727-168.881H669.317l70.781-95.741Z"
 				transform="translate(-608.971 -4069.917)"
 			/>
 		</svg>
+		<ul #menu class="navbar-top__popup" *ngIf="isMenuOpen">
+			<li class="popup__item">New Project</li>
+			<li class="popup__item">Import Project</li>
+			<li class="popup__item">Export Project</li>
+		</ul>
 	</div>
 	<div class="navbar-items">
 		<div class="navbar-item" routerLink="nodes" routerLinkActive="navbar-item-active">
