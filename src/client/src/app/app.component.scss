@@ -1,3 +1,5 @@
+@import "src/variables";
+
 $navbar-item-size: 4.5rem;
 $navbar-bg: #1d2023;
 
@@ -15,7 +17,6 @@ $navbar-item-transition: all 0.2s ease-out;
 	flex-direction: column;
 
 	background: $navbar-bg;
-	// box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .navbar-top {
@@ -63,7 +64,7 @@ $navbar-item-transition: all 0.2s ease-out;
 		transition: $navbar-item-transition;
 
 		&.navbar-item-active {
-			background: #7289da;
+			background: $color-primary;
 			.navbar-item__icon {
 				opacity: 1;
 			}

@@ -25,20 +25,20 @@ export interface Node {
 export interface LayerGroup {
 	id: string;
 	layer: Layer[];
-	nodes: Node[];
+	nodes?: Node[];
 }
 
 export interface Layer {
 	id: string;
 	source: string;
-	restartAfterStop: boolean;
-	transformation: {
+	restartAfterStop?: boolean;
+	transformation?: {
 		x: number;
 		y: number;
 		scale: number;
 		rotation: number;
 	},
-	color: any;
-	opacity: number;
-	blendMode: any;
+	color?: any;
+	opacity?: number;
+	blendMode?: any;
 }

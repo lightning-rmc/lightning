@@ -1,0 +1,19 @@
+@import 'src/variables';
+
+:host {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 2rem;
+}
+
+.master-detail {
+	height: 100%;
+	display: flex;
+	gap: 0.5rem;
+	flex-direction: column;
+	.master,
+	.detail {
+		overflow-y: auto;
+	}
+}

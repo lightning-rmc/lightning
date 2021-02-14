@@ -1,4 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@import "variables";
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
 
 html,
 body {
@@ -12,6 +20,11 @@ body {
 	color: #ddd;
 	user-select: none;
 	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+	color: currentColor;
 }
 
 /* width */
@@ -32,4 +45,9 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: rgba(255, 255, 255, 0.2);
+}
+
+
+.subtitle {
+	margin-bottom: 1rem;
 }

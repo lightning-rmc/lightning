@@ -1,0 +1,41 @@
+@import "src/variables";
+
+:host {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	width: 100%;
+	background-color: $submenu-bg;
+	padding: 1rem;
+}
+
+.group {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	justify-content: space-between;
+	height: 8rem;
+}
+
+.group-label {
+	border: 1px solid #fff;
+	width: 8rem;
+
+	&.group--active {
+		border-color: orange;
+	}
+}
+
+.layer {
+	flex: 1 0;
+	border: 1px solid #fff;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&--active {
+		border-color: $color-primary;
+	}
+}

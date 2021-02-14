@@ -1,13 +1,18 @@
+@import "src/variables";
+
 $icon-size: 1.4rem;
 
 $node-color: #3d4146;
 
 :host {
+	background: $submenu-bg;
+	padding: $submenu-padding;
+}
+
+.nodes {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
-	background: #23272a;
-	padding: 2rem;
 }
 
 .node {
