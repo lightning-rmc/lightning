@@ -7,20 +7,31 @@ option csharp_namespace = "Lightning.Core.Generated";
 package Lightning;
 
 service GrpcLifeTimeService {
-	rpc Connect(GeneralRequest) returns (stream NodeStateMessage) {} //TODO: add Client to Server Stream
+	rpc Connect(stream NodeCommandResponseMessage) returns (stream NodeCommandRequestMessage) {}
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }
 
-
-
-message NodeStateMessage {
-	enum State {
-		Info = 0;
-		Edit = 1;
-		Live = 2;
-		Error = 255;
+message NodeCommandRequestMessage {
+	enum CommandRequest {
+		GoLive = 0;
+		GoReady = 1;
+		ShowInfo = 2;
+		HideInfo = 3;
 	}
-	State state = 1;
+	CommandRequest command = 1;
+}
+
+
+message NodeCommandResponseMessage {
+	enum CommandResponse {
+		IsLive = 0;
+		IsReady = 1;
+		IsPreparing = 2;
+		ShowingInfo = 3;
+		HidingInfo = 4;
+		HasError = 255;
+	}
+	CommandResponse commnad = 1;
 }
 
 message LayerActivationMessage {
