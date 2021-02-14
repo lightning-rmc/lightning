@@ -10,17 +10,18 @@ namespace Lightning.Controller.Lifetime
 	public interface INodeLifetimeService
 	{
 
-		IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates();
+		IEnumerable<(string NodeId, NodeState Satte)> GetAllNodeStates();
 
 		//TODO: Change return type to ResponseObject?
 		//TODO: Change argument to more useful data, e.g. max display size or fps
 		bool TryRegisterNode(string nodeId);
-		bool RemoveNode(string nodeId);
+		bool TryRemoveNode(string nodeId);
 
-		IAsyncEnumerable<NodeState> GetNodeStatesAllAsync(string nodeId);
-		IAsyncEnumerable<(string NodeId, NodeState State)> GetAllNodeStatesAllAsync();
+		//TODO: Check if needed? maybe not?
+		IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId);
+		IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync();
 
-		Task UpdateNodeStateAsync(NodeState state, string? nodeId = null);
+		Task SetNodeCommandRequestsAsync(NodeCommandRequest request, string? nodeId = null);
 
 	}
 }

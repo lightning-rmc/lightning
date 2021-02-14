@@ -1,5 +1,10 @@
 <ProjectDefinition  xmlns="clr-namespace:Lightning.Core.Definitions;assembly=Lightning.Core">
 	<ProjectDefinition.Nodes>
+		<NodeDefinition FramesPerSecond="60"/>
 		<NodeDefinition />
 	</ProjectDefinition.Nodes>
+	<ProjectDefinition.RenderTrees>
+		<RenderTreeDefinition>
+		</RenderTreeDefinition>
+	</ProjectDefinition.RenderTrees>
 </ProjectDefinition>

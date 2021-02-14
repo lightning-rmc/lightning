@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace Lightning.Core.Definitions
 {
 	public class RenderTreeDefinition
 	{
-
+		public LayerBaseDefinition Root { get; set; }
 	}
 }
