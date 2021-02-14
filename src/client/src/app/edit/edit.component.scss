@@ -10,10 +10,6 @@
 .master-detail {
 	height: 100%;
 	display: flex;
-	gap: 0.5rem;
+	gap: 1rem;
 	flex-direction: column;
-	.master,
-	.detail {
-		overflow-y: auto;
-	}
 }

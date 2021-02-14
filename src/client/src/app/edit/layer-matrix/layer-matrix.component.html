@@ -1,4 +1,4 @@
-<div *ngFor="let group of groups" class="group">
-	<div class="group-label" [routerLink]="'groups/' + group.id" routerLinkActive="group--active"></div>
-	<div *ngFor="let layer of group.layer" [routerLink]="'layers/' + layer.id" class="layer" routerLinkActive="layer--active">{{ layer.id }}</div>
+<div *ngFor="let group of groups; let groupIndex = index" class="group">
+	<div class="group-label" [routerLink]="'groups/' + group.id" routerLinkActive="group-label--active">Group {{ groupIndex + 1 }}</div>
+	<div *ngFor="let layer of group.layer; let layerIndex = index" [routerLink]="'layers/' + layer.id" class="layer" routerLinkActive="layer--active">Layer {{ layerIndex + 1 }}</div>
 </div>

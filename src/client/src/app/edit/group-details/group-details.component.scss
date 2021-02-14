@@ -1,0 +1,9 @@
+@import "src/variables";
+
+:host {
+	display: block;
+	padding: 2rem;
+
+	background: $submenu-bg;
+	border: $border;
+}

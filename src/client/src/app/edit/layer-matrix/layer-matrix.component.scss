@@ -6,7 +6,8 @@
 	gap: 0.5rem;
 	width: 100%;
 	background-color: $submenu-bg;
-	padding: 1rem;
+	padding: 2rem;
+	border: $border;
 }
 
 .group {
@@ -15,16 +16,15 @@
 	flex-direction: row;
 	gap: 0.5rem;
 	justify-content: space-between;
-	height: 8rem;
+	height: 6rem;
 }
 
 .group-label {
 	border: 1px solid #fff;
 	width: 8rem;
-
-	&.group--active {
-		border-color: orange;
-	}
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .layer {
@@ -34,7 +34,12 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
 
+.group-label, .layer {
+	&:hover {
+		cursor: pointer;
+	}
 	&--active {
 		border-color: $color-primary;
 	}

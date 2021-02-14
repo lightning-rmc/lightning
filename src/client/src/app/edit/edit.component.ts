@@ -11,31 +11,31 @@ export class EditComponent implements OnInit {
 
 	groups: LayerGroup[] = [
 		{
-			id: 'test-1',
+			id: 'group-1',
 			layer: [
 				{
-					id: 'test-1',
+					id: 'layer-1',
 					source: 'media1.mp4',
 				},
 				{
-					id: 'test-2',
+					id: 'layer-2',
 					source: 'media2.mp4',
 				},
 				{
-					id: 'test-3',
+					id: 'layer-3',
 					source: 'media3.mp4',
 				},
 				{
-					id: 'test-4',
+					id: 'layer-4',
 					source: 'media4.mp4',
 				},
 			],
 		},
 		{
-			id: 'test-2',
+			id: 'group-2',
 			layer: [
 				{
-					id: 'test-5',
+					id: 'layer-5',
 					source: 'media1.mp4',
 				},
 			],

@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 $navbar-item-size: 4.5rem;
 $navbar-bg: #1d2023;
@@ -20,21 +20,45 @@ $navbar-item-transition: all 0.2s ease-out;
 }
 
 .navbar-top {
-	padding: 1rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	cursor: pointer;
+	position: relative;
 
 	&__icon {
+		cursor: pointer;
+		margin: 1rem;
 		height: 2.5rem;
 		width: 2.5rem;
 		fill: rgba(255, 255, 255, 0.25);
 		transition: all 0.2s ease-out;
+		&:hover {
+			fill: #fbcf3d;
+			transform: scale(1.1);
+		}
 	}
-	&:hover &__icon {
-		fill: #fbcf3d;
-		transform: scale(1.1);
+
+	&__popup {
+		position: absolute;
+		list-style: none;
+		top: 100%;
+		left: 0.5rem;
+		width: 20rem;
+		background: $navbar-bg;
+		border: 2px solid darken($navbar-bg, 5%);
+		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
+
+		.popup__item {
+			padding: 1rem;
+
+			&:not(:last-child) {
+				border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+			}
+			&:hover {
+				background: transparentize($color-primary, 0.8);
+				cursor: pointer;
+			}
+		}
 	}
 }
 
