@@ -1,0 +1,18 @@
+:host {
+	padding: 2rem;
+}
+
+
+.details {
+	display: flex;
+	flex-direction: column;
+}
+
+.property {
+	display: flex;
+	flex-direction: row;
+
+	&__name {
+		flex: 0 0 10rem;
+	}
+}

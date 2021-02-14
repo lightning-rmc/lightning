@@ -1,6 +1,6 @@
 <h2 class="subtitle">Nodes</h2>
 <div class="nodes">
-	<div class="node" *ngFor="let node of nodes" [routerLink]="node.id" routerLinkActive="node-selected">
+	<div class="node" *ngFor="let node of nodes" (click)="selectNode.emit(node)" [class.node--selected]="node == selectedNode">
 		<span
 		class="node-state"
 		[class.node-state__online]="node.state !== NodeState.Offline && node.state !== NodeState.Error"
