@@ -8,15 +8,12 @@ namespace Lightning.Controller.Lifetime
 {
 	public class GrpcLifetimeService : GrpcLifeTimeService.GrpcLifeTimeServiceBase
 	{
-		private readonly INodeLifetimeService _lifetimeService;
-		private readonly INodeLifetimeRequestPublisher _lifetimeServicePublisher;
+		private readonly INodeLifetimeRequestResponsePublisher _lifetimeServicePublisher;
 		private readonly ILogger<GrpcLifetimeService>? _logger;
 
-		public GrpcLifetimeService(INodeLifetimeService lifetimeService,
-			INodeLifetimeRequestPublisher lifetimeServicePublisher,
+		public GrpcLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
 			ILogger<GrpcLifetimeService>? logger = null)
 		{
-			_lifetimeService = lifetimeService;
 			_lifetimeServicePublisher = lifetimeServicePublisher;
 			_logger = logger;
 		}
@@ -52,25 +49,5 @@ namespace Lightning.Controller.Lifetime
 				await responseStream.WriteAsync(message);
 			}
 		}
-
-		//public override async Task Connect(GeneralRequest request, IServerStreamWriter<NodeStateMessage> responseStream, ServerCallContext context)
-		//{
-		//	//TODO: get real Id
-		//	var id = "test";
-		//	var stream = _lifetimeService.GetNodeCommandsAllAsync(id);
-
-		//	await foreach (var state in stream)
-		//	{
-		//		//Note: No need to tell the node that it is offline
-		//		if (state != NodeState.Offline)
-		//		{
-		//			await responseStream.WriteAsync(new NodeStateMessage
-		//			{
-		//				State = (NodeStateMessage.Types.State)state
-		//			});
-		//		}
-		//	}
-		//}
-
 	}
 }

@@ -17,6 +17,7 @@ namespace Lightning.Controller.Lifetime
 		bool TryRegisterNode(string nodeId);
 		bool TryRemoveNode(string nodeId);
 
+		//TODO: Check if needed? maybe not?
 		IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId);
 		IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync();
 

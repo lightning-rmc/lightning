@@ -17,7 +17,9 @@ namespace Lightning.Controller
 	{
 		public static IServiceCollection AddNodeLifetime(this IServiceCollection services)
 		{
-			services.TryAddSingleton<INodeLifetimeService, NodeLifetimeService>();
+			services.TryAddSingleton<NodeLifetimeService>();
+			services.TryAddSingleton<INodeLifetimeService>(sp => sp.GetRequiredService<NodeLifetimeService>());
+			services.TryAddSingleton<INodeLifetimeRequestResponsePublisher>(sp => sp.GetRequiredService<NodeLifetimeService>());
 			return services;
 		}
 

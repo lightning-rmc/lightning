@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
 {
-	internal class NodeLifetimeService : INodeLifetimeService, INodeLifetimeRequestPublisher
+	internal class NodeLifetimeService : INodeLifetimeService, INodeLifetimeRequestResponsePublisher
 	{
 		private readonly ILogger<NodeLifetimeService>? _logger;
+		//TODO: maybe change to ConcurrentDictionary
 		private readonly Dictionary<string, Channel<NodeCommandResponse>> _nodeCommandResponsesChannels;
 		private readonly Dictionary<string, Channel<NodeCommandRequest>> _nodeCommandRequestsChannels;
 		private readonly Dictionary<string, NodeState> _nodeStates;
@@ -36,8 +37,8 @@ namespace Lightning.Controller.Lifetime
 				//	await UpdateNodeStateAsync(rnd.NextDouble() > 0.5 ? NodeState.Live : NodeState.Error);
 				//	await Task.Delay(2000);
 				//}
-
 				await Task.Delay(5000);
+				TryRegisterNode("test");
 			});
 		}
 
@@ -58,11 +59,21 @@ namespace Lightning.Controller.Lifetime
 
 		public bool TryRemoveNode(string nodeId)
 		{
+			//TODO: Not sure if needed?
+			//Note: Remove also from ProjectManager
 			return true;
 		}
 
 		public bool TryRegisterNode(string nodeId)
 		{
+			if (_nodeStates.ContainsKey(nodeId))
+			{
+				return false;
+			}
+			_nodeStates.Add(nodeId, NodeState.Offline);
+			_nodeCommandRequestsChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandRequest>());
+			_nodeCommandResponsesChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandResponse>());
+			_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
 			return true;
 		}
 
@@ -95,91 +106,24 @@ namespace Lightning.Controller.Lifetime
 
 		public IAsyncEnumerable<NodeCommandRequest> GetNodeRequestsAllAsync(string nodeId)
 		{
-			throw new NotImplementedException();
+			if (_nodeCommandRequestsChannels.TryGetValue(nodeId, out var channel))
+			{
+				return channel.Reader.ReadAllAsync();
+			}
+			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 		}
 
-		public Task SetNodeResponseAsync(string nodeId, NodeCommandResponse nodeCommand)
+		public async Task SetNodeResponseAsync(string nodeId, NodeCommandResponse nodeCommand)
 		{
-			throw new NotImplementedException();
+			if (_nodeCommandResponsesChannels.TryGetValue(nodeId, out var channel))
+			{
+				await channel.Writer.WriteAsync(nodeCommand);
+			}
+			else
+			{
+				throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
+			}
+			await _allUpdatesChannel.Writer.WriteAsync((nodeId, nodeCommand));
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		//public bool TryRegisterNode(string nodeId)
-		//{
-		//	if (_nodes.ContainsKey(nodeId))
-		//	{
-		//		return false;
-		//	}
-		//	_nodes.Add(nodeId, NodeState.Offline);
-		//	_nodeChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
-		//	_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
-		//	return true;
-		//}
-
-
-
-
-
-		//public async Task SetNodeCommandRequestsAsync(NodeState state, string? nodeId = null)
-		//{
-		//	if (nodeId is not null)
-		//	{
-		//		if (!_nodes.ContainsKey(nodeId))
-		//		{
-		//			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
-		//		}
-
-		//		_nodes[nodeId] = state;
-		//		await _nodeChannels[nodeId].Writer.WriteAsync(state);
-		//		await _allUpdatesChannel.Writer.WriteAsync((nodeId, state));
-		//		_logger?.LogDebug("NodeState from node '{nodeId}' changed to '{state}'", nodeId, state);
-		//	}
-		//	else
-		//	{
-		//		foreach (var node in _nodes.Keys)
-		//		{
-		//			await SetNodeCommandRequestsAsync(state, node);
-		//		}
-		//	}
-		//}
-
-		//public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
-		//	=> _nodes.Select(ns => (ns.Key, ns.Value));
-
-		//public bool RemoveNode(string nodeId)
-		//{
-		//	//TODO: Not sure if needed?
-		//	//Note: Remove also from ProjectManager
-		//	throw new System.NotImplementedException();
-		//}
-
-		//public IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId)
-		//{
-		//	throw new NotImplementedException();
-		//}
-
-		//public IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync()
-		//{
-		//	throw new NotImplementedException();
-		//}
-
-		//public Task SetNodeCommandRequestsAsync(NodeCommandRequest request, string? nodeId = null)
-		//{
-		//	throw new NotImplementedException();
-		//}
 	}
 }
