@@ -47,7 +47,7 @@ namespace Lightning.Controller.Lifetime
 		public IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync()
 			=> _allUpdatesChannel.Reader.ReadAllAsync();
 
-		public IEnumerable<(string NodeId, NodeState Satte)> GetAllNodeStates()
+		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
 			=> _nodeStates.Select(kv => (kv.Key, kv.Value));
 
 		public IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId)
