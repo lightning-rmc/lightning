@@ -28,10 +28,10 @@ namespace Lightning.Controller.Projects
 		{
 			return new RenderTreeDefinition()
 			{
-				Root = new LayerDefinition()
-				{
-					Id = "MyLayer",
-				}
+				//Root = new LayerDefinition()
+				//{
+				//	Id = "MyLayer",
+				//}
 			};
 		}
 

@@ -1,4 +1,5 @@
 using Lightning.Core.Definitions.Collections;
+using Portable.Xaml.Markup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions
 {
+	[ContentProperty(nameof(Childs))]
 	public class SplitterLayerDefinition : LayerBaseDefinition
 	{
 		public SplitterLayerDefinition()
@@ -15,9 +17,6 @@ namespace Lightning.Core.Definitions
 		}
 
 
-		public LayerBaseDefinitionCollection Childs { get; set; }
-
-		public override IEnumerable<LayerBaseDefinition> GetChilds()
-			=> Childs;
+		public LayerBaseDefinitionCollectionCollection Childs { get; set; }
 	}
 }

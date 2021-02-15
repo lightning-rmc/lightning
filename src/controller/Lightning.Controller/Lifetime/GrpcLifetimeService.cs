@@ -1,7 +1,9 @@
 using Grpc.Core;
+using Lightning.Controller.Utils;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
@@ -25,21 +27,25 @@ namespace Lightning.Controller.Lifetime
 		{
 			//TODO: handle stream closing
 
-
 			//TODO: get real Id
-			var id = "test";
+			var nodeeId = context.GetHttpContext().GetNodeId();
+			if (nodeeId is null)
+			{
+				//TODO: handle more secure
+				throw new ArgumentException();
+			}
 			_ = Task.Factory.StartNew(async () =>
 			{
 				await foreach (var response in requestStream.ReadAllAsync())
 				{
 					//TODO: handle for secure check.
-					await _lifetimeServicePublisher.SetNodeResponseAsync(id, (NodeCommandResponse)response.Commnad);
+					await _lifetimeServicePublisher.SetNodeResponseAsync(nodeeId, (NodeCommandResponse)response.Commnad);
 				}
 
 			}, TaskCreationOptions.LongRunning);
 
 
-			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestsAllAsync(id))
+			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestsAllAsync(nodeeId))
 			{
 				var message = new NodeCommandRequestMessage
 				{

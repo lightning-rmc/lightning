@@ -23,5 +23,21 @@ namespace Lightning.Controller.Host.Controller
 		[HttpGet]
 		public IEnumerable<NodeDTO> GetNodes()
 			=> _nodeLifetimeSerivce.GetAllNodeStates().Select(n => new NodeDTO(n.NodeId, "Node", n.State));
+
+		[HttpPost("register/{nodeId}")]
+		public IActionResult Register([FromRoute]string nodeId)
+		{
+			var result = _nodeLifetimeSerivce.TryRegisterNode(nodeId);
+			if (result)
+			{
+				return Ok();
+			}
+			else
+			{
+				//TODO: Add useful error message
+				//TODO: Add Logging
+				return BadRequest("Node is already registered.");
+			}
+		}
 	}
 }

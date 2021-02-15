@@ -26,7 +26,14 @@ namespace Lightning.Node
 			services.AddNodeRendering();
 			services.AddOpenCVWindowHost();
 			services.AddFeatureFlags(configuration);
+			services.AddNodeConfiguration(configuration);
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
+			return services;
+		}
+
+		public static IServiceCollection AddNodeConfiguration(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.Configure<NodeConfiguration>(configuration.GetSection("Node"));
 			return services;
 		}
 

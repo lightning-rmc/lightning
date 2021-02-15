@@ -1,4 +1,6 @@
+using Grpc.Core;
 using Lightning.Core.Generated;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
@@ -9,12 +11,17 @@ namespace Lightning.Node.Communications
 {
 	internal class ConnectionManager : IConnectionManager
 	{
+
+
+		private string _httpClientName = "Controller";
 		private readonly IConnectionResolver _connectionResolver;
+		private readonly IConfiguration _configuration;
 		private ServiceProvider? _serviceProvider;
 
-		public ConnectionManager(IConnectionResolver connectionResolver)
+		public ConnectionManager(IConnectionResolver connectionResolver, IConfiguration configuration)
 		{
 			_connectionResolver = connectionResolver;
+			_configuration = configuration;
 			_serviceProvider = null;
 		}
 
@@ -43,41 +50,42 @@ namespace Lightning.Node.Communications
 		public async Task SearchAndAuthenticateForServerAsync(CancellationToken token = default)
 		{
 			//TODO: Add authentication
-
+			//TODO: Get Id from configuration
+			var nodeId = "Test2";
 			var connectionInfo = await _connectionResolver.GetConnectionInfoAsync();
 			ServerFound = true;
 			//TODO: Maybe move https vs. http in configuration
 			var baseUri = new Uri($@"https://{connectionInfo.IpAdress}:{connectionInfo.Port}");
-			var httpClient = new HttpClient();
-			httpClient.BaseAddress = baseUri;
-			////TODO: Handle Exception
-			var result = await httpClient.SendAsync(new HttpRequestMessage
+			var httpClient = new HttpClient
 			{
-				//TODO: Replace with real Id
-				RequestUri = new Uri("api/lifetime/test"),
-				Method = HttpMethod.Get
-			});
+				BaseAddress = baseUri
+			};
+			////TODO: Handle Exception/repsonse
+			var result = await httpClient.PostAsync("api/nodes/register/test", new StringContent(""));
+			var content = await  result.Content.ReadAsStringAsync();
 			var colllection = new ServiceCollection();
+			colllection.AddNodeConfiguration(_configuration);
 			colllection.AddGrpcClient<GrpcLayerEditService.GrpcLayerEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-			});
+
+			}).AddInterceptor<NodeIdInterceptor>();
 			colllection.AddGrpcClient<GrpcLifeTimeService.GrpcLifeTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-			});
+			}).AddInterceptor<NodeIdInterceptor>();
 			//colllection.AddGrpcClient<GrpcMediaService.GrpcMediaServiceClient>(opt =>
 			//{
 			//	opt.Address = baseUri;
-			//});
+			//}).AddInterceptor<NodeIdInterceptor>();
 			colllection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-			});
-			colllection.AddHttpClient(client =>
+			}).AddInterceptor<NodeIdInterceptor>();
+			colllection.AddHttpClient(_httpClientName, client =>
 			{
 				client.BaseAddress = baseUri;
-				
+
 			});
 			_serviceProvider = colllection.BuildServiceProvider();
 		}

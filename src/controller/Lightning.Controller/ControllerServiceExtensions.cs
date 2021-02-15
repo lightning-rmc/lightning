@@ -1,5 +1,6 @@
 using Lightning.Controller.Lifetime;
 using Lightning.Controller.Media;
+using Lightning.Controller.Projects;
 using Lightning.Core.Utils;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace Lightning.Controller
 		public static IServiceCollection AddControllerServices(this IServiceCollection services)
 		{
 			services.AddNodeLifetime();
+			services.TryAddSingleton<IProjectManager, ProjectManager>();
 			return services;
 		}
 

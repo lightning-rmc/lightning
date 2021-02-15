@@ -15,9 +15,5 @@ namespace Lightning.Core.Definitions
 		}
 
 		public string Id { get; set; } = string.Empty;
-
-
-		public abstract IEnumerable<LayerBaseDefinition> GetChilds();
-
 	}
 }

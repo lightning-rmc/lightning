@@ -20,10 +20,10 @@ namespace Lightning.Controller.Host.Controller
 			_projectManager = projectManager;
 		}
 
-		[HttpGet]
-		public string Index(string NodeId)
+		[HttpGet("{nodeId}")]
+		public string Index([FromRoute]string nodeId)
 		{
-			var result = _projectManager.GetRenderTree(NodeId);
+			var result = _projectManager.GetRenderTree(nodeId);
 			return XamlServices.Save(result);
 		}
 	}

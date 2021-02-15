@@ -1,10 +1,31 @@
-<ProjectDefinition  xmlns="clr-namespace:Lightning.Core.Definitions;assembly=Lightning.Core">
+<ProjectDefinition  xmlns="clr-namespace:Lightning.Core.Definitions;assembly=Lightning.Core"
+					xmlns:col="clr-namespace:Lightning.Core.Definitions.Collections;assembly=Lightning.Core">
 	<ProjectDefinition.Nodes>
 		<NodeDefinition FramesPerSecond="60"/>
 		<NodeDefinition />
 	</ProjectDefinition.Nodes>
 	<ProjectDefinition.RenderTrees>
 		<RenderTreeDefinition>
+			<LayerDefinition />
+			<LayerDefinition />
+			<LayerDefinition />
+			<SplitterLayerDefinition>
+				<col:LayerBaseDefinitionCollection>
+					<LayerDefinition/>
+					<LayerDefinition/>
+					<LayerDefinition/>
+				</col:LayerBaseDefinitionCollection>
+				<col:LayerBaseDefinitionCollection>
+					<LayerDefinition/>
+					<LayerDefinition/>
+					<LayerDefinition/>
+				</col:LayerBaseDefinitionCollection>
+				<col:LayerBaseDefinitionCollection>
+					<LayerDefinition/>
+					<LayerDefinition/>
+					<LayerDefinition/>
+				</col:LayerBaseDefinitionCollection>
+			</SplitterLayerDefinition>
 		</RenderTreeDefinition>
 	</ProjectDefinition.RenderTrees>
 </ProjectDefinition>
