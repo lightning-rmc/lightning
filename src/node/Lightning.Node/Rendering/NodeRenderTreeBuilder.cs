@@ -19,7 +19,7 @@ namespace Lightning.Node.Rendering
 			_windowHost = windowHost;
 		}
 
-		public ILayer<Mat> BuildTree()
+		public async Task<ILayer<Mat>> BuildTreeAsync()
 		{
 			return new DummyLayer(_windowHost);
 		}

@@ -36,7 +36,7 @@ namespace Lightning.Node
 				throw new ArgumentNullException(nameof(services));
 
 			services.AddSingleton<IConnectionResolver, ConfigurationConnectionResolver>();
-			services.AddSingleton<IGrpcConnectionManager, GrpcConnectionManager>();
+			services.AddSingleton<IConnectionManager, ConnectionManager>();
 			return services;
 		}
 

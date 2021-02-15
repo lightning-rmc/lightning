@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,11 +9,12 @@ using Lightning.Core.Generated;
 
 namespace Lightning.Node.Communications
 {
-	public interface IGrpcConnectionManager : IDisposable
+	public interface IConnectionManager : IDisposable
 	{
 		bool ServerFound { get; }
 		Task SearchAndAuthenticateForServerAsync(CancellationToken token = default);
 
+		HttpClient GetHttpClient();
 		GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient();
 		GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient();
 		//GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient();

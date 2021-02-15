@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Http;
+using Lightning.Controller.Lifetime;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
 {
@@ -11,9 +7,25 @@ namespace Lightning.Controller.Host.Controller
 	[ApiController]
 	public class LifetimeController : ControllerBase
 	{
-		public LifetimeController()
-		{
+		private readonly INodeLifetimeService _lifetimeService;
 
+		public LifetimeController(INodeLifetimeService lifetimeService)
+		{
+			_lifetimeService = lifetimeService;
+		}
+
+		[HttpGet("register/{nodeId}")]
+		public IActionResult RegisterNode([FromRoute] string nodeId)
+		{
+			var result = _lifetimeService.TryRegisterNode(nodeId);
+			if (result)
+			{
+				return Ok();
+			}
+			else
+			{
+				return BadRequest(new { Message = "Node is already registered." });
+			}
 		}
 	}
 }

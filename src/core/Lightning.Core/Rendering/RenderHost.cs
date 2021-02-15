@@ -32,7 +32,7 @@ namespace Lightning.Core.Rendering
 			if (!IsRunning)
 			{
 				IsRunning = true;
-				var layer = _treeBuilder.BuildTree();
+				var layer = _treeBuilder.BuildTreeAsync();
 
 				new Thread(Process)
 				{

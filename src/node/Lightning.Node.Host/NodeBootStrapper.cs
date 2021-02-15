@@ -11,10 +11,10 @@ namespace Lightning.Node.Host
 	public class NodeBootStrapper : IHostedService
 	{
 		private readonly IWindowHost _windowHost;
-		private readonly IGrpcConnectionManager _connectionManager;
+		private readonly IConnectionManager _connectionManager;
 		private readonly ILogger<NodeBootStrapper>? _logger;
 
-		public NodeBootStrapper(IWindowHost windowHost, IGrpcConnectionManager connectionManager,ILogger<NodeBootStrapper>? logger = null)
+		public NodeBootStrapper(IWindowHost windowHost, IConnectionManager connectionManager,ILogger<NodeBootStrapper>? logger = null)
 		{
 			_windowHost = windowHost;
 			_connectionManager = connectionManager;

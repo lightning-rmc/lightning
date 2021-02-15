@@ -18,7 +18,7 @@ namespace Lightning.Node.Lifetime
 		private readonly Channel<NodeCommandRequest> _requestChannel;
 		private GrpcLifeTimeService.GrpcLifeTimeServiceClient _grpcClient = null!;
 
-		public GrpcNodeLifetimeService(IGrpcConnectionManager connectionManager, IRenderHost renderHost, IHostApplicationLifetime hostLifetime)
+		public GrpcNodeLifetimeService(IConnectionManager connectionManager, IRenderHost renderHost, IHostApplicationLifetime hostLifetime)
 		{
 			//TODO: Maye check if application is allready started.
 			hostLifetime.ApplicationStarted.Register(() =>

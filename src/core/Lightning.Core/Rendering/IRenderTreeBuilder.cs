@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
-	public interface IRenderTreeBuilder<in TFrame>
+	public interface IRenderTreeBuilder<TFrame>
 	{
-		ILayer<TFrame> BuildTree();
+		Task<ILayer<TFrame>> BuildTreeAsync();
 	}
 }

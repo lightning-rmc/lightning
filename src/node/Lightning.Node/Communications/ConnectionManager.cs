@@ -1,20 +1,18 @@
 using Lightning.Core.Generated;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lightning.Node.Communications
 {
-	internal class GrpcConnectionManager : IGrpcConnectionManager
+	internal class ConnectionManager : IConnectionManager
 	{
 		private readonly IConnectionResolver _connectionResolver;
 		private ServiceProvider? _serviceProvider;
 
-		public GrpcConnectionManager(IConnectionResolver connectionResolver)
+		public ConnectionManager(IConnectionResolver connectionResolver)
 		{
 			_connectionResolver = connectionResolver;
 			_serviceProvider = null;
@@ -22,7 +20,9 @@ namespace Lightning.Node.Communications
 
 		public bool ServerFound { get; private set; }
 
-
+		public HttpClient GetHttpClient()
+			=> _serviceProvider?.GetRequiredService<HttpClient>()
+				?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcLayerEditService.GrpcLayerEditServiceClient>()
@@ -48,6 +48,15 @@ namespace Lightning.Node.Communications
 			ServerFound = true;
 			//TODO: Maybe move https vs. http in configuration
 			var baseUri = new Uri($@"https://{connectionInfo.IpAdress}:{connectionInfo.Port}");
+			var httpClient = new HttpClient();
+			httpClient.BaseAddress = baseUri;
+			////TODO: Handle Exception
+			var result = await httpClient.SendAsync(new HttpRequestMessage
+			{
+				//TODO: Replace with real Id
+				RequestUri = new Uri("api/lifetime/test"),
+				Method = HttpMethod.Get
+			});
 			var colllection = new ServiceCollection();
 			colllection.AddGrpcClient<GrpcLayerEditService.GrpcLayerEditServiceClient>(opt =>
 			{
@@ -64,6 +73,11 @@ namespace Lightning.Node.Communications
 			colllection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
+			});
+			colllection.AddHttpClient(client =>
+			{
+				client.BaseAddress = baseUri;
+				
 			});
 			_serviceProvider = colllection.BuildServiceProvider();
 		}
