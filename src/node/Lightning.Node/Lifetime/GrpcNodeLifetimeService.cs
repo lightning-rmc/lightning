@@ -25,7 +25,7 @@ namespace Lightning.Node.Lifetime
 			{
 				_grpcClient = connectionManager.GetLifetimeServiceClient();
 
-				Task.Factory.StartNew(GetLifeTimeUpdatesAsync, TaskCreationOptions.LongRunning);
+				Task.Run(GetLifeTimeUpdatesAsync);
 			});
 			_renderHost = renderHost;
 			_requestChannel = Channel.CreateUnbounded<NodeCommandRequest>();
@@ -45,13 +45,13 @@ namespace Lightning.Node.Lifetime
 		private async Task GetLifeTimeUpdatesAsync()
 		{
 			var result = _grpcClient.Connect(new());
-			_ = Task.Factory.StartNew(async () =>
+			_ = Task.Run(async () =>
 			{
 				await foreach (var message in HandleResponseAllAsync())
 				{
 					await result.RequestStream.WriteAsync(message);
 				}
-			}, TaskCreationOptions.LongRunning);
+			});
 
 			await foreach (var command in result.ResponseStream.ReadAllAsync())
 			{

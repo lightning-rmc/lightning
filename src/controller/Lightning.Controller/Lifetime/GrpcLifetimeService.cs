@@ -26,23 +26,20 @@ namespace Lightning.Controller.Lifetime
 			ServerCallContext context)
 		{
 			//TODO: handle stream closing
-
-			//TODO: get real Id
 			var nodeeId = context.GetHttpContext().GetNodeId();
 			if (nodeeId is null)
 			{
 				//TODO: handle more secure
 				throw new ArgumentException();
 			}
-			_ = Task.Factory.StartNew(async () =>
+			_ = Task.Run(async () =>
 			{
 				await foreach (var response in requestStream.ReadAllAsync())
 				{
 					//TODO: handle for secure check.
 					await _lifetimeServicePublisher.SetNodeResponseAsync(nodeeId, (NodeCommandResponse)response.Commnad);
 				}
-
-			}, TaskCreationOptions.LongRunning);
+			});
 
 
 			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestsAllAsync(nodeeId))

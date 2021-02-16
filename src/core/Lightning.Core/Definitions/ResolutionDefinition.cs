@@ -22,8 +22,8 @@ namespace Lightning.Core.Definitions
 		public int Height { get; set; }
 		public int Length { get; set; }
 
-		public static ResolutionDefinition UHD => new ResolutionDefinition(2160, 3840);
-		public static ResolutionDefinition FullHD => new ResolutionDefinition(1080, 1920);
-		public static ResolutionDefinition HDReady =>  new ResolutionDefinition(720, 1280);
+		public static ResolutionDefinition UHD => new(2160, 3840);
+		public static ResolutionDefinition FullHD => new(1080, 1920);
+		public static ResolutionDefinition HDReady =>  new(720, 1280);
 	}
 }

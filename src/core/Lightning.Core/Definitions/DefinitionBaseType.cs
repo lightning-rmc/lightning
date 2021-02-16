@@ -30,25 +30,5 @@ namespace Lightning.Core.Definitions
 
 		protected void RaiseNotifyPropertyChanged([CallerMemberName] string? name = null)
 			=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-		//protected void RegisterSubNode(INotifyPropertyChanged notifyPropertyChanged)
-		//{
-		//	if (notifyPropertyChanged is null)
-		//		throw new ArgumentNullException(nameof(notifyPropertyChanged), string.Empty);
-		//	notifyPropertyChanged.PropertyChanged += SubNodeCallback;
-		//}
-
-		//protected void UnregisterSubNode(INotifyPropertyChanged notifyPropertyChanged)
-		//{
-		//	if (notifyPropertyChanged is null)
-		//		throw new ArgumentNullException(nameof(notifyPropertyChanged), string.Empty);
-		//	notifyPropertyChanged.PropertyChanged -= SubNodeCallback;
-		//}
-
-		//private void SubNodeCallback(object? sender, PropertyChangedEventArgs args)
-		//{
-		//	RaiseNotifyPropertyChanged($"");
-		//}
-
 	}
 }
