@@ -1,5 +1,6 @@
 using Lightning.Controller.Lifetime;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Lightning.Controller.Host.Controller
 {
@@ -24,7 +25,10 @@ namespace Lightning.Controller.Host.Controller
 			}
 			else
 			{
-				return BadRequest(new { Message = "Node is already registered." });
+				return new ObjectResult(new { Message = "Node is already registered." })
+				{
+					StatusCode = (int)HttpStatusCode.NotModified
+				};
 			}
 		}
 	}

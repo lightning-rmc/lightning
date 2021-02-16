@@ -87,7 +87,7 @@ namespace Lightning.Node.Lifetime
 			switch (command)
 			{
 				case NodeCommandRequest.GoLive:
-					_renderHost.Start();
+					await _renderHost.StartAsync();
 					break;
 				case NodeCommandRequest.GoReady:
 					_renderHost.Stop();

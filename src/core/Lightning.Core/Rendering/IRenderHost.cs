@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
@@ -6,7 +7,7 @@ namespace Lightning.Core.Rendering
     {
         bool IsRunning { get; }
 
-        void Start();
+        Task StartAsync();
         void Stop();
     }
 }

@@ -32,6 +32,13 @@ namespace Lightning.Controller.Projects
 				//{
 				//	Id = "MyLayer",
 				//}
+				Layers = new()
+				{
+					new LayerDefinition
+					{
+						Id = "Layer1"
+					}
+				}
 			};
 		}
 

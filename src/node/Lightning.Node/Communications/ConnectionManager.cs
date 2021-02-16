@@ -1,8 +1,11 @@
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Lightning.Core.Generated;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,19 +19,22 @@ namespace Lightning.Node.Communications
 		private string _httpClientName = "Controller";
 		private readonly IConnectionResolver _connectionResolver;
 		private readonly IConfiguration _configuration;
+		private readonly NodeConfiguration _nodeConfiguration;
 		private ServiceProvider? _serviceProvider;
 
-		public ConnectionManager(IConnectionResolver connectionResolver, IConfiguration configuration)
+		public ConnectionManager(IConnectionResolver connectionResolver, IConfiguration configuration, IOptions<NodeConfiguration> options)
 		{
 			_connectionResolver = connectionResolver;
 			_configuration = configuration;
 			_serviceProvider = null;
+			_nodeConfiguration = options.Value;
 		}
 
 		public bool ServerFound { get; private set; }
+		public string NodeId => _nodeConfiguration.NodeId;
 
 		public HttpClient GetHttpClient()
-			=> _serviceProvider?.GetRequiredService<HttpClient>()
+			=> _serviceProvider?.GetRequiredService<IHttpClientFactory>().CreateClient(_httpClientName)
 				?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient()
@@ -49,25 +55,34 @@ namespace Lightning.Node.Communications
 
 		public async Task SearchAndAuthenticateForServerAsync(CancellationToken token = default)
 		{
-			//TODO: Add authentication
-			//TODO: Get Id from configuration
-			var nodeId = "Test2";
+			//TODO: Maybe split two operations into to Methods
+			var nodeId = _nodeConfiguration.NodeId;
 			var connectionInfo = await _connectionResolver.GetConnectionInfoAsync();
 			ServerFound = true;
+
 			//TODO: Maybe move https vs. http in configuration
 			var baseUri = new Uri($@"https://{connectionInfo.IpAdress}:{connectionInfo.Port}");
 			var httpClient = new HttpClient
 			{
 				BaseAddress = baseUri
 			};
-			////TODO: Handle Exception/repsonse
-			var result = await httpClient.PostAsync("api/nodes/register/test", new StringContent(""));
-			var content = await  result.Content.ReadAsStringAsync();
+			////TODO: Handle Exceptions
+			var result = await httpClient.PostAsync($"api/nodes/register/{nodeId}", new StringContent(""));
+			//TODO: Handle Response object and make a guideline for api responses
+			if (result.StatusCode is not (HttpStatusCode.NotModified or HttpStatusCode.OK))
+			{
+				throw new InvalidOperationException("Something went wrong while authenticate at the controller.");
+			}
+			//TODO: Log Message
+			var content = await result.Content.ReadAsStringAsync();
+			var nodeEntry = new Metadata.Entry("nodeId", _nodeConfiguration.NodeId);
 			var colllection = new ServiceCollection();
 			colllection.AddNodeConfiguration(_configuration);
+			colllection.AddSingleton<NodeIdInterceptor>();
 			colllection.AddGrpcClient<GrpcLayerEditService.GrpcLayerEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
+				
 
 			}).AddInterceptor<NodeIdInterceptor>();
 			colllection.AddGrpcClient<GrpcLifeTimeService.GrpcLifeTimeServiceClient>(opt =>

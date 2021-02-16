@@ -26,13 +26,13 @@ namespace Lightning.Core.Rendering
 
 		public bool IsRunning { get; private set; }
 
-		public void Start()
+		public async Task StartAsync()
 		{
 			//TODO: Maybe Lock for secure, that it starts only one time?
 			if (!IsRunning)
 			{
 				IsRunning = true;
-				var layer = _treeBuilder.BuildTreeAsync();
+				var layer = await _treeBuilder.BuildTreeAsync();
 
 				new Thread(Process)
 				{

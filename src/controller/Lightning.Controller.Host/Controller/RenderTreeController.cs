@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Lightning.Controller.Host.Controller
 {
 
-	[Route("api/[controller]")]
+	[Route("api/rendering")]
 	[ApiController]
 	public class RenderTreeController : ControllerBase
 	{

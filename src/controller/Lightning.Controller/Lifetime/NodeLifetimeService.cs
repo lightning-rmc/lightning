@@ -36,10 +36,11 @@ namespace Lightning.Controller.Lifetime
 				//	await UpdateNodeStateAsync(rnd.NextDouble() > 0.5 ? NodeState.Live : NodeState.Error);
 				//	await Task.Delay(2000);
 				//}
-				await Task.Delay(3000);
-				await this.GoLiveAsync();
 				await Task.Delay(2000);
+				await this.GoLiveAsync();
+				await Task.Delay(6000);
 				await this.GoReadyAsync();
+				await Task.Delay(2000);
 				await this.GoLiveAsync();
 			});
 		}
@@ -75,6 +76,7 @@ namespace Lightning.Controller.Lifetime
 			_nodeStates.Add(nodeId, NodeState.Offline);
 			_nodeCommandRequestsChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandRequest>());
 			_nodeCommandResponsesChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandResponse>());
+			//TODO: add to ProjectManager
 			_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
 			return true;
 		}

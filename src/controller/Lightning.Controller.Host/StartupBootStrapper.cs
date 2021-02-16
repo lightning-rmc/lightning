@@ -18,7 +18,6 @@ namespace Lightning.Controller.Host
 		}
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
-			_nodeLifetimeService.TryRegisterNode("test");
 			return Task.CompletedTask;
 		}
 

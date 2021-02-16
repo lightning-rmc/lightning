@@ -12,6 +12,8 @@ namespace Lightning.Node.Communications
 	public interface IConnectionManager : IDisposable
 	{
 		bool ServerFound { get; }
+		//TODO: Remove if we have service over the httpclient
+		public string NodeId { get; } 
 		Task SearchAndAuthenticateForServerAsync(CancellationToken token = default);
 
 		HttpClient GetHttpClient();

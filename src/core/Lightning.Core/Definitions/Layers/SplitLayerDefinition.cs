@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace Lightning.Core.Definitions
 {
 	[ContentProperty(nameof(Childs))]
-	public class SplitterLayerDefinition : LayerBaseDefinition
+	public class SplitLayerDefinition : LayerBaseDefinition
 	{
-		public SplitterLayerDefinition()
+		public SplitLayerDefinition()
 		{
 			Childs = new();
 		}
