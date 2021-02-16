@@ -28,14 +28,14 @@ namespace Lightning.Node.Rendering
 
 		public async Task<ILayer<Mat>> BuildTreeAsync()
 		{
-			//TODO: Refctor it in service
+			//TODO: Refactor httpclient it in service
 			var httpClient = _connectionManager.GetHttpClient();
 			var response = await httpClient.GetAsync($"api/rendering/{_connectionManager.NodeId}");
 			//TODO: Handle response code...
 			var stringResponse = await response.Content.ReadAsStringAsync();
 			if (XamlServices.Parse(stringResponse) is not RenderTreeDefinition tree)
 			{
-				//TODO: add logging and meaningful exceptionmessage
+				//TODO: add logging and meaningful exception message
 				throw new InvalidOperationException();
 			}
 			return BuildTreeInternal(tree);
