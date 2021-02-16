@@ -8,6 +8,6 @@ namespace Lightning.Core.Definitions
 {
 	public abstract class InputLayerBaseDefinition
 	{
-		public string Id { get; set; }
+		public string Id { get; set; } = string.Empty;
 	}
 }

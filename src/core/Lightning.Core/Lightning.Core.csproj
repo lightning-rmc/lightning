@@ -36,8 +36,4 @@
     </Protobuf>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Rendering\Layers\Outputs\" />
-  </ItemGroup>
-
 </Project>

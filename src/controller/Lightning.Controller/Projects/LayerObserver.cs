@@ -8,8 +8,5 @@ namespace Lightning.Controller.Projects
 {
 	public class LayerObserver
 	{
-
-
-		public static BasicLayer
 	}
 }

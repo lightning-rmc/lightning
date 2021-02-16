@@ -1,4 +1,5 @@
 using Lightning.Core.Definitions;
+using Lightning.Core.Definitions.Layers;
 using Lightning.Core.Presentation;
 using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Layers;
@@ -40,22 +41,30 @@ namespace Lightning.Node.Rendering
 			return BuildTreeInternal(tree);
 		}
 
-		private ILayer<Mat> BuildTreeInternal(RenderTreeDefinition definition)
+		private ILayer<Mat> BuildTreeInternal(RenderTreeDefinition renderTreeDefinition)
 		{
-			var layers = definition.Layers.Reverse<LayerBaseDefinition>().ToArray();
-			for (int i = layers.Length - 1; i >= 0; i--)
+			var layerDefinitions = renderTreeDefinition.Layers.Reverse<LayerBaseDefinition>().ToArray();
+			ILayer<Mat> next = null!;
+			for (int i = layerDefinitions.Length - 1; i >= 0; i--)
 			{
-				var layer = layers[i];
-				switch (layer)
-				{
-					case LayerDefinition basicLayer:
-					case SplitLayerDefinition splitLayer:
-					default:
-						break;
-				}
+				var definition = layerDefinitions[i];
+				next = BuildLayer(definition, next);
 			}
 
+			//return next;
 			return new DummyLayer(_windowHost);
+		}
+
+
+		private ILayer<Mat> BuildLayer(LayerBaseDefinition definition, ILayer<Mat>? next)
+		{
+			return definition switch
+			{
+				LayerDefinition basicLayer => null!,
+				SplitLayerDefinition splitLayer => null!,
+				WindowOutputDefinition outputDefinition => LayerBuilder.BuildOutputWindowLayer(_windowHost, outputDefinition),
+				_ => throw new NotImplementedException(),
+			};
 		}
 	}
 }

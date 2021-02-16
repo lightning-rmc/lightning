@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Media
+namespace Lightning.Core.Definitions.Layers
 {
-	public class MediaSettings
+	public class WindowOutputDefinition : LayerBaseDefinition
 	{
-		public string StoragePath { get; set; } = string.Empty;
+		
 	}
 }

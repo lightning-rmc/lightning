@@ -16,9 +16,9 @@ namespace Lightning.Core.Presentation
 	{
 		private readonly ILogger<OpenCVWindowHost>? _logger;
 		private readonly FeatureFlags _featureFlags;
-		private Channel<Mat> _frameChannel;
+		private Channel<Mat> _frameChannel = null!;
 		private bool _isWindowShowing;
-		private Window _window;
+		private Window? _window;
 
 		public OpenCVWindowHost(IOptions<FeatureFlags> featureFlagsOptions, ILogger<OpenCVWindowHost>? logger = null)
 		{
@@ -35,6 +35,11 @@ namespace Lightning.Core.Presentation
 			if (!_isWindowShowing)
 			{
 				_isWindowShowing = true;
+				//Note: Should never happen, only for secure purpose
+				if (_frameChannel is not null)
+				{
+					_frameChannel.Writer.TryComplete();
+				}
 				_frameChannel = Channel.CreateUnbounded<Mat>(new UnboundedChannelOptions
 				{
 					SingleReader = true,
@@ -76,8 +81,8 @@ namespace Lightning.Core.Presentation
 			{
 				_isWindowShowing = false;
 				_frameChannel.Writer.Complete();
-				_window.Close();
-				if (!_window.IsDisposed)
+				_window?.Close();
+				if (!(_window?.IsDisposed ?? true))
 				{
 					_window.Dispose();
 				}
