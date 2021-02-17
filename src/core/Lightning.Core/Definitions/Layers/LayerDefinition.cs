@@ -6,15 +6,22 @@ namespace Lightning.Core.Definitions
 	{
 		public LayerDefinition()
 		{
-			Transformation = new();
-			ColorCorrection = new();
-			BlendMode = new();
+			_input = null!;
+			_transformation = new();
+			_colorCorrection = new();
+			_blendMode = new();
 		}
 
-		public InputLayerBaseDefinition Input { get; set; } = null!;
+		private InputLayerBaseDefinition _input;
+		public InputLayerBaseDefinition Input { get => _input; set => Set(ref _input, value); }
 
-		public TransformProcessorDefinition Transformation { get; set; }
-		public ColorProcessorDefinition ColorCorrection { get; set; }
-		public MergeProcessorDefinition BlendMode { get; set; }
+		private TransformProcessorDefinition _transformation;
+		public TransformProcessorDefinition Transformation { get => _transformation; set => Set(ref _transformation, value); }
+
+		private ColorProcessorDefinition _colorCorrection;
+		public ColorProcessorDefinition ColorCorrection { get => _colorCorrection; set => Set(ref _colorCorrection, value); }
+
+		private MergeProcessorDefinition _blendMode;
+		public MergeProcessorDefinition BlendMode { get => _blendMode; set => Set(ref _blendMode, value); }
 	}
 }

@@ -1,6 +1,6 @@
 namespace Lightning.Core.Definitions
 {
-	public class ColorProcessorDefinition
+	public class ColorProcessorDefinition : DefinitionBaseType
 	{
 	}
 }

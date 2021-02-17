@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions
 {
-	public abstract class LayerBaseDefinition
+	public abstract class LayerBaseDefinition : DefinitionBaseType
 	{
 
 		protected LayerBaseDefinition()
 		{
-
+			_id = string.Empty;
 		}
 
-		public string Id { get; set; } = string.Empty;
+		private string _id;
+		public string Id { get => _id; set => Set(ref _id, value); }
 	}
 }

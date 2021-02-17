@@ -38,4 +38,8 @@
 		</Protobuf>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Definitions\MarkupExtensions\" />
+	</ItemGroup>
+
 </Project>
