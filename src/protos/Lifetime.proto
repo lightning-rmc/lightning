@@ -1,5 +1,4 @@
 syntax = "proto3";
-import "google/protobuf/empty.proto";
 import "General.proto";
 
 option csharp_namespace = "Lightning.Core.Generated";
@@ -12,26 +11,16 @@ service GrpcLifeTimeService {
 }
 
 message NodeCommandRequestMessage {
-	enum CommandRequest {
-		GoLive = 0;
-		GoReady = 1;
-		ShowInfo = 2;
-		HideInfo = 3;
-	}
-	CommandRequest command = 1;
+	//Note: CommandCodes are defined in the C# Code as Enum
+	//		Unter Lifetime as NodeCommandRequest
+	int32 command = 1;
 }
 
 
 message NodeCommandResponseMessage {
-	enum CommandResponse {
-		IsLive = 0;
-		IsReady = 1;
-		IsPreparing = 2;
-		ShowingInfo = 3;
-		HidingInfo = 4;
-		HasError = 255;
-	}
-	CommandResponse commnad = 1;
+	//Note: CommandCodes are defined in the C# Code as Enum
+	//		Unter Lifetime as NodeCommandResponse
+	int32 command = 1;
 }
 
 message LayerActivationMessage {

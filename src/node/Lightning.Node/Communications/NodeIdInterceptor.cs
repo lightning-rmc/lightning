@@ -14,7 +14,7 @@ namespace Lightning.Node.Communications
 		public readonly Metadata.Entry _nodeEntry;
 		public NodeIdInterceptor(IOptions<NodeConfiguration> conf)
 		{
-			_nodeEntry = new Metadata.Entry("nodeId", conf.Value.NodeId);
+			_nodeEntry = new("nodeId", conf.Value.NodeId);
 		}
 
 		

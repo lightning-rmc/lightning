@@ -69,7 +69,7 @@ namespace Lightning.Node.Lifetime
 
 				var message = new NodeCommandResponseMessage
 				{
-					Commnad = (NodeCommandResponseMessage.Types.CommandResponse)response
+					Command = (int)response
 				};
 				yield return message;
 			}

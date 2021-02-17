@@ -1,39 +1,41 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.14.0" />
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.34.0" />
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.34.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.34.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="OpenCvSharp4" Version="4.5.1.20201229" />
-    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.5.1.20201229" />
-	 <PackageReference Include="Portable.Xaml" Version="0.26.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.14.0" />
+		<PackageReference Include="Grpc.AspNetCore.Server" Version="2.34.0" />
+		<PackageReference Include="Grpc.Net.ClientFactory" Version="2.34.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.34.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="OpenCvSharp4" Version="4.5.1.20201229" />
+		<PackageReference Include="OpenCvSharp4.runtime.win" Version="4.5.1.20201229" />
+		<PackageReference Include="Portable.Xaml" Version="0.26.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="..\..\protos\LayerEdit.proto" GrpcServices="Both">
-      <Link>protos\LayerEdit.proto</Link>
-    </Protobuf>
-	  <Protobuf Include="..\..\protos\Lifetime.proto" GrpcServices="Both">
-		  <Link>protos\Lifetime.proto</Link>
-	  </Protobuf>
-    <Protobuf Include="..\..\protos\MediaSync.proto" GrpcServices="Both">
-      <Link>protos\MediaSync.proto</Link>
-    </Protobuf>
-    <Protobuf Include="..\..\protos\General.proto" GrpcServices="Both">
-      <Link>Protos\General.proto</Link>
-    </Protobuf>
-    <Protobuf Include="..\..\protos\TimeSync.proto" GrpcServices="Both">
-      <Link>protos\TimeSync.proto</Link>
-    </Protobuf>
-  </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="..\..\protos\LayerEdit.proto" GrpcServices="Both">
+			<Link>protos\LayerEdit.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\..\protos\Lifetime.proto" GrpcServices="Both">
+			<Link>protos\Lifetime.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\..\protos\MediaSync.proto" GrpcServices="Both">
+			<Link>protos\MediaSync.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\..\protos\General.proto" GrpcServices="Both">
+			<Link>Protos\General.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\..\protos\TimeSync.proto" GrpcServices="Both">
+			<Link>protos\TimeSync.proto</Link>
+		</Protobuf>
+	</ItemGroup>
 
 </Project>

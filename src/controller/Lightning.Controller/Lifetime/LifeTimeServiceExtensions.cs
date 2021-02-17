@@ -5,8 +5,6 @@ namespace Lightning.Controller.Lifetime
 {
 	public static class LifetimeServiceExtensions
 	{
-
-
 		public static Task GoLiveAsync(this INodeLifetimeService lifetimeService)
 			=> lifetimeService.SetNodeCommandRequestsAsync(NodeCommandRequest.GoLive, null);
 		public static Task GoReadyAsync(this INodeLifetimeService lifetimeService)

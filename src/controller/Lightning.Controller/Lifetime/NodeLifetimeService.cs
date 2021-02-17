@@ -30,12 +30,6 @@ namespace Lightning.Controller.Lifetime
 			//TODO: Remove testcase
 			Task.Run(async () =>
 			{
-				//var rnd = new Random();
-				//while (true)
-				//{
-				//	await UpdateNodeStateAsync(rnd.NextDouble() > 0.5 ? NodeState.Live : NodeState.Error);
-				//	await Task.Delay(2000);
-				//}
 				await Task.Delay(2000);
 				await this.GoLiveAsync();
 				await Task.Delay(6000);
