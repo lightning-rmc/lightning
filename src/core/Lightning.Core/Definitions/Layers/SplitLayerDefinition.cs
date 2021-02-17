@@ -17,7 +17,6 @@ namespace Lightning.Core.Definitions
 		}
 
 		private LayerBaseDefinitionCollectionCollection _childs;
-
 		public LayerBaseDefinitionCollectionCollection Childs { get => _childs; set => Set(ref _childs, value); }
 	}
 }

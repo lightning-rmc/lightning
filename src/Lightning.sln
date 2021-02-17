@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node", "node\Ligh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node.Host", "node\Lightning.Node.Host\Lightning.Node.Host.csproj", "{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightning.Core.SourceGenerators", "core\Lightning.Core.SourceGenerators\Lightning.Core.SourceGenerators.csproj", "{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

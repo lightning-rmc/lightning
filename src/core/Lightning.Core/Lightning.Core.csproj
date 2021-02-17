@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -18,6 +19,11 @@
 		<PackageReference Include="OpenCvSharp4" Version="4.5.1.20201229" />
 		<PackageReference Include="OpenCvSharp4.runtime.win" Version="4.5.1.20201229" />
 		<PackageReference Include="Portable.Xaml" Version="0.26.0" />
+
+
+		<!--<ProjectReference Include="../Lightning.Core.SourceGenerators/Lightning.Core.SourceGenerators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />-->
 	</ItemGroup>
 
 	<ItemGroup>
