@@ -12,16 +12,17 @@ namespace Lightning.Controller.Projects
 	{
 		event EventHandler ProjectLoaded;
 
+		bool IsProjectLoaded { get; }
 		void CreateNewProject();
-		string ExportProject();
+		string? ExportProject();
 		bool ImportProject(string import);
 
-		RenderTreeDefinition GetRenderTree(string id);
+		RenderTreeDefinition? TryGetRenderTree(string id);
 
-		LayerDefinition GetLayer(string id);
-		NodeDefinition GetNode(string id);
+		NodeDefinition? TryGetNode(string id);
 
 		IAsyncEnumerable<LayerPropertyUpdate> GetLayerPropertyUpdatesAllAsync(CancellationToken cancellationToken = default);
+		LayerBaseDefinition? TryGetLayer(string id);
 
 	}
 }

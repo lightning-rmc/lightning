@@ -18,8 +18,8 @@ namespace Lightning.Node.Communications
 		Task SearchAndAuthenticateForServerAsync(CancellationToken token = default);
 
 		HttpClient GetHttpClient();
-		GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient();
-		GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient();
+		GrpcProjectEditService.GrpcProjectEditServiceClient GetProjectEditServiceClient();
+		GrpcLifetimeService.GrpcLifetimeServiceClient GetLifetimeServiceClient();
 		//GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient();
 		GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient();
 

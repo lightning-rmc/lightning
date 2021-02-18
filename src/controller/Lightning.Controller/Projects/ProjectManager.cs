@@ -1,4 +1,5 @@
 using Lightning.Core.Definitions;
+using Lightning.Core.Definitions.Collections;
 using Microsoft.Extensions.Logging;
 using Portable.Xaml;
 using System;
@@ -17,8 +18,8 @@ namespace Lightning.Controller.Projects
 	{
 		public event EventHandler? ProjectLoaded;
 		private readonly ILogger<ProjectManager>? _logger;
-		private ProjectDefinition? _project;
 		private readonly Channel<LayerPropertyUpdate> _layerPropertyUpdates;
+		private ProjectDefinition? _project;
 
 		public ProjectManager(ILogger<ProjectManager>? logger = null)
 		{
@@ -26,9 +27,15 @@ namespace Lightning.Controller.Projects
 			_layerPropertyUpdates = Channel.CreateUnbounded<LayerPropertyUpdate>();
 		}
 
-		public string ExportProject()
+		public bool IsProjectLoaded { get; private set; }
+
+		public string? ExportProject()
 		{
-			return "";
+			if (_project is not null)
+			{
+				return XamlServices.Save(_project);
+			}
+			return null;
 		}
 
 		public bool ImportProject(string import)
@@ -61,30 +68,44 @@ namespace Lightning.Controller.Projects
 			RaiseProjectLoaded();
 		}
 
-
-		public LayerDefinition GetLayer(string id)
+		public LayerBaseDefinition? TryGetLayer(string id)
 		{
-			return new();
+			if (_project?.RenderTrees is not IEnumerable<RenderTreeDefinition> renderTrees)
+			{
+				renderTrees = Enumerable.Empty<RenderTreeDefinition>();
+			}
+			foreach (var renderTree in renderTrees)
+			{
+				var result = renderTree.TryGetLayer(id);
+				if (result is not null)
+				{
+					return result;
+				}
+			}
+			return null;
 		}
 
-		public NodeDefinition GetNode(string id)
+		public NodeDefinition? TryGetNode(string id)
 		{
-			return new();
+			//TODO: Maybe Log if the node does not exist?
+			return _project?.Nodes.FirstOrDefault(n => n.Id == id);
 		}
 
-		public RenderTreeDefinition GetRenderTree(string id)
+		public RenderTreeDefinition? TryGetRenderTree(string id)
 		{
-			return new();
+			//TODO: Maybe Log if the node does not exist?
+			return _project?.RenderTrees.FirstOrDefault(r => r.Id == id);
 		}
 
 		private void RaiseProjectLoaded()
 		{
+			IsProjectLoaded = true;
 			//TODO: add Logging
 			ProjectLoaded?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void ObserveProject(ProjectDefinition projectDefinition)
-		{ 
+		{
 			projectDefinition.PropertyChanged += NotfiyPropertyChanged_EventCallback!;
 			projectDefinition.RenderTrees.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
 			foreach (var renderTrees in projectDefinition.RenderTrees)
@@ -93,8 +114,6 @@ namespace Lightning.Controller.Projects
 			}
 			projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
 		}
-
-		
 
 		private void UnObserveProject(ProjectDefinition projectDefinition)
 		{
@@ -107,7 +126,7 @@ namespace Lightning.Controller.Projects
 			projectDefinition.Nodes.CollectionChanged -= NotifyIfCollectionElementChanged_EventCallback;
 		}
 
-		private void TraverseLayers(IEnumerable<LayerBaseDefinition> layers, Action<LayerBaseDefinition> manipulation )
+		private void TraverseLayers(IEnumerable<LayerBaseDefinition> layers, Action<LayerBaseDefinition> manipulation)
 		{
 			foreach (var layer in layers)
 			{
@@ -121,10 +140,10 @@ namespace Lightning.Controller.Projects
 				}
 			}
 		}
-		
 
 		private void NotifyIfCollectionElementChanged_EventCallback(object? sender, NotifyCollectionChangedEventArgs e)
 		{
+			//TODO: Implement
 			if (sender is null)
 			{
 				throw new ArgumentNullException(nameof(sender));
@@ -161,7 +180,7 @@ namespace Lightning.Controller.Projects
 
 			switch (sender)
 			{
-				case LayerDefinition layerDefinition:
+				case LayerBaseDefinition layerDefinition:
 				{
 					//TODO: Handle sub routes like Transformation, color, etc...
 					var property = layerDefinition.GetType().GetProperty(eventArgs.PropertyName);

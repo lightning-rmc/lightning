@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
 {
-	public class GrpcLifetimeService : GrpcLifeTimeService.GrpcLifeTimeServiceBase
+	public class GrpcLifetimeService : Core.Generated.GrpcLifetimeService.GrpcLifetimeServiceBase
 	{
 		private readonly INodeLifetimeRequestResponsePublisher _lifetimeServicePublisher;
 		private readonly ILogger<GrpcLifetimeService>? _logger;

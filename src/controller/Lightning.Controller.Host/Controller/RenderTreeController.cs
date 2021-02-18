@@ -23,7 +23,7 @@ namespace Lightning.Controller.Host.Controller
 		[HttpGet("{nodeId}")]
 		public string Index([FromRoute]string nodeId)
 		{
-			var result = _projectManager.GetRenderTree(nodeId);
+			var result = _projectManager.TryGetRenderTree(nodeId);
 			return XamlServices.Save(result);
 		}
 	}

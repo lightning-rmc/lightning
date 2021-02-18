@@ -5,19 +5,18 @@ option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
-service GrpcLayerEditService {
+service GrpcProjectEditService {
 	rpc GetEditChangeStream(GeneralRequest) returns (stream EditChangeMessage) {}
 }
 
 message EditChangeMessage {
-	enum Type {
-		input = 0;
-		layer = 1;
-		output = 2;
-		general = 3;
+	string id = 1;
+	int32 targetType = 2;
+	string name = 3;
+	oneof value {
+		int32 integer = 4;
+		float float = 5;
+		string string = 6;
+		bool boolean = 7;
 	}
-	Type type = 1;
-	string configId = 2;
-	string paramName = 3;
-	string value = 4; //Maybe change to Any? not sure
 }

@@ -15,9 +15,44 @@ namespace Lightning.Core.Definitions
 		public RenderTreeDefinition()
 		{
 			_layers = new();
+			_id = string.Empty;
+		}
+
+		private string _id;
+		public string Id
+		{
+			get => _id;
+			set => Set(ref _id, value);
 		}
 
 		private LayerBaseDefinitionCollection _layers;
 		public LayerBaseDefinitionCollection Layers { get => _layers; set => Set(ref _layers, value); }
+
+		public LayerBaseDefinition? TryGetLayer(string id)
+		{
+			return Recursion(Layers, id);
+			LayerBaseDefinition? Recursion(IEnumerable<LayerBaseDefinition> layers, string id)
+			{
+				foreach (var layer in Layers)
+				{
+					if (layer.Id == id)
+					{
+						return layer;
+					}
+					if (layer is SplitLayerDefinition splitLayer)
+					{
+						foreach (var layerlist in splitLayer.Childs)
+						{
+							var result = Recursion(layerlist, id);
+							if (result is not null)
+							{
+								return result;
+							}
+						}
+					}
+				}
+				return null;
+			}
+		}
 	}
 }

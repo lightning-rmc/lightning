@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
@@ -27,8 +27,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\..\protos\LayerEdit.proto" GrpcServices="Both">
-			<Link>protos\LayerEdit.proto</Link>
+		<Protobuf Include="..\..\protos\ProjectEdit.proto" GrpcServices="Both">
+			<Link>protos\ProjectEdit.proto</Link>
 		</Protobuf>
 		<Protobuf Include="..\..\protos\Lifetime.proto" GrpcServices="Both">
 			<Link>protos\Lifetime.proto</Link>
@@ -45,7 +45,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Definitions\MarkupExtensions\" />
+	  <Folder Include="Configuration\" />
 	</ItemGroup>
 
 </Project>

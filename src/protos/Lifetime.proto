@@ -5,7 +5,7 @@ option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
-service GrpcLifeTimeService {
+service GrpcLifetimeService {
 	rpc Connect(stream NodeCommandResponseMessage) returns (stream NodeCommandRequestMessage) {}
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 }

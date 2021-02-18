@@ -35,12 +35,12 @@ namespace Lightning.Node.Communications
 			=> _serviceProvider?.GetRequiredService<IHttpClientFactory>().CreateClient(_httpClientName)
 				?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
-		public GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient()
-			=> _serviceProvider?.GetRequiredService<GrpcLayerEditService.GrpcLayerEditServiceClient>()
+		public GrpcProjectEditService.GrpcProjectEditServiceClient GetProjectEditServiceClient()
+			=> _serviceProvider?.GetRequiredService<GrpcProjectEditService.GrpcProjectEditServiceClient>()
 				?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
-		public GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient()
-			=> _serviceProvider?.GetRequiredService<GrpcLifeTimeService.GrpcLifeTimeServiceClient>()
+		public GrpcLifetimeService.GrpcLifetimeServiceClient GetLifetimeServiceClient()
+			=> _serviceProvider?.GetRequiredService<GrpcLifetimeService.GrpcLifetimeServiceClient>()
 				?? throw new InvalidOperationException($"First call {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		//public GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient()
@@ -77,13 +77,13 @@ namespace Lightning.Node.Communications
 			var colllection = new ServiceCollection();
 			colllection.AddNodeConfiguration(_configuration);
 			colllection.AddSingleton<NodeIdInterceptor>();
-			colllection.AddGrpcClient<GrpcLayerEditService.GrpcLayerEditServiceClient>(opt =>
+			colllection.AddGrpcClient<GrpcProjectEditService.GrpcProjectEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
 				
 
 			}).AddInterceptor<NodeIdInterceptor>();
-			colllection.AddGrpcClient<GrpcLifeTimeService.GrpcLifeTimeServiceClient>(opt =>
+			colllection.AddGrpcClient<GrpcLifetimeService.GrpcLifetimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
 			}).AddInterceptor<NodeIdInterceptor>();
