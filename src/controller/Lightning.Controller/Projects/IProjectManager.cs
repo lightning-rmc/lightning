@@ -12,10 +12,12 @@ namespace Lightning.Controller.Projects
 		string ExportProject();
 		bool ImportProject(string import);
 
-		RenderTreeDefinition GetRenderTree(string id);
+		IEnumerable<RenderTreeDefinition> GetRenderTreeDefinitions();
+		IEnumerable<LayerDefinition> GetLayers();
+		IEnumerable<NodeDefinition> GetNodes();
 
+		RenderTreeDefinition GetRenderTree(string id);
 		LayerDefinition GetLayer(string id);
 		NodeDefinition GetNode(string id);
-
 	}
 }

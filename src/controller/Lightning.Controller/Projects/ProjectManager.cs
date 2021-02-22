@@ -19,9 +19,19 @@ namespace Lightning.Controller.Projects
 			return new();
 		}
 
+		public IEnumerable<LayerDefinition> GetLayers()
+		{
+			return Enumerable.Empty<LayerDefinition>();
+		}
+
 		public NodeDefinition GetNode(string id)
 		{
 			return new();
+		}
+
+		public IEnumerable<NodeDefinition> GetNodes()
+		{
+			return Enumerable.Empty<NodeDefinition>();
 		}
 
 		public RenderTreeDefinition GetRenderTree(string id)
@@ -40,6 +50,11 @@ namespace Lightning.Controller.Projects
 					}
 				}
 			};
+		}
+
+		public IEnumerable<RenderTreeDefinition> GetRenderTreeDefinitions()
+		{
+			return Enumerable.Empty<RenderTreeDefinition>();
 		}
 
 		public bool ImportProject(string import)
