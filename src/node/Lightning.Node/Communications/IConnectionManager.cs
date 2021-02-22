@@ -12,13 +12,14 @@ namespace Lightning.Node.Communications
 	public interface IConnectionManager : IDisposable
 	{
 		bool ServerFound { get; }
+
 		//TODO: Remove if we have service over the httpclient
 		public string NodeId { get; } 
 		Task SearchAndAuthenticateForServerAsync(CancellationToken token = default);
 
 		HttpClient GetHttpClient();
-		GrpcLayerEditService.GrpcLayerEditServiceClient GetLayerEditServiceClient();
-		GrpcLifeTimeService.GrpcLifeTimeServiceClient GetLifetimeServiceClient();
+		GrpcProjectEditService.GrpcProjectEditServiceClient GetProjectEditServiceClient();
+		GrpcLifetimeService.GrpcLifetimeServiceClient GetLifetimeServiceClient();
 		//GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient();
 		GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient();
 

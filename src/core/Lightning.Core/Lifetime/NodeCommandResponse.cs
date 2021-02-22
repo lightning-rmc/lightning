@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Lifetime
 {
-	public enum NodeCommandResponse : byte
+	public enum NodeCommandResponse 
 	{
 		IsLive = 0,
 		IsReady = 1,

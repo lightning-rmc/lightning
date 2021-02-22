@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions
 {
-	public class RenderPipelineDefinition
+	public class RenderPipelineDefinition : DefinitionBaseType
 	{
+		public RenderPipelineDefinition()
+		{
+			_renderTree = new();
+		}
 
-		public RenderTreeDefinition RenderTree { get; set; } = new RenderTreeDefinition();
+		private RenderTreeDefinition _renderTree;
+		public RenderTreeDefinition RenderTree { get => _renderTree; set => Set(ref _renderTree, value); }
 	}
 }

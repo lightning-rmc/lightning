@@ -13,10 +13,10 @@ namespace Lightning.Core.Definitions
 	{
 		public SplitLayerDefinition()
 		{
-			Childs = new();
+			_childs = new();
 		}
 
-
-		public LayerBaseDefinitionCollectionCollection Childs { get; set; }
+		private LayerBaseDefinitionCollectionCollection _childs;
+		public LayerBaseDefinitionCollectionCollection Childs { get => _childs; set => Set(ref _childs, value); }
 	}
 }

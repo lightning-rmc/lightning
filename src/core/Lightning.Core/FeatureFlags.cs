@@ -10,5 +10,6 @@ namespace Lightning.Core
 	{
 		public bool DisableFullscreen { get; set; }
 		public bool NodeWithoutServer { get; set; }
+		public bool AddDummyNodeServices { get; set; }
 	}
 }

@@ -35,7 +35,7 @@ namespace Lightning.Node.Rendering
 			var stringResponse = await response.Content.ReadAsStringAsync();
 			if (XamlServices.Parse(stringResponse) is not RenderTreeDefinition tree)
 			{
-				//TODO: add logging and meaningful exception message
+				//TODO: add logging and meaningful exceptionmessage
 				throw new InvalidOperationException();
 			}
 			return BuildTreeInternal(tree);
@@ -43,9 +43,9 @@ namespace Lightning.Node.Rendering
 
 		private ILayer<Mat> BuildTreeInternal(RenderTreeDefinition renderTreeDefinition)
 		{
-			var layerDefinitions = renderTreeDefinition.Layers.Reverse<LayerBaseDefinition>().ToArray();
+			var layerDefinitions = renderTreeDefinition.Layers;
 			ILayer<Mat> next = null!;
-			for (int i = layerDefinitions.Length - 1; i >= 0; i--)
+			for (int i = layerDefinitions.Count - 1; i >= 0; i--)
 			{
 				var definition = layerDefinitions[i];
 				next = BuildLayer(definition, next);

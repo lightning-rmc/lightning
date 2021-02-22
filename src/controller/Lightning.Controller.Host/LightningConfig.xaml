@@ -5,7 +5,7 @@
 		<NodeDefinition />
 	</ProjectDefinition.Nodes>
 	<ProjectDefinition.RenderTrees>
-		<RenderTreeDefinition >
+		<RenderTreeDefinition>
 			<LayerDefinition />
 			<LayerDefinition />
 			<LayerDefinition />
@@ -26,6 +26,10 @@
 					<LayerDefinition/>
 				</col:LayerBaseDefinitionCollection>
 			</SplitterLayerDefinition>
+		</RenderTreeDefinition>
+
+
+		<RenderTreeDefinition>
 		</RenderTreeDefinition>
 	</ProjectDefinition.RenderTrees>
 </ProjectDefinition>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions
 {
-	public class TransformProcessorDefinition
+	public class TransformProcessorDefinition : DefinitionBaseType
 	{
 		public TransformProcessorDefinition()
 		{

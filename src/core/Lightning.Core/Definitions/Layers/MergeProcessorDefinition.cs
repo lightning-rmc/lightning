@@ -1,6 +1,6 @@
 namespace Lightning.Core.Definitions
 {
-	public class MergeProcessorDefinition
+	public class MergeProcessorDefinition : DefinitionBaseType
 	{
 	}
 }
