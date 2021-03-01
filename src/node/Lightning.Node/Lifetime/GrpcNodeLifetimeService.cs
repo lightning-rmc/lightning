@@ -16,7 +16,7 @@ namespace Lightning.Node.Lifetime
 		private readonly IRenderHost _renderHost;
 		private readonly Channel<NodeCommandResponse> _responseChannel;
 		private readonly Channel<NodeCommandRequest> _requestChannel;
-		private GrpcLifeTimeService.GrpcLifeTimeServiceClient _grpcClient = null!;
+		private GrpcLifetimeService.GrpcLifetimeServiceClient _grpcClient = null!;
 
 		public GrpcNodeLifetimeService(IConnectionManager connectionManager, IRenderHost renderHost, IHostApplicationLifetime hostLifetime)
 		{

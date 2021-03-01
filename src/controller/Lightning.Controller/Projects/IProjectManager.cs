@@ -24,17 +24,7 @@ namespace Lightning.Controller.Projects
 
 		LayerBaseDefinition? TryGetLayer(string id);
 
-<<<<<<< HEAD
 		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 
-=======
-		IEnumerable<RenderTreeDefinition> GetRenderTreeDefinitions();
-		IEnumerable<LayerDefinition> GetLayers();
-		IEnumerable<NodeDefinition> GetNodes();
-
-		RenderTreeDefinition GetRenderTree(string id);
-		LayerDefinition GetLayer(string id);
-		NodeDefinition GetNode(string id);
->>>>>>> 86d4e994f08e96b91aea8ca72fde9393ba71e00f
 	}
 }
