@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,6 @@ namespace Lightning.Core.Definitions
 		private string _hash;
 		public string Hash { get=> _hash; set => Set(ref _hash,value); }
 
-
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}
 }

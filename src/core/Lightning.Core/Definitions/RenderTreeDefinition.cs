@@ -1,4 +1,5 @@
 
+using Lightning.Core.Configuration;
 using Lightning.Core.Definitions.Collections;
 using Portable.Xaml.Markup;
 using System;
@@ -15,18 +16,12 @@ namespace Lightning.Core.Definitions
 		public RenderTreeDefinition()
 		{
 			_layers = new();
-			_id = string.Empty;
-		}
-
-		private string _id;
-		public string Id
-		{
-			get => _id;
-			set => Set(ref _id, value);
 		}
 
 		private LayerBaseDefinitionCollection _layers;
 		public LayerBaseDefinitionCollection Layers { get => _layers; set => Set(ref _layers, value); }
+
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 
 		public LayerBaseDefinition? TryGetLayer(string id)
 		{

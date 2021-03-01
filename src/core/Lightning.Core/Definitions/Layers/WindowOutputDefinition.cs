@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Lightning.Core.Definitions.Layers
 {
 	public class WindowOutputDefinition : LayerBaseDefinition
 	{
-		
+		protected override ConfigurationChangedTarget Type
+			=> ConfigurationChangedTarget.Output;
 	}
 }

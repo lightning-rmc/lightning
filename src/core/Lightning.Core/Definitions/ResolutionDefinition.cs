@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +29,7 @@ namespace Lightning.Core.Definitions
 		public static ResolutionDefinition UHD => new(2160, 3840);
 		public static ResolutionDefinition FullHD => new(1080, 1920);
 		public static ResolutionDefinition HDReady => new(720, 1280);
+
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}
 }

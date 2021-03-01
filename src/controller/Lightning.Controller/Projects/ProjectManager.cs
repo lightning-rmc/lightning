@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using Lightning.Core.Definitions;
 using Lightning.Core.Definitions.Collections;
 using Microsoft.Extensions.Logging;
@@ -18,13 +19,13 @@ namespace Lightning.Controller.Projects
 	{
 		public event EventHandler? ProjectLoaded;
 		private readonly ILogger<ProjectManager>? _logger;
-		private readonly Channel<LayerPropertyUpdate> _layerPropertyUpdates;
+		private readonly Channel<ConfigurationChangedContext> _configurationsChangedChannel;
 		private ProjectDefinition? _project;
 
 		public ProjectManager(ILogger<ProjectManager>? logger = null)
 		{
 			_logger = logger;
-			_layerPropertyUpdates = Channel.CreateUnbounded<LayerPropertyUpdate>();
+			_configurationsChangedChannel = Channel.CreateUnbounded<ConfigurationChangedContext>();
 		}
 
 		public bool IsProjectLoaded { get; private set; }
@@ -106,24 +107,27 @@ namespace Lightning.Controller.Projects
 
 		private void ObserveProject(ProjectDefinition projectDefinition)
 		{
-			projectDefinition.PropertyChanged += NotfiyPropertyChanged_EventCallback!;
-			projectDefinition.RenderTrees.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
+			projectDefinition.ConfigurationChanged += Project_ConfigurationChanged;
+
+			//Check CollectionChanges
 			foreach (var renderTrees in projectDefinition.RenderTrees)
 			{
-				TraverseLayers(renderTrees.Layers, layer => layer.PropertyChanged += NotfiyPropertyChanged_EventCallback!);
+				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged += Project_ConfigurationChanged);
 			}
-			projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
+			//projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
 		}
+
+		
 
 		private void UnObserveProject(ProjectDefinition projectDefinition)
 		{
-			projectDefinition.PropertyChanged -= NotfiyPropertyChanged_EventCallback!;
-			projectDefinition.RenderTrees.CollectionChanged -= NotifyIfCollectionElementChanged_EventCallback;
+			projectDefinition.ConfigurationChanged -= Project_ConfigurationChanged;
+
+			//Check CollectionChanges
 			foreach (var renderTrees in projectDefinition.RenderTrees)
 			{
-				TraverseLayers(renderTrees.Layers, layer => layer.PropertyChanged -= NotfiyPropertyChanged_EventCallback!);
+				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged -= Project_ConfigurationChanged);
 			}
-			projectDefinition.Nodes.CollectionChanged -= NotifyIfCollectionElementChanged_EventCallback;
 		}
 
 		private void TraverseLayers(IEnumerable<LayerBaseDefinition> layers, Action<LayerBaseDefinition> manipulation)
@@ -141,71 +145,10 @@ namespace Lightning.Controller.Projects
 			}
 		}
 
-		private void NotifyIfCollectionElementChanged_EventCallback(object? sender, NotifyCollectionChangedEventArgs e)
-		{
-			//TODO: Implement
-			if (sender is null)
-			{
-				throw new ArgumentNullException(nameof(sender));
-			}
+		private void Project_ConfigurationChanged(object? sender, ConfigurationChangedEventArgs e)
+			=> _configurationsChangedChannel.Writer.TryWrite(e.Context);
 
-			if (e is null)
-			{
-				throw new ArgumentNullException(nameof(e));
-			}
-
-			switch (sender)
-			{
-				default:
-					break;
-			}
-		}
-
-		private void NotfiyPropertyChanged_EventCallback(object? sender, PropertyChangedEventArgs eventArgs)
-		{
-			if (sender is null)
-			{
-				throw new ArgumentNullException(nameof(sender));
-			}
-
-			if (eventArgs is null)
-			{
-				throw new ArgumentNullException(nameof(eventArgs));
-			}
-			if (eventArgs.PropertyName is null)
-			{
-				//TODO: add Logging
-				return;
-			}
-
-			switch (sender)
-			{
-				case LayerBaseDefinition layerDefinition:
-				{
-					//TODO: Handle sub routes like Transformation, color, etc...
-					var property = layerDefinition.GetType().GetProperty(eventArgs.PropertyName);
-					if (property is null)
-					{
-						//TODO: add Logging
-						return;
-					}
-					//NOTE: we are sure the property has a value.
-					var value = property.GetValue(layerDefinition)!;
-					//TODO: We should avoid that every client gets all LayerPropertyChange notifications.
-					//		Only those updates they are relevant should sent to client.
-					//		For that we need the RenderTreeId, but we don't know that at this point.
-					_layerPropertyUpdates.Writer.TryWrite(new(layerDefinition.Id, eventArgs.PropertyName, value));
-				}
-				break;
-
-				default:
-					break;
-			}
-		}
-
-		public IAsyncEnumerable<LayerPropertyUpdate> GetLayerPropertyUpdatesAllAsync(CancellationToken cancellationToken = default)
-		{
-			return _layerPropertyUpdates.Reader.ReadAllAsync(cancellationToken);
-		}
+		public IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default)
+			=> _configurationsChangedChannel.Reader.ReadAllAsync(cancellationToken);
 	}
 }
