@@ -43,9 +43,9 @@ namespace Lightning.Node.Communications
 			=> _serviceProvider?.GetRequiredService<GrpcLifetimeService.GrpcLifetimeServiceClient>()
 				?? throw new InvalidOperationException($"First call {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
-		//public GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient()
-		//	=> _serviceProvider?.GetRequiredService<GrpcMediaService.GrpcMediaServiceClient>()
-		//			   ?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
+		public GrpcMediaSyncService.GrpcMediaSyncServiceClient GetMediaServiceClient()
+			=> _serviceProvider?.GetRequiredService<GrpcMediaSyncService.GrpcMediaSyncServiceClient>()
+					   ?? throw new InvalidOperationException($"First call  {nameof(SearchAndAuthenticateForServerAsync)} to get the Server Credentials");
 
 		public GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient()
 			=> _serviceProvider?.GetRequiredService<GrpcTimeService.GrpcTimeServiceClient>()
@@ -87,10 +87,10 @@ namespace Lightning.Node.Communications
 			{
 				opt.Address = baseUri;
 			}).AddInterceptor<NodeIdInterceptor>();
-			//colllection.AddGrpcClient<GrpcMediaService.GrpcMediaServiceClient>(opt =>
-			//{
-			//	opt.Address = baseUri;
-			//}).AddInterceptor<NodeIdInterceptor>();
+			colllection.AddGrpcClient<GrpcMediaSyncService.GrpcMediaSyncServiceClient>(opt =>
+			{
+				opt.Address = baseUri;
+			}).AddInterceptor<NodeIdInterceptor>();
 			colllection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;

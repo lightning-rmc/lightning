@@ -67,6 +67,7 @@ namespace Lightning.Controller.Host
             {
 				//Grpc Services
 				endpoints.MapGrpcService<GrpcLifetimeService>();
+				endpoints.MapGrpcService<GrpcMediaService>();
 
 				//API Services
 				endpoints.MapControllers();
