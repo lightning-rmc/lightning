@@ -11,7 +11,7 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 		private readonly FileInputLayerDefinition _definition;
 		private VideoCapture _videoCapture;
 
-		public FileLayerInput(Media, FileInputLayerDefinition definition)
+		public FileLayerInput(FileInputLayerDefinition definition)
 			: base(definition.Filename)
 		{
 			_definition = definition;
