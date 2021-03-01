@@ -44,45 +44,42 @@ namespace Lightning.Controller.Projects
 			//TODO: Check exception handling if Config is broken..
 			if (XamlServices.Parse(import) is not ProjectDefinition project)
 			{
+				//TODO: add logging
 				return false;
 			}
-			if (_project is not null)
-			{
-				UnObserveProject(_project);
-			}
-			//TODO: add Logging
-			ObserveProject(project);
-			_project = project;
-			RaiseProjectLoaded();
+			ImportProject(project);
 			return true;
 		}
 
 		public void CreateNewProject()
+			=> ImportProject(new ProjectDefinition());
+
+		private void ImportProject(ProjectDefinition project)
 		{
 			if (_project is not null)
 			{
 				UnObserveProject(_project);
 			}
 			//TODO: add Logging
-			_project = new();
+			_project = project;
 			ObserveProject(_project);
 			RaiseProjectLoaded();
 		}
 
 		public LayerBaseDefinition? TryGetLayer(string id)
 		{
-			if (_project?.RenderTrees is not IEnumerable<RenderTreeDefinition> renderTrees)
+			if (_project?.RenderTrees is IEnumerable<RenderTreeDefinition> renderTrees)
 			{
-				renderTrees = Enumerable.Empty<RenderTreeDefinition>();
-			}
-			foreach (var renderTree in renderTrees)
-			{
-				var result = renderTree.TryGetLayer(id);
-				if (result is not null)
+				foreach (var renderTree in renderTrees)
 				{
-					return result;
+					var result = renderTree.TryGetLayer(id);
+					if (result is not null)
+					{
+						return result;
+					}
 				}
 			}
+			//TODO: add Logging
 			return null;
 		}
 
@@ -117,7 +114,7 @@ namespace Lightning.Controller.Projects
 			//projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
 		}
 
-		
+
 
 		private void UnObserveProject(ProjectDefinition projectDefinition)
 		{
@@ -146,7 +143,11 @@ namespace Lightning.Controller.Projects
 		}
 
 		private void Project_ConfigurationChanged(object? sender, ConfigurationChangedEventArgs e)
-			=> _configurationsChangedChannel.Writer.TryWrite(e.Context);
+		{
+			//TODO: add logging
+			//TODO: log if failed
+			_configurationsChangedChannel.Writer.TryWrite(e.Context);
+		}
 
 		public IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default)
 			=> _configurationsChangedChannel.Reader.ReadAllAsync(cancellationToken);
