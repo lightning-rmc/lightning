@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Lightning.Controller.Host.Hubs;
 using Lightning.Controller.Lifetime;
 using Lightning.Controller.Media;
+using Lightning.Controller.Projects;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -67,6 +68,7 @@ namespace Lightning.Controller.Host
             {
 				//Grpc Services
 				endpoints.MapGrpcService<GrpcLifetimeService>();
+				endpoints.MapGrpcService<GrpcConfigurationService>();
 
 				//API Services
 				endpoints.MapControllers();

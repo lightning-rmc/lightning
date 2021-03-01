@@ -20,7 +20,7 @@ namespace Lightning.Node.Lifetime
 
 		public GrpcNodeLifetimeService(IConnectionManager connectionManager, IRenderHost renderHost, IHostApplicationLifetime hostLifetime)
 		{
-			//TODO: Maye check if application is allready started.
+			//TODO: Maye check if application is already started.
 			hostLifetime.ApplicationStarted.Register(() =>
 			{
 				_grpcClient = connectionManager.GetLifetimeServiceClient();

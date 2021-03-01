@@ -6,17 +6,28 @@ option csharp_namespace = "Lightning.Core.Generated";
 package Lightning;
 
 service GrpcProjectEditService {
-	rpc GetEditChangeStream(GeneralRequest) returns (stream EditChangeMessage) {}
+	rpc GetEditChangeStream(GeneralRequest) returns (stream ConfigurationChangedMessage) {}
 }
 
-message EditChangeMessage {
+message ConfigurationChangedMessage {
 	string id = 1;
 	int32 targetType = 2;
-	string name = 3;
-	oneof value {
-		int32 integer = 4;
-		float float = 5;
-		string string = 6;
-		bool boolean = 7;
+	oneof context {
+		ValueChangedContext valueChangedContext = 4;
+		StructureChangedContext structureChangedContext = 5;
 	}
+}
+
+message ValueChangedContext {
+	string name = 1;
+	oneof value {
+		int32 integer = 2;
+		float float = 3;
+		string string = 4;
+		bool boolean = 5;
+	}
+}
+
+message StructureChangedContext {
+
 }
