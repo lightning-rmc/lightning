@@ -14,17 +14,17 @@ namespace Lightning.Core.Definitions
 
 		}
 
-		public ResolutionDefinition(int height, int length)
+		public ResolutionDefinition(int height, int width)
 		{
 			Height = height;
-			Length = length;
+			Width = width;
 		}
 
 		private int _height;
 		public int Height { get => _height; set => Set(ref _height, value); }
 
-		private int _length;
-		public int Length { get => _length; set => Set(ref _length, value); }
+		private int _width;
+		public int Width { get => _width; set => Set(ref _width, value); }
 
 		public static ResolutionDefinition UHD => new(2160, 3840);
 		public static ResolutionDefinition FullHD => new(1080, 1920);
