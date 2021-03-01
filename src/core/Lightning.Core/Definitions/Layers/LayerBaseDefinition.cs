@@ -11,10 +11,6 @@ namespace Lightning.Core.Definitions
 
 		protected LayerBaseDefinition()
 		{
-			_id = string.Empty;
 		}
-
-		private string _id;
-		public string Id { get => _id; set => Set(ref _id, value); }
 	}
 }

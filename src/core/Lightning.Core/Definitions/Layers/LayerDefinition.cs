@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System.Collections.Generic;
 
 namespace Lightning.Core.Definitions
@@ -23,5 +24,7 @@ namespace Lightning.Core.Definitions
 
 		private MergeProcessorDefinition _blendMode;
 		public MergeProcessorDefinition BlendMode { get => _blendMode; set => Set(ref _blendMode, value); }
+
+		protected override ConfigurationChangedTarget Type => throw new System.NotImplementedException();
 	}
 }

@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,23 +9,47 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions
 {
-	public class DefinitionBaseType : INotifyPropertyChanged
+	public abstract class DefinitionBaseType : INotifyPropertyChanged, INotifyConfigurationChanged
 	{
 		public event PropertyChangedEventHandler? PropertyChanged;
+		public event EventHandler<ConfigurationChangedEventArgs>? ConfigurationChanged;
 
 
-		public DefinitionBaseType()
+		protected DefinitionBaseType()
 		{
-
+			Id = Guid.NewGuid().ToString();
 		}
 
+		protected abstract ConfigurationChangedTarget Type { get; }
 
-		protected void Set<T>(ref T storage, T value, [CallerMemberName]string? name = null)
+		//TODO: maybe Change to init and Check if XAML can handle that
+		public string Id { get; set; }
+
+		protected void Set<TValue>(ref TValue storage, TValue value, [CallerMemberName] string? name = null)
 		{
 			if (!storage?.Equals(value) ?? false)
 			{
 				storage = value;
 				RaiseNotifyPropertyChanged(name);
+				RaiseConfigurationChanged(Id, name!, value);
+			}
+		}
+
+		private void RaiseConfigurationChanged<TValue>(string id, string name, TValue value)
+		{
+			//TODO: Remove TryCatch
+			try
+			{
+				ConfigurationChanged?.Invoke(this, new()
+				{
+					Context = new ConfigurationValueChangedContext<TValue>(id, name, Type, value)
+				});
+			}
+			catch (Exception e)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Achtung Target Type wurde noch nicht angelegt. Unbedingt Fixen!!!" + e.ToString());
+				Console.ResetColor();
 			}
 		}
 

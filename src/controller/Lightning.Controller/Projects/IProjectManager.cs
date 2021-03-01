@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using Lightning.Core.Definitions;
 using System;
 using System.Collections.Generic;
@@ -13,23 +14,17 @@ namespace Lightning.Controller.Projects
 		event EventHandler ProjectLoaded;
 
 		bool IsProjectLoaded { get; }
-		void CreateNewProject();
 		string? ExportProject();
+		void CreateNewProject();
 		bool ImportProject(string import);
 
 		RenderTreeDefinition? TryGetRenderTree(string id);
 
 		NodeDefinition? TryGetNode(string id);
 
-		IAsyncEnumerable<LayerPropertyUpdate> GetLayerPropertyUpdatesAllAsync(CancellationToken cancellationToken = default);
 		LayerBaseDefinition? TryGetLayer(string id);
 
-		IEnumerable<RenderTreeDefinition> GetRenderTreeDefinitions();
-		IEnumerable<LayerDefinition> GetLayers();
-		IEnumerable<NodeDefinition> GetNodes();
+		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 
-		RenderTreeDefinition GetRenderTree(string id);
-		LayerDefinition GetLayer(string id);
-		NodeDefinition GetNode(string id);
 	}
 }

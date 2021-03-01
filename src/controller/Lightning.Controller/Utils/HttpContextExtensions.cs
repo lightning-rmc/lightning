@@ -14,7 +14,7 @@ namespace Lightning.Controller.Utils
 		{
 			if (httpContext.Request.Headers.TryGetValue("nodeId",out var nodeId))
 			{
-				//TODO: Maybe check typeconverting between StrinValues and string
+				//TODO: Maybe check type converting between StrinValues and string
 				return nodeId;
 			}
 			return null;

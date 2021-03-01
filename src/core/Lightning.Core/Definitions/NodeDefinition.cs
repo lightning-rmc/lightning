@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,8 @@ namespace Lightning.Core.Definitions
 		public NodeDefinition()
 		{
 			_resolution = new();
-			_id = string.Empty;
 			_name = string.Empty;
 		}
-
-
-		private string _id;
-		public string Id { get => _id; set => Set(ref _id, value); }
 
 		private string _name;
 		public string Name { get => _name; set => Set(ref _name, value); }
@@ -28,5 +24,6 @@ namespace Lightning.Core.Definitions
 		private ResolutionDefinition _resolution;
 		public ResolutionDefinition Resolution { get=> _resolution; set => Set(ref _resolution,value); }
 
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}
 }

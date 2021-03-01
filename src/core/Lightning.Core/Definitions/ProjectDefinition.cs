@@ -1,4 +1,5 @@
 
+using Lightning.Core.Configuration;
 using Lightning.Core.Definitions.Collections;
 using Portable.Xaml.Markup;
 using System;
@@ -28,6 +29,6 @@ namespace Lightning.Core.Definitions
 		private RenderTreeDefinitionCollection _renderTrees;
 		public RenderTreeDefinitionCollection RenderTrees { get => _renderTrees; set => Set(ref _renderTrees, value); }
 
-
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}
 }

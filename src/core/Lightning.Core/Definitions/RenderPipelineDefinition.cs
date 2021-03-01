@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace Lightning.Core.Definitions
 
 		private RenderTreeDefinition _renderTree;
 		public RenderTreeDefinition RenderTree { get => _renderTree; set => Set(ref _renderTree, value); }
+
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}
 }

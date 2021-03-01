@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using Lightning.Core.Definitions.Collections;
 using Portable.Xaml.Markup;
 using System;
@@ -18,5 +19,9 @@ namespace Lightning.Core.Definitions
 
 		private LayerBaseDefinitionCollectionCollection _childs;
 		public LayerBaseDefinitionCollectionCollection Childs { get => _childs; set => Set(ref _childs, value); }
+
+
+		//TODO: handle Collections?
+		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}
 }

@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using Lightning.Core.Definitions;
 using Lightning.Core.Definitions.Collections;
 using Microsoft.Extensions.Logging;
@@ -18,13 +19,13 @@ namespace Lightning.Controller.Projects
 	{
 		public event EventHandler? ProjectLoaded;
 		private readonly ILogger<ProjectManager>? _logger;
-		private readonly Channel<LayerPropertyUpdate> _layerPropertyUpdates;
+		private readonly Channel<ConfigurationChangedContext> _configurationsChangedChannel;
 		private ProjectDefinition? _project;
 
 		public ProjectManager(ILogger<ProjectManager>? logger = null)
 		{
 			_logger = logger;
-			_layerPropertyUpdates = Channel.CreateUnbounded<LayerPropertyUpdate>();
+			_configurationsChangedChannel = Channel.CreateUnbounded<ConfigurationChangedContext>();
 		}
 
 		public bool IsProjectLoaded { get; private set; }
@@ -43,45 +44,42 @@ namespace Lightning.Controller.Projects
 			//TODO: Check exception handling if Config is broken..
 			if (XamlServices.Parse(import) is not ProjectDefinition project)
 			{
+				//TODO: add logging
 				return false;
 			}
-			if (_project is not null)
-			{
-				UnObserveProject(_project);
-			}
-			//TODO: add Logging
-			ObserveProject(project);
-			_project = project;
-			RaiseProjectLoaded();
+			ImportProject(project);
 			return true;
 		}
 
 		public void CreateNewProject()
+			=> ImportProject(new ProjectDefinition());
+
+		private void ImportProject(ProjectDefinition project)
 		{
 			if (_project is not null)
 			{
 				UnObserveProject(_project);
 			}
 			//TODO: add Logging
-			_project = new();
+			_project = project;
 			ObserveProject(_project);
 			RaiseProjectLoaded();
 		}
 
 		public LayerBaseDefinition? TryGetLayer(string id)
 		{
-			if (_project?.RenderTrees is not IEnumerable<RenderTreeDefinition> renderTrees)
+			if (_project?.RenderTrees is IEnumerable<RenderTreeDefinition> renderTrees)
 			{
-				renderTrees = Enumerable.Empty<RenderTreeDefinition>();
-			}
-			foreach (var renderTree in renderTrees)
-			{
-				var result = renderTree.TryGetLayer(id);
-				if (result is not null)
+				foreach (var renderTree in renderTrees)
 				{
-					return result;
+					var result = renderTree.TryGetLayer(id);
+					if (result is not null)
+					{
+						return result;
+					}
 				}
 			}
+			//TODO: add Logging
 			return null;
 		}
 
@@ -106,24 +104,27 @@ namespace Lightning.Controller.Projects
 
 		private void ObserveProject(ProjectDefinition projectDefinition)
 		{
-			projectDefinition.PropertyChanged += NotfiyPropertyChanged_EventCallback!;
-			projectDefinition.RenderTrees.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
+			projectDefinition.ConfigurationChanged += Project_ConfigurationChanged;
+
+			//Check CollectionChanges
 			foreach (var renderTrees in projectDefinition.RenderTrees)
 			{
-				TraverseLayers(renderTrees.Layers, layer => layer.PropertyChanged += NotfiyPropertyChanged_EventCallback!);
+				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged += Project_ConfigurationChanged);
 			}
-			projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
+			//projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
 		}
+
+
 
 		private void UnObserveProject(ProjectDefinition projectDefinition)
 		{
-			projectDefinition.PropertyChanged -= NotfiyPropertyChanged_EventCallback!;
-			projectDefinition.RenderTrees.CollectionChanged -= NotifyIfCollectionElementChanged_EventCallback;
+			projectDefinition.ConfigurationChanged -= Project_ConfigurationChanged;
+
+			//Check CollectionChanges
 			foreach (var renderTrees in projectDefinition.RenderTrees)
 			{
-				TraverseLayers(renderTrees.Layers, layer => layer.PropertyChanged -= NotfiyPropertyChanged_EventCallback!);
+				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged -= Project_ConfigurationChanged);
 			}
-			projectDefinition.Nodes.CollectionChanged -= NotifyIfCollectionElementChanged_EventCallback;
 		}
 
 		private void TraverseLayers(IEnumerable<LayerBaseDefinition> layers, Action<LayerBaseDefinition> manipulation)
@@ -141,101 +142,15 @@ namespace Lightning.Controller.Projects
 			}
 		}
 
-		private void NotifyIfCollectionElementChanged_EventCallback(object? sender, NotifyCollectionChangedEventArgs e)
+		private void Project_ConfigurationChanged(object? sender, ConfigurationChangedEventArgs e)
 		{
-			//TODO: Implement
-			if (sender is null)
-			{
-				throw new ArgumentNullException(nameof(sender));
-			}
-
-			if (e is null)
-			{
-				throw new ArgumentNullException(nameof(e));
-			}
-
-			switch (sender)
-			{
-				default:
-					break;
-			}
+			//TODO: add logging
+			//TODO: log if failed
+			_configurationsChangedChannel.Writer.TryWrite(e.Context);
 		}
 
-		private void NotfiyPropertyChanged_EventCallback(object? sender, PropertyChangedEventArgs eventArgs)
-		{
-			if (sender is null)
-			{
-				throw new ArgumentNullException(nameof(sender));
-			}
 
-			if (eventArgs is null)
-			{
-				throw new ArgumentNullException(nameof(eventArgs));
-			}
-			if (eventArgs.PropertyName is null)
-			{
-				//TODO: add Logging
-				return;
-			}
-
-			switch (sender)
-			{
-				case LayerBaseDefinition layerDefinition:
-				{
-					//TODO: Handle sub routes like Transformation, color, etc...
-					var property = layerDefinition.GetType().GetProperty(eventArgs.PropertyName);
-					if (property is null)
-					{
-						//TODO: add Logging
-						return;
-					}
-					//NOTE: we are sure the property has a value.
-					var value = property.GetValue(layerDefinition)!;
-					//TODO: We should avoid that every client gets all LayerPropertyChange notifications.
-					//		Only those updates they are relevant should sent to client.
-					//		For that we need the RenderTreeId, but we don't know that at this point.
-					_layerPropertyUpdates.Writer.TryWrite(new(layerDefinition.Id, eventArgs.PropertyName, value));
-				}
-				break;
-
-				default:
-					break;
-			}
-		}
-
-		public IAsyncEnumerable<LayerPropertyUpdate> GetLayerPropertyUpdatesAllAsync(CancellationToken cancellationToken = default)
-		{
-			return _layerPropertyUpdates.Reader.ReadAllAsync(cancellationToken);
-		}
-
-		public IEnumerable<RenderTreeDefinition> GetRenderTreeDefinitions()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<LayerDefinition> GetLayers()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<NodeDefinition> GetNodes()
-		{
-			throw new NotImplementedException();
-		}
-
-		public RenderTreeDefinition GetRenderTree(string id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public LayerDefinition GetLayer(string id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public NodeDefinition GetNode(string id)
-		{
-			throw new NotImplementedException();
-		}
+		public IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default)
+			=> _configurationsChangedChannel.Reader.ReadAllAsync(cancellationToken);
 	}
 }

@@ -1,3 +1,4 @@
+using Lightning.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,10 @@ namespace Lightning.Core.Definitions
 	{
 		public TransformProcessorDefinition()
 		{
-				
+
 		}
+
+		protected override ConfigurationChangedTarget Type
+			=> ConfigurationChangedTarget.Transition;
 	}
 }
