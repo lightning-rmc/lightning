@@ -4,7 +4,7 @@
 Eine Node befindet sich immer in einem der folgenden Zustände:
 
 ```mermaid
-stateDiagram-v2
+stateDiagram
     Offline
     Preparing
     Ready

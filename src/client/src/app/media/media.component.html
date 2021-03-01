@@ -1,7 +1,7 @@
 <h2 class="subtitle">Media</h2>
 <div class="header">
 	<input type="file" #input multiple (change)="handleFileInput($any($event.target).files)">
-	<button (click)="onSubmit()">Upload</button>
+	<button class="btn" (click)="onSubmit()">Upload</button>
 </div>
 
 <div class="media-container">

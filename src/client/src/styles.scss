@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "variables";
+@import "components";
 
 * {
 	box-sizing: border-box;
@@ -45,9 +46,4 @@ a {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: rgba(255, 255, 255, 0.2);
-}
-
-
-.subtitle {
-	margin-bottom: 1rem;
 }

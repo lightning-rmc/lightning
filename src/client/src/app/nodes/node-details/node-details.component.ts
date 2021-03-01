@@ -14,7 +14,7 @@ export class NodeDetailsComponent implements OnInit {
 
 	ngOnInit(): void {}
 
-	getStateName(state: NodeState): string {
+	getStateName(state?: NodeState): string {
 		switch (state) {
 			case NodeState.Edit:
 				return 'EDIT';

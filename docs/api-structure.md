@@ -3,7 +3,6 @@
 ```
 /api/nodes
 /api/nodes/123
-/api/nodes/123/output
 
 
 /api/group

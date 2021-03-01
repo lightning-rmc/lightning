@@ -149,7 +149,44 @@ namespace Lightning.Controller.Projects
 			_configurationsChangedChannel.Writer.TryWrite(e.Context);
 		}
 
+<<<<<<< HEAD
 		public IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default)
 			=> _configurationsChangedChannel.Reader.ReadAllAsync(cancellationToken);
+=======
+		public IAsyncEnumerable<LayerPropertyUpdate> GetLayerPropertyUpdatesAllAsync(CancellationToken cancellationToken = default)
+		{
+			return _layerPropertyUpdates.Reader.ReadAllAsync(cancellationToken);
+		}
+
+		public IEnumerable<RenderTreeDefinition> GetRenderTreeDefinitions()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<LayerDefinition> GetLayers()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<NodeDefinition> GetNodes()
+		{
+			throw new NotImplementedException();
+		}
+
+		public RenderTreeDefinition GetRenderTree(string id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public LayerDefinition GetLayer(string id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public NodeDefinition GetNode(string id)
+		{
+			throw new NotImplementedException();
+		}
+>>>>>>> 86d4e994f08e96b91aea8ca72fde9393ba71e00f
 	}
 }

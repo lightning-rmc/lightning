@@ -1,7 +1,6 @@
 @import 'src/variables';
 
 $navbar-item-size: 4.5rem;
-$navbar-bg: #1d2023;
 
 $navbar-item-transition: all 0.2s ease-out;
 
@@ -16,7 +15,7 @@ $navbar-item-transition: all 0.2s ease-out;
 	display: flex;
 	flex-direction: column;
 
-	background: $navbar-bg;
+	background: $color-dark;
 }
 
 .navbar-top {
@@ -44,8 +43,8 @@ $navbar-item-transition: all 0.2s ease-out;
 		top: 100%;
 		left: 0.5rem;
 		width: 20rem;
-		background: $navbar-bg;
-		border: 2px solid darken($navbar-bg, 5%);
+		background: $color-dark;
+		border: 2px solid darken($color-dark, 5%);
 		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
 
 		.popup__item {
