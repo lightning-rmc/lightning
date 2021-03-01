@@ -8,9 +8,7 @@ using OpenCvSharp;
 using Portable.Xaml;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Lightning.Node.Rendering
@@ -43,28 +41,36 @@ namespace Lightning.Node.Rendering
 
 		private ILayer<Mat> BuildTreeInternal(RenderTreeDefinition renderTreeDefinition)
 		{
+			var layerDic = new Dictionary<string, ILayer<Mat>>();
 			var layerDefinitions = renderTreeDefinition.Layers;
 			ILayer<Mat> next = null!;
 			for (int i = layerDefinitions.Count - 1; i >= 0; i--)
 			{
 				var definition = layerDefinitions[i];
-				next = BuildLayer(definition, next);
+				next = BuildLayer(definition, next, layerDic);
 			}
 
+			var grpcClient = _connectionManager.GetLifetimeServiceClient();
+			var observer = new LayerActivationObserver<Mat>(layerDic, grpcClient);
+			var obseravationWrapper = new ObseravtionWrapperLayer(observer, next);
 			//return next;
-			return new DummyLayer(_windowHost);
+			//return new DummyLayer(_windowHost);
+			return obseravationWrapper;
 		}
 
 
-		private ILayer<Mat> BuildLayer(LayerBaseDefinition definition, ILayer<Mat>? next)
+		private ILayer<Mat> BuildLayer(LayerBaseDefinition definition, ILayer<Mat>? next, IDictionary<string, ILayer<Mat>> layers)
 		{
-			return definition switch
+			var layer = definition switch
 			{
 				LayerDefinition basicLayer => null!,
 				SplitLayerDefinition splitLayer => null!,
 				WindowOutputDefinition outputDefinition => LayerBuilder.BuildOutputWindowLayer(_windowHost, outputDefinition),
 				_ => throw new NotImplementedException(),
 			};
+
+
+			return layer;
 		}
 	}
 }
