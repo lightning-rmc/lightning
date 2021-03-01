@@ -20,7 +20,7 @@ namespace Lightning.Node.Communications
 		HttpClient GetHttpClient();
 		GrpcProjectEditService.GrpcProjectEditServiceClient GetProjectEditServiceClient();
 		GrpcLifetimeService.GrpcLifetimeServiceClient GetLifetimeServiceClient();
-		//GrpcMediaService.GrpcMediaServiceClient GetMediaServiceClient();
+		GrpcMediaSyncService.GrpcMediaSyncServiceClient GetMediaServiceClient();
 		GrpcTimeService.GrpcTimeServiceClient GetTimeServiceClient();
 
 	}

@@ -18,7 +18,6 @@ namespace Lightning.Controller.Media
 		private readonly ConcurrentDictionary<string, string> _hashCache;
 		private readonly FileSystemWatcher _watcher;
 		private readonly ILogger _logger;
-
 		private readonly Channel<(string fileName, UpdateType updateType)> _updates;
 
 		public MediaService(IOptions<MediaSettings> mediaSettings, ILogger<MediaService> logger)
@@ -28,15 +27,15 @@ namespace Lightning.Controller.Media
 			_settings = mediaSettings.Value;
 			_updates = Channel.CreateUnbounded<(string, UpdateType)>();
 			Directory.CreateDirectory(_settings.StoragePath);
-			_watcher = new FileSystemWatcher()
-			{
-				Path = _settings.StoragePath,
-				EnableRaisingEvents = true
-			};
+			//_watcher = new FileSystemWatcher()
+			//{
+			//	Path = _settings.StoragePath,
+			//	EnableRaisingEvents = true
+			//};
 		}
 
 
-		public IEnumerable<Media> GetFiles(bool ignoreCache = false)
+		public IEnumerable<Core.Media.Media> GetFiles(bool ignoreCache = false)
 		{
 			var dirInfo = new DirectoryInfo(_settings.StoragePath);
 
@@ -63,21 +62,19 @@ namespace Lightning.Controller.Media
 			var filePath = Path.Combine(_settings.StoragePath, file.FileName);
 			using var stream = File.Create(filePath);
 			await file.CopyToAsync(stream);
-			var hash = ComputeHash(filePath);
-			_hashCache.AddOrUpdate(file.Name, hash, (key, oldValue) => hash);
 			await _updates.Writer.WriteAsync((file.FileName, UpdateType.ADDED));
 		}
 
 
-		public IAsyncEnumerable<(string fileName, UpdateType updateType)> GetUpdates()
+		public IAsyncEnumerable<(string fileName, UpdateType updateType)> GetUpdatesAllAsync()
 			=> _updates.Reader.ReadAllAsync();
 
 
 		private string ComputeHash(string fullName)
 		{
-			using var md5 = MD5.Create();
+			using var algorithm = SHA256.Create();
 			using var stream = File.OpenRead(fullName);
-			var hash = md5.ComputeHash(stream);
+			var hash = algorithm.ComputeHash(stream);
 			return BitConverter.ToString(hash);
 		}
 	}

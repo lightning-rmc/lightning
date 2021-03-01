@@ -1,4 +1,5 @@
 using Lightning.Controller.Media;
+using Lightning.Core.Definitions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 		[HttpGet]
-		public IEnumerable<Media.Media> GetStoredFiles(bool ignoreCache= false)
+		public IEnumerable<Core.Media.Media> GetStoredFiles(bool ignoreCache= false)
 		{
 			return _mediaService.GetFiles(ignoreCache);
 		}
@@ -32,7 +33,6 @@ namespace Lightning.Controller.Host.Controller
 		[RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
 		public async Task<IActionResult> UploadFile(List<IFormFile> mediaFiles)
 		{
-			_logger.LogInformation($"File upload called with {mediaFiles.Count} files");
 			var results = new Dictionary<string, UploadDetails>();
 			foreach (var file in mediaFiles)
 			{
@@ -40,6 +40,7 @@ namespace Lightning.Controller.Host.Controller
 				{
 					await _mediaService.SaveFileAsync(file);
 					results.Add(file.FileName, new(true, null));
+					_logger.LogInformation("File uploaded: {}", file.FileName);
 				}
 				catch (Exception ex)
 				{

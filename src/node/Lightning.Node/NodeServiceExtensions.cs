@@ -3,6 +3,7 @@ using Lightning.Core.Rendering;
 using Lightning.Core.Utils;
 using Lightning.Node.Communications;
 using Lightning.Node.Lifetime;
+using Lightning.Node.Media;
 using Lightning.Node.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace Lightning.Node
 			services.AddFeatureFlags(configuration);
 			services.AddNodeConfiguration(configuration);
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
+			services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
 			return services;
 		}
 

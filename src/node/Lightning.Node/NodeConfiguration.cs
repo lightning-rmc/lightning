@@ -1,3 +1,4 @@
+using Lightning.Node.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Lightning.Node
 	public class NodeConfiguration
 	{
 		public string NodeId { get; set; } = string.Empty;
+		public MediaConfiguration Media { get; set; } = new();
 	}
 }

@@ -8,7 +8,7 @@ using Lightning.Core.Generated;
 
 namespace Lightning.Controller.Media
 {
-	class GrpcMediaService : MediaSyncService.MediaSyncServiceBase
+	public class GrpcMediaService : GrpcMediaSyncService.GrpcMediaSyncServiceBase
 	{
 		private readonly IMediaService _mediaService;
 
@@ -17,9 +17,22 @@ namespace Lightning.Controller.Media
 			_mediaService = mediaService;
 		}
 
-		public override Task GetMediaUpdates(MediaUpdateRequest request, IServerStreamWriter<MediaUpdateResponse> responseStream, ServerCallContext context)
+		public async override Task GetMediaUpdates(MediaUpdateRequest request, IServerStreamWriter<MediaUpdateResponse> responseStream, ServerCallContext context)
 		{
-			return base.GetMediaUpdates(request, responseStream, context);
+			await foreach (var update in _mediaService.GetUpdatesAllAsync())
+			{
+				await responseStream.WriteAsync(new()
+				{
+					FileName = update.fileName,
+					UpdateType = update.updateType switch
+					{
+						UpdateType.ADDED => Core.Generated.UpdateType.Add,
+						UpdateType.CHANGED => Core.Generated.UpdateType.Change,
+						UpdateType.DELETED => Core.Generated.UpdateType.Delete,
+						_ => throw new NotImplementedException()
+					}
+				});
+			}
 		}
 	}
 }
