@@ -14,7 +14,7 @@ namespace Lightning.Node.Communications
 {
 	internal class ConnectionManager : IConnectionManager
 	{
-		private string _httpClientName = "Controller";
+		private readonly string _httpClientName = "Controller";
 		private readonly IConnectionResolver _connectionResolver;
 		private readonly IConfiguration _configuration;
 		private readonly NodeConfiguration _nodeConfiguration;
