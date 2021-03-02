@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	internal class OpenCVLayer : LayerBase<Mat>
+	public class OpenCVLayer : LayerBase<Mat>
 	{
 		private readonly LayerDefinition _definition;
-		private readonly ILayer<Mat> _child;
+		private readonly ILayer<Mat>? _child;
 
-		public OpenCVLayer(LayerDefinition definition, ILayer<Mat> child)
+		public OpenCVLayer(LayerDefinition definition, ILayer<Mat>? child = null)
 			: base(definition.Id)
 		{
 			_definition = definition;
@@ -22,11 +22,11 @@ namespace Lightning.Core.Rendering.Layers
 
 		protected override Mat InternalProcess(Mat frame, int tick)
 		{
-
+			//TODO: add more Process Information
 			return frame;
 		}
 
 		protected override void ProcessChilds(Mat frame, int tick)
-			=> _child.Process(frame, tick);
+			=> _child?.Process(frame, tick);
 	}
 }

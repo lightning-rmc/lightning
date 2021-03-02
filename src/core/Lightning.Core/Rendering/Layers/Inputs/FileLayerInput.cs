@@ -1,5 +1,7 @@
 using Lightning.Core.Configuration;
 using Lightning.Core.Definitions.Layers;
+using Lightning.Core.Media;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using System;
 using System.IO;
@@ -9,39 +11,48 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 	public class FileLayerInput : OpenCVLayerInputBase
 	{
 		private readonly FileInputLayerDefinition _definition;
-		private VideoCapture _videoCapture;
+		private readonly IMediaResolver _mediaResolver;
+		private readonly ILogger<FileLayerInput>? _logger;
+		private VideoCapture? _videoCapture;
 
-		public FileLayerInput(FileInputLayerDefinition definition)
+		public FileLayerInput(FileInputLayerDefinition definition, IMediaResolver mediaResolver, ILogger<FileLayerInput>? logger)
 			: base(definition.Filename)
 		{
 			_definition = definition;
-			_definition.ConfigurationChanged += Definition_ConfigurationChanged;
+			_mediaResolver = mediaResolver;
+			_logger = logger;
 			_videoCapture = CreateVideoCapture(definition.Filename);
+			_definition.PropertyChanged += Definition_PropertyChanged;
 		}
 
-		private VideoCapture CreateVideoCapture(string filename)
+		private void Definition_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			var basePath = "";
-			return new VideoCapture(Path.Combine(basePath, filename));
-		}
-
-		private void Definition_ConfigurationChanged(object? sender, ConfigurationChangedEventArgs e)
-		{
-			//TODO: maybe add a new Base Valuechanged type.
-			if (e.Context is ConfigurationValueChangedContext<string> context
-				&& context.Name == nameof(_definition.Filename))
+			if (e.PropertyName == nameof(_definition.Filename))
 			{
 				_videoCapture = CreateVideoCapture(_definition.Filename);
+			}
+		}
+
+		private VideoCapture? CreateVideoCapture(string filename)
+		{
+			if (_mediaResolver.GetFilePath(filename) is string filepath)
+			{
+				return new VideoCapture(filepath);
+			}
+			else
+			{
+				//TODO: add logging
+				return null;
 			}
 		}
 
 		public override Mat Process(int tick)
 		{
 			var image = new Mat<Vec3b>();
-			_videoCapture.Read(image);
+			_videoCapture?.Read(image);
 			if (image.Empty())
 			{
-				throw new NotImplementedException();
+				//TODO: Add logging
 			}
 			return image;
 		}
