@@ -17,7 +17,7 @@ namespace Lightning.Core.Rendering.Layers
 
 		public string Name { get; }
 
-		public virtual bool IsActive { get; protected set; }
+		public virtual bool IsActive { get; set; }
 
 		public void Process(TFrame frame, int tick)
 		{
@@ -31,5 +31,10 @@ namespace Lightning.Core.Rendering.Layers
 		protected abstract TFrame InternalProcess(TFrame frame, int tick);
 		protected abstract void ProcessChilds(TFrame frame,int tick);
 		protected virtual bool CanProcess(TFrame frame, int tick) => IsActive;
+
+		public virtual void Dispose()
+		{
+			//Note : No Disposing needed
+		}
 	}
 }

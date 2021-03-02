@@ -30,11 +30,8 @@ namespace Lightning.Controller.Lifetime
 			//TODO: Remove testcase
 			Task.Run(async () =>
 			{
-				await Task.Delay(2000);
-				await this.GoLiveAsync();
-				await Task.Delay(6000);
-				await this.GoReadyAsync();
-				await Task.Delay(2000);
+				
+				await Task.Delay(10_000);
 				await this.GoLiveAsync();
 			});
 		}

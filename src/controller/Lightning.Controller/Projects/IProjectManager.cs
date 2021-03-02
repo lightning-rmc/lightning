@@ -17,6 +17,7 @@ namespace Lightning.Controller.Projects
 		string? ExportProject();
 		void CreateNewProject();
 		bool ImportProject(string import);
+		void ImportProject(ProjectDefinition import);
 
 		RenderTreeDefinition? TryGetRenderTree(string id);
 

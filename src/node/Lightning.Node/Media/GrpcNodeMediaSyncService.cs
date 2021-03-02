@@ -40,10 +40,10 @@ namespace Lightning.Node.Media
 			Directory.CreateDirectory(_options.Media.StoragePath);
 		}
 
-		public async Task DownloadMediaAsync(string filename)
+		public async Task DownloadMediaAsync(string fileName)
 		{
-			var response = await _http.GetByteArrayAsync("/media/" + filename);
-			await File.WriteAllBytesAsync(Path.Combine(_options.Media.StoragePath, filename), response);
+			var response = await _http.GetByteArrayAsync("/media/" + fileName);
+			await File.WriteAllBytesAsync(Path.Combine(_options.Media.StoragePath, fileName), response);
 		}
 
 		public async Task SyncAllMediaAsync()
@@ -58,6 +58,7 @@ namespace Lightning.Node.Media
 				{
 					if (savedMedia.Any(f => f.Name == m.Name))
 					{
+						//TODO: Check null
 						var file = savedMedia.FirstOrDefault(f => f.Name == m.Name);
 						var sha256 = SHA256.Create();
 						var localHash = sha256.ComputeHash(await File.ReadAllBytesAsync(file.FullName));

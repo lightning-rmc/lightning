@@ -54,14 +54,14 @@ namespace Lightning.Controller.Projects
 		public void CreateNewProject()
 			=> ImportProject(new ProjectDefinition());
 
-		private void ImportProject(ProjectDefinition project)
+		public void ImportProject(ProjectDefinition import)
 		{
 			if (_project is not null)
 			{
 				UnObserveProject(_project);
 			}
 			//TODO: add Logging
-			_project = project;
+			_project = import;
 			ObserveProject(_project);
 			RaiseProjectLoaded();
 		}
@@ -106,12 +106,11 @@ namespace Lightning.Controller.Projects
 		{
 			projectDefinition.ConfigurationChanged += Project_ConfigurationChanged;
 
-			//Check CollectionChanges
+			//TODO:Check CollectionChanges
 			foreach (var renderTrees in projectDefinition.RenderTrees)
 			{
 				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged += Project_ConfigurationChanged);
 			}
-			//projectDefinition.Nodes.CollectionChanged += NotifyIfCollectionElementChanged_EventCallback;
 		}
 
 

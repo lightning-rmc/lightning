@@ -1,3 +1,4 @@
+using Lightning.Core.Definitions;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
@@ -7,24 +8,42 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	internal class OpenCVLayer : LayerBase<Mat>
+	public class OpenCVLayer : LayerBase<Mat>
 	{
-		private readonly ILayer<Mat> _child;
+		private readonly LayerDefinition _definition;
+		private readonly ILayer<Mat>? _child;
+		private readonly ILayerInput<Mat> _input;
 
-		public OpenCVLayer(string name, ILayer<Mat> child)
-			: base(name)
+		public OpenCVLayer(LayerDefinition definition, ILayerInput<Mat> input, ILayer<Mat>? child = null)
+			: base(definition.Id)
 		{
+			_definition = definition;
 			_child = child;
+			_input = input;
+			IsActive = true;
+		}
+
+
+		public override bool IsActive
+		{
+			get => base.IsActive;
+			set
+			{
+				if (value && value != base.IsActive)
+				{
+					_input.Reset();
+				}
+				base.IsActive = value;
+			}
 		}
 
 		protected override Mat InternalProcess(Mat frame, int tick)
 		{
-			return frame;
+			//TODO: add more Process Information
+			return _input.Process(tick);
 		}
 
 		protected override void ProcessChilds(Mat frame, int tick)
-		{
-			_child.Process(frame, tick);
-		}
+			=> _child?.Process(frame, tick);
 	}
 }

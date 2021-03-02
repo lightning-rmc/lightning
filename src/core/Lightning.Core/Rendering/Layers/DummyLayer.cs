@@ -15,7 +15,12 @@ namespace Lightning.Core.Rendering.Layers
 		}
 		public string Name => string.Empty;
 
-		public bool IsActive => true;
+		public bool IsActive { get; set; }
+
+		public void Dispose()
+		{
+
+		}
 
 		public void Process(Mat frame, int tick)
 		{

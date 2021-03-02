@@ -24,6 +24,11 @@ namespace Lightning.Core.Rendering.Layers.Outputs
 
 		public bool IsActive { get; set; }
 
+		public void Dispose()
+		{
+			//TODO: Nothing to handle
+		}
+
 		public void Process(Mat frame, int tick)
 		{
 			_windowHost.WriteFrame(frame);

@@ -1,4 +1,5 @@
 using Lightning.Core;
+using Lightning.Core.Media;
 using Lightning.Core.Rendering;
 using Lightning.Core.Utils;
 using Lightning.Node.Communications;
@@ -30,6 +31,8 @@ namespace Lightning.Node
 			services.AddNodeConfiguration(configuration);
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
 			services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
+			//TODO: Refactor find right place
+			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
 			return services;
 		}
 
