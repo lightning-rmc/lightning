@@ -15,7 +15,7 @@ namespace Lightning.Core.Definitions.Layers
 		public string Filename
 		{
 			get => _filename;
-			set => Set(ref _filename, Filename);
+			set => Set(ref _filename, value);
 		}
 
 

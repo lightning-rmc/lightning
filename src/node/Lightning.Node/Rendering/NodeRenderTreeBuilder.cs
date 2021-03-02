@@ -3,6 +3,8 @@ using Lightning.Core.Definitions.Layers;
 using Lightning.Core.Presentation;
 using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Layers;
+using Lightning.Core.Rendering.Layers.Inputs;
+using Lightning.Core.Rendering.Layers.Outputs;
 using Lightning.Node.Communications;
 using Microsoft.Extensions.DependencyInjection;
 using OpenCvSharp;
@@ -66,14 +68,25 @@ namespace Lightning.Node.Rendering
 		{
 			ILayer<Mat> layer = definition switch
 			{
-				LayerDefinition def => ActivatorUtilities.CreateInstance<OpenCVLayer>(_provider, def, next!),
+				LayerDefinition def => CreateLayer(def, next),
 				SplitLayerDefinition def => null!,
-				WindowOutputDefinition def => ActivatorUtilities.CreateInstance<WindowHostOutputLayer>(_provider, def),
+				WindowOutputDefinition def => ActivatorUtilities.CreateInstance<WindowOutputLayer>(_provider, def),
 				_ => throw new NotImplementedException(),
 			};
 			//TODO: add logging
 
 			return layer;
+		}
+
+		private ILayer<Mat> CreateLayer(LayerDefinition def, ILayer<Mat>? next)
+		{
+			ILayerInput<Mat> input = def.Input switch
+			{
+				FileInputLayerDefinition fileDef => ActivatorUtilities.CreateInstance<FileLayerInput>(_provider,fileDef),
+				_ => throw new NotImplementedException(),
+			};
+
+			return ActivatorUtilities.CreateInstance<OpenCVLayer>(_provider, def, input, next!);
 		}
 	}
 }

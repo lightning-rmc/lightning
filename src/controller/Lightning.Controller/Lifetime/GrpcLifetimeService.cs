@@ -45,5 +45,29 @@ namespace Lightning.Controller.Lifetime
 				await responseStream.WriteAsync(message);
 			}
 		}
+
+		public override async Task GelLayerActivationStream(GeneralRequest request,
+			IServerStreamWriter<LayerActivationMessage> responseStream,
+			ServerCallContext context)
+		{
+			await responseStream.WriteAsync(new()
+			{
+				Active = true,
+				LayerId = "myLayer"
+			});
+			await Task.Delay(4000);
+
+			await responseStream.WriteAsync(new()
+			{
+				Active = false,
+				LayerId = "myLayer"
+			});
+			await responseStream.WriteAsync(new()
+			{
+				Active = true,
+				LayerId = "myLayer"
+			});
+			await Task.Delay(20000);
+		}
 	}
 }

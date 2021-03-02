@@ -12,5 +12,7 @@ namespace Lightning.Core.Rendering
 		string Name { get; }
 
 		TFrame Process(int tick);
+
+		void Reset();
 	}
 }

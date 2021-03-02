@@ -54,7 +54,7 @@ namespace Lightning.Controller.Projects
 		public void CreateNewProject()
 			=> ImportProject(new ProjectDefinition());
 
-		private void ImportProject(ProjectDefinition project)
+		public void ImportProject(ProjectDefinition project)
 		{
 			if (_project is not null)
 			{

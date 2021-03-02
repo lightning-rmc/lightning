@@ -62,7 +62,10 @@ namespace Lightning.Core.Presentation
 					{
 						if (_frameChannel.Reader.TryRead(out var frame))
 						{
-							_window.ShowImage(frame);
+							if (!frame.Empty())
+							{
+								_window.ShowImage(frame);
+							}
 							frame.Dispose();
 						}
 						//TODO: Change to customizable parameter or use the FPS rate

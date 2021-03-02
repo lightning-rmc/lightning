@@ -12,18 +12,35 @@ namespace Lightning.Core.Rendering.Layers
 	{
 		private readonly LayerDefinition _definition;
 		private readonly ILayer<Mat>? _child;
+		private readonly ILayerInput<Mat> _input;
 
-		public OpenCVLayer(LayerDefinition definition, ILayer<Mat>? child = null)
+		public OpenCVLayer(LayerDefinition definition, ILayerInput<Mat> input, ILayer<Mat>? child = null)
 			: base(definition.Id)
 		{
 			_definition = definition;
 			_child = child;
+			_input = input;
+			IsActive = true;
+		}
+
+
+		public override bool IsActive
+		{
+			get => base.IsActive;
+			set
+			{
+				if (value && value != base.IsActive)
+				{
+					_input.Reset();
+				}
+				base.IsActive = value;
+			}
 		}
 
 		protected override Mat InternalProcess(Mat frame, int tick)
 		{
 			//TODO: add more Process Information
-			return frame;
+			return _input.Process(tick);
 		}
 
 		protected override void ProcessChilds(Mat frame, int tick)

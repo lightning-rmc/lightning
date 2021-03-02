@@ -20,5 +20,8 @@ namespace Lightning.Core.Rendering.Layers
 		{
 			return Mat.Zeros(0, 0, MatType.CV_16SC3);
 		}
+
+		public abstract void Reset();
+
 	}
 }

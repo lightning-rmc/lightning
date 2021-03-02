@@ -27,7 +27,7 @@ namespace Lightning.Core.Definitions
 
 		protected void Set<TValue>(ref TValue storage, TValue value, [CallerMemberName] string? name = null)
 		{
-			if (!storage?.Equals(value) ?? false)
+			if (!object.Equals(storage,value))
 			{
 				storage = value;
 				RaiseNotifyPropertyChanged(name);

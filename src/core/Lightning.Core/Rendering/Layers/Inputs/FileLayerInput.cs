@@ -56,5 +56,10 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 			}
 			return image;
 		}
+
+		public override void Reset()
+		{
+			_videoCapture = CreateVideoCapture(_definition.Filename);
+		}
 	}
 }
