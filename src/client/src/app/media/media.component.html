@@ -1,9 +1,26 @@
 <h2 class="subtitle">Media</h2>
 <div class="header">
 	<input type="file" #input multiple (change)="handleFileInput($any($event.target).files)">
-	<button class="btn" (click)="onSubmit()">Upload</button>
+	<button mat-raised-button color="primary" (click)="onSubmit()">Upload</button>
 </div>
 
-<div class="media-container">
-	<div class="media" *ngFor="let m of media">{{ m.name }}</div>
-</div>
+<table>
+	<thead>
+		<th></th>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Last Updated</th>
+		<th class="right">Size</th>
+	</thead>
+	<tbody>
+		<tr *ngFor="let m of media">
+			<td class="min">
+				<mat-checkbox></mat-checkbox>
+			</td>
+			<td>{{ m.name }}</td>
+			<td>{{ m.extension }}</td>
+			<td>{{ m.createdOn | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+			<td class="right">{{ m.size }}</td>
+		</tr>
+	</tbody>
+</table>
