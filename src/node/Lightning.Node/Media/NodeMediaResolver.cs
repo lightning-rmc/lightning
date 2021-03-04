@@ -22,7 +22,7 @@ namespace Lightning.Node.Media
 		public string? GetFilePath(string filename)
 		{
 			//TODO: check if the file exists
-			//TODO: add logging?
+			//TODO: add logging
 			return Path.Combine(_options.Media.StoragePath, filename);
 		}
 	}

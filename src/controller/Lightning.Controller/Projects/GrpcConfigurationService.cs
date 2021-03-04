@@ -66,7 +66,8 @@ namespace Lightning.Controller.Projects
 					break;
 					default:
 					{
-						//TODO: add log message
+						_logger?.LogWarning("Attention it was tried to transfer a property via grpc to the client which is not serializable." +
+											"The transmission was skipped." + config.ToString());
 					}
 					break;
 				}

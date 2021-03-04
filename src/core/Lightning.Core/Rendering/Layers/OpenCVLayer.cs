@@ -39,7 +39,7 @@ namespace Lightning.Core.Rendering.Layers
 
 		protected override Mat InternalProcess(Mat frame, int tick)
 		{
-			//TODO: add more Process Information
+			//TODO: add color, Blend, Transform etc...
 			return _input.Process(tick);
 		}
 

@@ -31,10 +31,12 @@ namespace Lightning.Core.Rendering.Time
 		{
 			// Note: Waiting until the Timer is started
 			//		 To get sure the stream does not close directly
+			_logger?.LogDebug("'GetTimerTicks' has been called it waits blocking until the timer has stopped!");
 			while (!IsRunning)
 			{
 				Thread.Sleep(10);
 			}
+			_logger?.LogDebug("The timer is started, 'GetTimerTicks' does not block anymore!");
 
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -63,7 +65,7 @@ namespace Lightning.Core.Rendering.Time
 		{
 			if (!IsRunning)
 			{
-				//TODO: Logging
+				_logger?.LogInformation("The timer started.");
 				_timerTick = 0;
 				IsRunning = true;
 				new Thread(() =>
@@ -71,15 +73,16 @@ namespace Lightning.Core.Rendering.Time
 					while (IsRunning)
 					{
 						//Note:The loop has too few instructions
-						//      to benefit from a process time calculation with Stopwatch.
+						//     to benefit from a process time calculation with Stopwatch.
 						_timerTick++;
 						Thread.Sleep((int)(1000 / (_configuration.FramesPerSecond * _timerInterpolation)));
 					}
+					_logger?.LogInformation("The timer stopped.");
 				}).Start();
 			}
 			else
 			{
-				//TODO: Logging
+				_logger?.LogWarning("The timer has already started. The call will be ignored.");
 			}
 		}
 
@@ -88,11 +91,10 @@ namespace Lightning.Core.Rendering.Time
 			if (IsRunning)
 			{
 				IsRunning = false;
-				//TODO: Logging
 			}
 			else
 			{
-				//TODO: Logging
+				_logger?.LogWarning("The timer has already stopped. The call will be ignored.");
 			}
 		}
 	}

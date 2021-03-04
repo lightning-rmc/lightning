@@ -26,7 +26,7 @@ namespace Lightning.Core.Rendering.Layers.Outputs
 
 		public void Dispose()
 		{
-			//TODO: Nothing to handle
+			//Note: Nothing to handle
 		}
 
 		public void Process(Mat frame, int tick)

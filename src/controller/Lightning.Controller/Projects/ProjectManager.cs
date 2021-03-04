@@ -44,15 +44,19 @@ namespace Lightning.Controller.Projects
 			//TODO: Check exception handling if Config is broken..
 			if (XamlServices.Parse(import) is not ProjectDefinition project)
 			{
-				//TODO: add logging
+				_logger?.LogError("The project string could not be read in. It is broken! Check manually where the problem is.");
 				return false;
 			}
+			_logger?.LogInformation("Am existing project from string will be created.");
 			ImportProject(project);
 			return true;
 		}
 
 		public void CreateNewProject()
-			=> ImportProject(new ProjectDefinition());
+		{
+			_logger?.LogInformation("A new project will be created.");
+			ImportProject(new ProjectDefinition());
+		}
 
 		public void ImportProject(ProjectDefinition import)
 		{
@@ -60,10 +64,11 @@ namespace Lightning.Controller.Projects
 			{
 				UnObserveProject(_project);
 			}
-			//TODO: add Logging
+			_logger?.LogInformation("A project from object will be created.");
 			_project = import;
 			ObserveProject(_project);
 			RaiseProjectLoaded();
+			_logger?.LogInformation("The project was successfully imported.");
 		}
 
 		public LayerBaseDefinition? TryGetLayer(string id)
@@ -79,26 +84,35 @@ namespace Lightning.Controller.Projects
 					}
 				}
 			}
-			//TODO: add Logging
+			_logger?.LogWarning("The layer with the id '{id}' could not be found.", id);
 			return null;
 		}
 
 		public NodeDefinition? TryGetNode(string id)
 		{
-			//TODO: Maybe Log if the node does not exist?
-			return _project?.Nodes.FirstOrDefault(n => n.Id == id);
+			var node = _project?.Nodes.FirstOrDefault(n => n.Id == id);
+			if (node is null)
+			{
+				_logger?.LogWarning("The node with the id '{id}' could not be found.", id);
+			}
+			return node;
 		}
 
 		public RenderTreeDefinition? TryGetRenderTree(string id)
 		{
 			//TODO: Maybe Log if the node does not exist?
-			return _project?.RenderTrees.FirstOrDefault(r => r.Id == id);
+			var rendertree = _project?.RenderTrees.FirstOrDefault(r => r.Id == id);
+			if (rendertree is null)
+			{
+				_logger?.LogWarning("The renderTree with the id '{id}' could not be found.", id);
+			}
+			return rendertree; 
 		}
 
 		private void RaiseProjectLoaded()
 		{
 			IsProjectLoaded = true;
-			//TODO: add Logging
+			_logger?.LogDebug("ProjectLoaded event will be raised.");
 			ProjectLoaded?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -143,8 +157,7 @@ namespace Lightning.Controller.Projects
 
 		private void Project_ConfigurationChanged(object? sender, ConfigurationChangedEventArgs e)
 		{
-			//TODO: add logging
-			//TODO: log if failed
+			
 			_configurationsChangedChannel.Writer.TryWrite(e.Context);
 		}
 

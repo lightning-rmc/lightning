@@ -41,7 +41,7 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 			}
 			else
 			{
-				//TODO: add logging
+				_logger?.LogWarning("No matching media file could be found for the filename: '{filename}'. ", filename);
 				return null;
 			}
 		}
@@ -52,7 +52,7 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 			_videoCapture?.Read(image);
 			if (image.Empty())
 			{
-				//TODO: Add logging
+				//TODO: Handle Looping
 			}
 			return image;
 		}
