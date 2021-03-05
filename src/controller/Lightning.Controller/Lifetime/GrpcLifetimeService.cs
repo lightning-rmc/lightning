@@ -13,7 +13,7 @@ namespace Lightning.Controller.Lifetime
 		private readonly INodeLifetimeRequestResponsePublisher _lifetimeServicePublisher;
 		private readonly ILogger<GrpcLifetimeService>? _logger;
 
-		internal GrpcLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
+		public GrpcLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
 			ILogger<GrpcLifetimeService>? logger = null)
 		{
 			_lifetimeServicePublisher = lifetimeServicePublisher;

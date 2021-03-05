@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Lifetime
 {
-	public interface INodeLifetimeService
+	public interface INodeStateReceiver
 	{
-		Task SetCommandResponseAsync(NodeCommandResponse command);
-		IAsyncEnumerable<NodeCommandRequest> GetCommandRequestsAllAsync();
+		Task<bool> TryChangeNodeStateAsync(NodeCommandRequest request);
 	}
 }
