@@ -10,7 +10,7 @@ namespace Lightning.Node.Lifetime
 {
 	public interface INodeStateManager
 	{
-		void RegisterCallback(Func<NodeCommandRequest, Task> callback);
+		void RegisterCallback(Func<NodeCommandRequest, Task<bool>> callback);
 
 		Task ReportNodeCommandRequestAsync(NodeCommandRequest request);
 

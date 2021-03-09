@@ -19,11 +19,15 @@ namespace Lightning.Controller.Projects
 		bool ImportProject(string import);
 		void ImportProject(ProjectDefinition import);
 
-		RenderTreeDefinition? TryGetRenderTree(string id);
+		RenderTreeDefinition? TryGetRenderTree(string renderTreeId);
+		RenderTreeDefinition? TryGetRenderTreeForNode(string nodeId);
 
 		NodeDefinition? TryGetNode(string id);
 
 		LayerBaseDefinition? TryGetLayer(string id);
+
+		IEnumerable<NodeDefinition> GetNodes();
+		IEnumerable<RenderTreeDefinition> GetRenderTrees();
 
 		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 

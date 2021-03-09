@@ -25,16 +25,37 @@ namespace Lightning.Controller.Host
 		{
 			_projectManager.ImportProject(new ProjectDefinition()
 			{
+				Nodes = new()
+				{
+					new NodeDefinition
+					{
+						Name = "Leinwand Rechts",
+						FramesPerSecond = 60,
+						Resolution = ResolutionDefinition.HDReady
+					},
+					new NodeDefinition
+					{
+						Name = "Leinwand Mitte",
+						FramesPerSecond = 30,
+						Resolution = ResolutionDefinition.UHD,
+					},
+					new NodeDefinition
+					{
+						Name = "Leinwand Backstage",
+						FramesPerSecond = 30,
+						Resolution = ResolutionDefinition.HDReady
+					},
+				},
 				RenderTrees = new()
 				{
 					new RenderTreeDefinition
 					{
-						Id = "node1",
+						Id = "renderTree1",
 						Layers = new()
 						{
 							new LayerDefinition
 							{
-								Id = "myLayer",
+								Id = "layer1",
 								Input = new FileInputLayerDefinition
 								{
 									Filename = "Alone_low.mp4"

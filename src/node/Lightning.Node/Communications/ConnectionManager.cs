@@ -1,6 +1,7 @@
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Lightning.Core.Generated;
+using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -64,43 +65,38 @@ namespace Lightning.Node.Communications
 			{
 				BaseAddress = baseUri
 			};
-			////TODO: Handle Exceptions
-			var result = await httpClient.PostAsync($"api/nodes/register/{nodeId}", new StringContent(""));
-			//TODO: Handle Response object and make a guideline for api responses
-			if (result.StatusCode is not (HttpStatusCode.NotModified or HttpStatusCode.OK))
-			{
-				throw new InvalidOperationException("Something went wrong while authenticate at the controller.");
-			}
-			//TODO: Log Message
-			var content = await result.Content.ReadAsStringAsync();
+
 			var nodeEntry = new Metadata.Entry("nodeId", _nodeConfiguration.NodeId);
-			var colllection = new ServiceCollection();
-			colllection.AddNodeConfiguration(_configuration);
-			colllection.AddSingleton<NodeIdInterceptor>();
-			colllection.AddGrpcClient<GrpcProjectEditService.GrpcProjectEditServiceClient>(opt =>
+			var collection = new ServiceCollection();
+			collection.AddNodeConfiguration(_configuration);
+			collection.AddSingleton<NodeIdInterceptor>();
+			collection.AddGrpcClient<GrpcProjectEditService.GrpcProjectEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
 				
 
 			}).AddInterceptor<NodeIdInterceptor>();
-			colllection.AddGrpcClient<GrpcLifetimeService.GrpcLifetimeServiceClient>(opt =>
+			collection.AddGrpcClient<GrpcLifetimeService.GrpcLifetimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
 			}).AddInterceptor<NodeIdInterceptor>();
-			colllection.AddGrpcClient<GrpcMediaSyncService.GrpcMediaSyncServiceClient>(opt =>
+			collection.AddGrpcClient<GrpcMediaSyncService.GrpcMediaSyncServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
 			}).AddInterceptor<NodeIdInterceptor>();
-			colllection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
+			collection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
 			}).AddInterceptor<NodeIdInterceptor>();
-			colllection.AddHttpClient(_httpClientName, client =>
+			collection.AddHttpClient(_httpClientName, client =>
 			{
 				client.BaseAddress = baseUri;
 
 			});
-			_serviceProvider = colllection.BuildServiceProvider();
+			_serviceProvider = collection.BuildServiceProvider();
+
+			//var result = GetLifetimeServiceClient().Connect();
+			//await result.RequestStream.WriteAsync(new NodeCommandResponseMessage() { Command = (int)NodeCommandResponse.IsConnected });
 		}
 
 		public void Dispose()

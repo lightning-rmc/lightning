@@ -33,7 +33,7 @@ namespace Lightning.Node.Rendering
 		{
 			//TODO: Refactor httpclient it in service
 			var httpClient = _connectionManager.GetHttpClient();
-			var response = await httpClient.GetAsync($"api/rendering/{_connectionManager.NodeId}");
+			var response = await httpClient.GetAsync($"api/rendertrees/fornode/{_connectionManager.NodeId}");
 			//TODO: Handle response code...
 			var stringResponse = await response.Content.ReadAsStringAsync();
 			if (XamlServices.Parse(stringResponse) is not RenderTreeDefinition tree)

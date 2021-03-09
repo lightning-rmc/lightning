@@ -1,3 +1,4 @@
+using Lightning.Controller.Projects;
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,23 +18,27 @@ namespace Lightning.Controller.Lifetime
 		private readonly Dictionary<string, Channel<NodeCommandRequest>> _nodeCommandRequestsChannels;
 		private readonly Dictionary<string, NodeState> _nodeStates;
 		private readonly Channel<(string nodeId, NodeCommandResponse state)> _allUpdatesChannel;
+		private readonly IProjectManager _projectManager;
 
 
-		public NodeLifetimeService(ILogger<NodeLifetimeService>? logger = null)
+		public NodeLifetimeService(IProjectManager projectManager, ILogger<NodeLifetimeService>? logger = null)
 		{
+			_projectManager = projectManager;
 			_nodeCommandResponsesChannels = new Dictionary<string, Channel<NodeCommandResponse>>();
 			_nodeCommandRequestsChannels = new Dictionary<string, Channel<NodeCommandRequest>>();
 			_allUpdatesChannel = Channel.CreateUnbounded<(string, NodeCommandResponse)>();
 			_nodeStates = new Dictionary<string, NodeState>();
 			_logger = logger;
-			//TODO: Remove Test Register
-			//TODO: Remove testcase
-			Task.Run(async () =>
+
+			_projectManager.ProjectLoaded += (s, e) =>
 			{
-				
-				await Task.Delay(10_000);
-				await this.GoLiveAsync();
-			});
+				ClearAllNodes();
+				var nodes = _projectManager.GetNodes();
+				foreach (var node in nodes)
+				{
+					TryRegisterNode(node.Id);
+				}
+			};
 		}
 
 		public IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync()
@@ -53,9 +58,33 @@ namespace Lightning.Controller.Lifetime
 
 		public bool TryRemoveNode(string nodeId)
 		{
-			//TODO: Not sure if needed?
-			//Note: Remove also from ProjectManager
+			if (_nodeCommandRequestsChannels.TryGetValue(nodeId, out var requestsChannel))
+			{
+				requestsChannel.Writer.TryComplete();
+				_nodeCommandRequestsChannels.Remove(nodeId);
+			}
+			if (_nodeCommandResponsesChannels.TryGetValue(nodeId, out var responseChannel))
+			{
+				responseChannel.Writer.TryComplete();
+				_nodeCommandResponsesChannels.Remove(nodeId);
+			}
+			_nodeStates.Remove(nodeId);
 			return true;
+		}
+
+		private void ClearAllNodes()
+		{
+			foreach (var item in _nodeCommandRequestsChannels)
+			{
+				item.Value.Writer.TryComplete();
+			}
+			foreach (var item in _nodeCommandResponsesChannels)
+			{
+				item.Value.Writer.TryComplete();
+			}
+			_nodeCommandRequestsChannels.Clear();
+			_nodeCommandResponsesChannels.Clear();
+			_nodeStates.Clear();
 		}
 
 		public bool TryRegisterNode(string nodeId)
@@ -67,7 +96,6 @@ namespace Lightning.Controller.Lifetime
 			_nodeStates.Add(nodeId, NodeState.Offline);
 			_nodeCommandRequestsChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandRequest>());
 			_nodeCommandResponsesChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandResponse>());
-			//TODO: add to ProjectManager
 			_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
 			return true;
 		}
