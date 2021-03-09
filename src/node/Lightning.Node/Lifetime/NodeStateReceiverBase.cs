@@ -13,8 +13,9 @@ namespace Lightning.Node.Lifetime
 		{
 			return request switch
 			{
-				NodeCommandRequest.GoLive => TyChangeToGoLiveAsync(),
+				NodeCommandRequest.GoLive => TryChangeToGoLiveAsync(),
 				NodeCommandRequest.GoReady => TryChangeToGoReadyAsync(),
+				NodeCommandRequest.TryConnecting => TryConnectingAsync(),
 				_ => Task.FromResult(true)
 			};
 		}
@@ -24,7 +25,12 @@ namespace Lightning.Node.Lifetime
 			return Task.FromResult(true);
 		}
 
-		protected virtual Task<bool> TyChangeToGoLiveAsync()
+		protected virtual Task<bool> TryConnectingAsync()
+		{
+			return Task.FromResult(true);
+		}
+
+		protected virtual Task<bool> TryChangeToGoLiveAsync()
 		{
 			return Task.FromResult(true);
 		}
