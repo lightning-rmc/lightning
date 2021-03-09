@@ -35,7 +35,7 @@ namespace Lightning.Node.Lifetime
 
 		private async Task GetLifeTimeUpdatesAsync()
 		{
-			var result = _grpcClient.Connect(new());
+			var result = _grpcClient.NodeCommandChannel(new());
 			_ = Task.Run(async () =>
 			{
 				await foreach (var message in HandleResponseAllAsync())

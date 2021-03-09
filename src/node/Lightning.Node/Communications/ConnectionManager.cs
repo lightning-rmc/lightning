@@ -1,12 +1,9 @@
 using Grpc.Core;
-using Grpc.Core.Interceptors;
 using Lightning.Core.Generated;
-using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,7 +70,7 @@ namespace Lightning.Node.Communications
 			collection.AddGrpcClient<GrpcProjectEditService.GrpcProjectEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-				
+
 
 			}).AddInterceptor<NodeIdInterceptor>();
 			collection.AddGrpcClient<GrpcLifetimeService.GrpcLifetimeServiceClient>(opt =>
@@ -95,8 +92,8 @@ namespace Lightning.Node.Communications
 			});
 			_serviceProvider = collection.BuildServiceProvider();
 
-			//var result = GetLifetimeServiceClient().Connect();
-			//await result.RequestStream.WriteAsync(new NodeCommandResponseMessage() { Command = (int)NodeCommandResponse.IsConnected });
+			//TODO: Handle Response
+			_ = await GetLifetimeServiceClient().ConnectAsync(new());
 		}
 
 		public void Dispose()
