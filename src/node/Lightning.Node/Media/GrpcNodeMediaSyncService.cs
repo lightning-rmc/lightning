@@ -20,12 +20,15 @@ namespace Lightning.Node.Media
 {
 	internal class GrpcNodeMediaSyncService : ICreateOnStartup, IMediaSyncService
 	{
-		private readonly ILogger _logger;
+		private readonly ILogger? _logger;
 		private readonly NodeConfiguration _options;
 		private GrpcMediaSyncService.GrpcMediaSyncServiceClient _grpcClient = null!;
 		private HttpClient _http = null!;
 
-		public GrpcNodeMediaSyncService(IConnectionManager connectionManager, IHostApplicationLifetime hostLifetime, IOptions<NodeConfiguration> options, ILogger<GrpcNodeMediaSyncService> logger)
+		public GrpcNodeMediaSyncService(IConnectionManager connectionManager,
+			IHostApplicationLifetime hostLifetime,
+			IOptions<NodeConfiguration> options,
+			ILogger<GrpcNodeMediaSyncService>? logger = null)
 		{
 			_logger = logger;
 			hostLifetime.ApplicationStarted.Register(async () =>
@@ -48,7 +51,7 @@ namespace Lightning.Node.Media
 
 		public async Task SyncAllMediaAsync()
 		{
-			_logger.LogInformation("Media syncing started");
+			_logger?.LogInformation("Media syncing started");
 			var media = await _http.GetFromJsonAsync<Core.Media.Media[]>("/api/media");
 			var savedMedia = new DirectoryInfo(_options.Media.StoragePath).GetFiles();
 
@@ -64,22 +67,22 @@ namespace Lightning.Node.Media
 						var localHash = sha256.ComputeHash(await File.ReadAllBytesAsync(file.FullName));
 						if (BitConverter.ToString(localHash) != m.Hash)
 						{
-							_logger.LogInformation("Downloading newer version for file: {}", m.Name);
+							_logger?.LogInformation("Downloading newer version for file: {}", m.Name);
 							await DownloadMediaAsync(m.Name);
 						}
 						else
 						{
-							_logger.LogInformation("Skipping file: {}", m.Name);
+							_logger?.LogInformation("Skipping file: {}", m.Name);
 						}
 					}
 					else
 					{
-						_logger.LogInformation("Downloading new file: {}", m.Name);
+						_logger?.LogInformation("Downloading new file: {}", m.Name);
 						await DownloadMediaAsync(m.Name);
 					}
 				}
 			}
-			_logger.LogInformation("Media syncing finished");
+			_logger?.LogInformation("Media syncing finished");
 		}
 
 		private async Task GetMediaSyncUpdatesAsync()
@@ -91,12 +94,12 @@ namespace Lightning.Node.Media
 				if (update.UpdateType == UpdateType.Delete)
 				{
 					File.Delete(Path.Combine(_options.Media.StoragePath, update.FileName));
-					_logger.LogInformation("Deleted file: {filename}", update.FileName);
+					_logger?.LogInformation("Deleted file: {filename}", update.FileName);
 				}
 				else
 				{
 					await DownloadMediaAsync(update.FileName);
-					_logger.LogInformation("Created/Updated file: {filename}", update.FileName);
+					_logger?.LogInformation("Created/Updated file: {filename}", update.FileName);
 				}
 			}
 		}

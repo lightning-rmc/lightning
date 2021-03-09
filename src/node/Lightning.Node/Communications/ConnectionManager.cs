@@ -88,7 +88,6 @@ namespace Lightning.Node.Communications
 			collection.AddHttpClient(_httpClientName, client =>
 			{
 				client.BaseAddress = baseUri;
-
 			});
 			_serviceProvider = collection.BuildServiceProvider();
 
