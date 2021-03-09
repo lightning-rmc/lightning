@@ -26,8 +26,8 @@ namespace Lightning.Controller.Utils
 			var result = TryGetNodeId(httpContext);
 			if (result is null)
 			{
-				//TODO: add Exception message
-				throw new ArgumentException();
+				throw new InvalidOperationException("Their is no NodeId set in the Request Headers. " +
+					"Check if the client sends the nodeId in the Header with key: 'nodeId'!");
 			}
 			return result;
 		}

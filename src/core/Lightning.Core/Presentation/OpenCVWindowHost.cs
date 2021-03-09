@@ -57,7 +57,7 @@ namespace Lightning.Core.Presentation
 						_window.SetProperty(WindowProperty.Fullscreen, 1);
 					}
 					WriteFrame(Mat.Zeros(new Size(1, 1), MatType.CV_16SC3));
-					//TODO: add Logging
+					_logger?.LogDebug("The window will be displayed.");
 					while (_isWindowShowing)
 					{
 						if (_frameChannel.Reader.TryRead(out var frame))
@@ -65,6 +65,10 @@ namespace Lightning.Core.Presentation
 							if (!frame.Empty())
 							{
 								_window.ShowImage(frame);
+							}
+							else
+							{
+								_logger?.LogDebug("Skipped Empty Frame. Empty Frames ca not be displayed.");
 							}
 							frame.Dispose();
 						}
@@ -75,7 +79,10 @@ namespace Lightning.Core.Presentation
 				}).Start();
 
 			}
-
+			else
+			{
+				_logger?.LogDebug("An attempt was made to open the window, although it is already active.");
+			}
 		}
 
 		public void HideWindow()
@@ -89,7 +96,11 @@ namespace Lightning.Core.Presentation
 				{
 					_window.Dispose();
 				}
-				//TODO: add Logging
+				_logger?.LogInformation("The displaying of the window was finished.The window was closed.");
+			}
+			else
+			{
+				_logger?.LogDebug("An attempt was made to close the window although it is not active.");
 			}
 		}
 
@@ -102,7 +113,10 @@ namespace Lightning.Core.Presentation
 				//Note: can ignore the result if it is successful
 				_frameChannel.Writer.TryWrite(mat);
 			}
-			//TODO: add logging
+			else
+			{
+				_logger?.LogWarning("Attention, it tries to display a frame on the window, although no window is active. The frame will be discarded!");
+			}
 		}
 
 		public void Dispose()

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace Lightning.Controller.Lifetime
 {
 
-	//TODO: Add interface description
 	public interface INodeLifetimeRequestResponsePublisher
 	{
 		IAsyncEnumerable<NodeCommandRequest> GetNodeRequestsAllAsync(string nodeId);
