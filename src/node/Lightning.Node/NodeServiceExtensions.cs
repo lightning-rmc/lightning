@@ -31,6 +31,7 @@ namespace Lightning.Node
 			services.AddNodeConfiguration(configuration);
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
 			services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
+			services.TryAddSingleton<INodeStateManager, NodeStateManager>();
 			//TODO: Refactor find right place
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
 			return services;

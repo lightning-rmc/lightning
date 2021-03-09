@@ -11,12 +11,15 @@ namespace Lightning.Controller.Lifetime
 	public class GrpcLifetimeService : Core.Generated.GrpcLifetimeService.GrpcLifetimeServiceBase
 	{
 		private readonly INodeLifetimeRequestResponsePublisher _lifetimeServicePublisher;
+		private readonly INodeLifetimeService _nodeLifetimeService;
 		private readonly ILogger<GrpcLifetimeService>? _logger;
 
 		public GrpcLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
+			INodeLifetimeService nodeLifetimeService,
 			ILogger<GrpcLifetimeService>? logger = null)
 		{
 			_lifetimeServicePublisher = lifetimeServicePublisher;
+			_nodeLifetimeService = nodeLifetimeService;
 			_logger = logger;
 		}
 
@@ -26,17 +29,22 @@ namespace Lightning.Controller.Lifetime
 			ServerCallContext context)
 		{
 			//TODO: handle stream closing
-			var nodeeId = context.GetHttpContext().GetNodeId();
+			var nodeId = context.GetHttpContext().GetNodeId();
 			_ = Task.Run(async () =>
 			{
 				await foreach (var response in requestStream.ReadAllAsync())
 				{
-					//TODO: handle for secure check.
-					await _lifetimeServicePublisher.SetNodeResponseAsync(nodeeId, (NodeCommandResponse)response.Command);
+					if ((NodeCommandResponse)response.Command == NodeCommandResponse.IsConnected)
+					{
+						_nodeLifetimeService.TryRegisterNode(nodeId);
+					} else
+					{
+						await _lifetimeServicePublisher.SetNodeResponseAsync(nodeId, (NodeCommandResponse)response.Command);
+					}
 				}
 			});
 
-			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestsAllAsync(nodeeId))
+			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestsAllAsync(nodeId))
 			{
 				var message = new NodeCommandRequestMessage
 				{

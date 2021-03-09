@@ -12,19 +12,22 @@ namespace Lightning.Node.Lifetime
 
 
 
-		public static void RegisterCallback(this INodeStateManager nodeStateManager, Func<Task> callback, NodeCommandRequest request)
+		public static void RegisterCallback(this INodeStateManager nodeStateManager, Func<Task<bool>> callback, NodeCommandRequest request)
 			=> nodeStateManager.RegisterCallback(async state =>
 			{
 				if (state == request)
 				{
-					await callback();
+					return await callback();
+				} else
+				{
+					return true;
 				}
 			});
 
-		public static void RegisterGoLiveCallback(this INodeStateManager nodeStateManager, Func<Task> callback)
+		public static void RegisterGoLiveCallback(this INodeStateManager nodeStateManager, Func<Task<bool>> callback)
 			=> nodeStateManager.RegisterCallback(callback, NodeCommandRequest.GoLive);
 
-		public static void RegisterGoReadyCallback(this INodeStateManager nodeStateManager, Func<Task> callback)
+		public static void RegisterGoReadyCallback(this INodeStateManager nodeStateManager, Func<Task<bool>> callback)
 			=> nodeStateManager.RegisterCallback(callback, NodeCommandRequest.GoReady);
 	}
 }

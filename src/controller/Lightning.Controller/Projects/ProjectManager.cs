@@ -71,6 +71,7 @@ namespace Lightning.Controller.Projects
 			_logger?.LogInformation("The project was successfully imported.");
 		}
 
+
 		public LayerBaseDefinition? TryGetLayer(string id)
 		{
 			if (_project?.RenderTrees is IEnumerable<RenderTreeDefinition> renderTrees)
@@ -98,15 +99,20 @@ namespace Lightning.Controller.Projects
 			return node;
 		}
 
-		public RenderTreeDefinition? TryGetRenderTree(string id)
+		public RenderTreeDefinition? TryGetRenderTree(string renderTreeId)
 		{
 			//TODO: Maybe Log if the node does not exist?
-			var rendertree = _project?.RenderTrees.FirstOrDefault(r => r.Id == id);
+			var rendertree = _project?.RenderTrees.FirstOrDefault(r => r.Id == renderTreeId);
 			if (rendertree is null)
 			{
-				_logger?.LogWarning("The renderTree with the id '{id}' could not be found.", id);
+				_logger?.LogWarning("The renderTree with the id '{id}' could not be found.", renderTreeId);
 			}
 			return rendertree; 
+		}
+
+		public RenderTreeDefinition? TryGetRenderTreeForNode(string nodeId)
+		{
+			throw new NotImplementedException();
 		}
 
 		private void RaiseProjectLoaded()
@@ -164,5 +170,15 @@ namespace Lightning.Controller.Projects
 
 		public IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default)
 			=> _configurationsChangedChannel.Reader.ReadAllAsync(cancellationToken);
+
+		public IEnumerable<NodeDefinition> GetNodes()
+		{
+			return _project?.Nodes.ToArray() ?? Enumerable.Empty<NodeDefinition>();
+		}
+
+		public IEnumerable<RenderTreeDefinition> GetRenderTrees()
+		{
+			return _project?.RenderTrees.ToArray() ?? Enumerable.Empty<RenderTreeDefinition>();
+		}
 	}
 }

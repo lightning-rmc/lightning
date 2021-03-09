@@ -11,9 +11,9 @@ namespace Lightning.Core.Lifetime
 		IsLive = 0,
 		IsReady = 1,
 		IsPreparing = 2,
-		ShowingInfo = 3,
-		HidingInfo = 4,
-		IsConnected = 5,
+		IsConnected = 3,
+		ShowingInfo = 4,
+		HidingInfo = 5,
 		HasError = 255,
 	}
 }

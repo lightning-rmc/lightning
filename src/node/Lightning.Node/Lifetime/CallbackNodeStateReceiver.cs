@@ -9,16 +9,16 @@ namespace Lightning.Node.Lifetime
 {
 	public class CallbackNodeStateReceiver : INodeStateReceiver
 	{
-		private readonly Func<NodeCommandRequest, Task> _callback;
+		private readonly Func<NodeCommandRequest, Task<bool>> _callback;
 
-		public CallbackNodeStateReceiver(Func<NodeCommandRequest, Task> callback)
+		public CallbackNodeStateReceiver(Func<NodeCommandRequest, Task<bool>> callback)
 		{
 			_callback = callback;
 		}
 
-		public async Task NodeStateChangeRequestedAsync(NodeCommandRequest request)
+		public Task<bool> TryChangeNodeStateAsync(NodeCommandRequest request)
 		{
-			await _callback(request);
+			return _callback(request);
 		}
 	}
 }

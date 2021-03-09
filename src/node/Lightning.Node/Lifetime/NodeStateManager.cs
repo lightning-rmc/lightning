@@ -24,7 +24,7 @@ namespace Lightning.Node.Lifetime
 		public IAsyncEnumerable<NodeCommandResponse> GetNodeCommandResponseAllAsync(CancellationToken token = default)
 			=> _commandResponse.Reader.ReadAllAsync(token);
 
-		public void RegisterCallback(Func<NodeCommandRequest, Task> callback)
+		public void RegisterCallback(Func<NodeCommandRequest, Task<bool>> callback)
 		{
 			_stateReceivers.Add(new CallbackNodeStateReceiver(callback));
 		}
