@@ -3,12 +3,12 @@ using System;
 
 namespace Lightning.Core.Rendering.Layers
 {
-	public class ObseravtionWrapperLayer : ILayer<Mat>
+	public class ObservationWrapperLayer : ILayer<Mat>
 	{
 		private readonly LayerActivationObserver<Mat> _layerActivationObserver;
 		private readonly ILayer<Mat> _child;
 
-		public ObseravtionWrapperLayer(LayerActivationObserver<Mat> layerActivationObserver, ILayer<Mat> child)
+		public ObservationWrapperLayer(LayerActivationObserver<Mat> layerActivationObserver, ILayer<Mat> child)
 		{
 			_layerActivationObserver = layerActivationObserver;
 			_child = child;

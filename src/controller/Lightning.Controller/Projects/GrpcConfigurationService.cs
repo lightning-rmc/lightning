@@ -27,7 +27,6 @@ namespace Lightning.Controller.Projects
 				{
 					Id = config.Id,
 					TargetType = (int)config.Target,
-					
 				};
 
 				switch (config)

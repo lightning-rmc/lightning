@@ -59,8 +59,8 @@ namespace Lightning.Node.Rendering
 			//TODO: Add property synchronization
 			var grpcClient = _connectionManager.GetLifetimeServiceClient();
 			var observer = new LayerActivationObserver<Mat>(layerDic, grpcClient);
-			var obseravationWrapper = new ObseravtionWrapperLayer(observer, next);
-			return obseravationWrapper;
+			var observationWrapper = new ObservationWrapperLayer(observer, next);
+			return observationWrapper;
 		}
 
 
