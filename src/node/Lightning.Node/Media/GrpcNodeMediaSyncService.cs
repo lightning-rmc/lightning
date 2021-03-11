@@ -1,19 +1,16 @@
 using Grpc.Core;
 using Lightning.Core.Generated;
+using Lightning.Core.Lifetime;
 using Lightning.Core.Utils;
 using Lightning.Node.Communications;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Lightning.Node.Media
@@ -26,21 +23,26 @@ namespace Lightning.Node.Media
 		private HttpClient _http = null!;
 
 		public GrpcNodeMediaSyncService(IConnectionManager connectionManager,
-			IHostApplicationLifetime hostLifetime,
+			INodeLifetimeNotifier nodeLifetime,
 			IOptions<NodeConfiguration> options,
 			ILogger<GrpcNodeMediaSyncService>? logger = null)
 		{
 			_logger = logger;
-			hostLifetime.ApplicationStarted.Register(async () =>
+			nodeLifetime.CommandRequested += (s, e) =>
 			{
-				_grpcClient = connectionManager.GetMediaServiceClient();
-				_http = connectionManager.GetHttpClient();
-				await SyncAllMediaAsync();
-				_ = Task.Run(GetMediaSyncUpdatesAsync);
-			});
+				if (e.Request == NodeCommandRequest.GoReady)
+				{
+					e.AddTask(Task.Run(async () =>
+					{
+						_grpcClient = connectionManager.GetMediaServiceClient();
+						_http = connectionManager.GetHttpClient();
+						await SyncAllMediaAsync();
+					}));
+				}
+			};
 			_options = options.Value;
-
 			Directory.CreateDirectory(_options.Media.StoragePath);
+			_ = Task.Run(GetMediaSyncUpdatesAsync);
 		}
 
 		public async Task DownloadMediaAsync(string fileName)
