@@ -7,7 +7,8 @@
 		[class.node-state__offline]="node.state === NodeState.Offline"
 		[class.node-state__error]="node.state === NodeState.Error"
 		></span>
-		<span class="node-name">{{ node.id }}</span>
+		<span class="node-name">{{ node.name ? node.name : 'No name specified' }}</span>
 	</div>
 	<div class="no-nodes-message" *ngIf="nodes?.length == 0">No nodes registered</div>
 </div>
+<div *ngIf="isLoading">Fetching nodes...</div>

@@ -16,7 +16,6 @@ namespace Lightning.Controller.Media
 	{
 		private readonly MediaSettings _settings;
 		private readonly ConcurrentDictionary<string, string> _hashCache;
-		private readonly FileSystemWatcher _watcher;
 		private readonly ILogger _logger;
 		private readonly Channel<(string fileName, UpdateType updateType)> _updates;
 
@@ -27,11 +26,6 @@ namespace Lightning.Controller.Media
 			_settings = mediaSettings.Value;
 			_updates = Channel.CreateUnbounded<(string, UpdateType)>();
 			Directory.CreateDirectory(_settings.StoragePath);
-			//_watcher = new FileSystemWatcher()
-			//{
-			//	Path = _settings.StoragePath,
-			//	EnableRaisingEvents = true
-			//};
 		}
 
 

@@ -24,8 +24,7 @@ export interface Node {
 
 export interface LayerGroup {
 	id: string;
-	layer: Layer[];
-	nodes?: Node[];
+	layers: Layer[];
 }
 
 export interface Layer {
@@ -35,7 +34,8 @@ export interface Layer {
 	transformation?: {
 		x: number;
 		y: number;
-		scale: number;
+		scaleX: number;
+		scaleY: number;
 		rotation: number;
 	},
 	color?: any;

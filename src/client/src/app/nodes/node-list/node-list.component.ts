@@ -12,6 +12,7 @@ export class NodeListComponent implements OnInit {
 
 	@Input() nodes?: Node[];
 	@Input() selectedNode?: Node;
+	@Input() isLoading?: boolean = false;
 	@Output() selectNode = new EventEmitter<Node>();
 
 	ngOnInit(): void {}

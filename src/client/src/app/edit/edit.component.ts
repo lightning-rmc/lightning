@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LayerGroup } from '../Project.type';
+import { EditService } from './edit.service';
 
 @Component({
 	selector: 'app-edit',
@@ -7,40 +8,24 @@ import { LayerGroup } from '../Project.type';
 	styleUrls: ['./edit.component.scss'],
 })
 export class EditComponent implements OnInit {
-	constructor() {}
+	constructor(private edit: EditService) {}
 
-	groups: LayerGroup[] = [
-		{
-			id: 'group-1',
-			layer: [
-				{
-					id: 'layer-1',
-					source: 'media1.mp4',
-				},
-				{
-					id: 'layer-2',
-					source: 'media2.mp4',
-				},
-				{
-					id: 'layer-3',
-					source: 'media3.mp4',
-				},
-				{
-					id: 'layer-4',
-					source: 'media4.mp4',
-				},
-			],
-		},
-		{
-			id: 'group-2',
-			layer: [
-				{
-					id: 'layer-5',
-					source: 'media1.mp4',
-				},
-			],
-		},
-	];
+	groups: LayerGroup[] = [];
 
-	ngOnInit(): void {}
+	async ngOnInit() {
+		await this.fetchRenderTrees();
+	}
+
+	async fetchRenderTrees() {
+		this.groups = await this.edit.getRenderTrees();
+	}
+
+	async addLayerForGroup(groupId: string) {
+		try {
+			await this.edit.addLayerToGroup(groupId);
+			await this.fetchRenderTrees();
+		} catch (error) {
+			console.error(error);
+		}
+	}
 }

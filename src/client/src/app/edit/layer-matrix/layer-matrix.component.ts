@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LayerGroup } from 'src/app/Project.type';
 
 @Component({
@@ -6,11 +6,10 @@ import { LayerGroup } from 'src/app/Project.type';
 	templateUrl: './layer-matrix.component.html',
 	styleUrls: ['./layer-matrix.component.scss'],
 })
-export class LayerMatrixComponent implements OnInit {
-	constructor() {}
-
+export class LayerMatrixComponent {
 	@Input()
 	groups?: LayerGroup[];
 
-	ngOnInit(): void {}
+	@Output()
+	addLayer = new EventEmitter<string>();
 }

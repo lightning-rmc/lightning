@@ -15,30 +15,12 @@ const routes: Routes = [
 		component: EditComponent,
 		children: [
 			{
-				path: 'layers/:layerId',
-				component: LayerDetailsComponent,
-				children: [
-					{
-						path: 'source',
-						component: LayerSourceComponent,
-					},
-					{
-						path: 'transform',
-						component: LayerTransformComponent,
-					},
-					{
-						path: 'color',
-						component: LayerColorComponent,
-					},
-					{
-						path: 'blend',
-						component: LayerBlendComponent,
-					},
-				],
-			},
-			{
 				path: 'groups/:groupId',
 				component: GroupDetailsComponent,
+			},
+			{
+				path: 'groups/:groupId/layers/:layerId',
+				component: LayerDetailsComponent,
 			},
 		],
 	},

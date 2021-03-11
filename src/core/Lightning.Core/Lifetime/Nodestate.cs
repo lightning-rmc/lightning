@@ -30,6 +30,7 @@ namespace Lightning.Core.Lifetime
 		/// <summary>
 		/// Not in use Today.
 		/// </summary>
-		Error = byte.MaxValue
+		Error = byte.MaxValue,
+		Unknown = 4
 	}
 }

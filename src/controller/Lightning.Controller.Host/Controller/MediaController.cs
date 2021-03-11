@@ -23,7 +23,7 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 		[HttpGet]
-		public IEnumerable<Core.Media.Media> GetStoredFiles(bool ignoreCache= false)
+		public IEnumerable<Core.Media.Media> GetStoredFiles([FromQuery] bool ignoreCache = false)
 		{
 			return _mediaService.GetFiles(ignoreCache);
 		}

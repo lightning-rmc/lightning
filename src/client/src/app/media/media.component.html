@@ -1,7 +1,7 @@
 <h2 class="subtitle">Media</h2>
 <div class="header">
 	<input type="file" #input multiple (change)="handleFileInput($any($event.target).files)">
-	<button mat-raised-button color="primary" (click)="onSubmit()">Upload</button>
+	<button mat-raised-button color="primary" [disabled]="!files || files.length == 0" (click)="onSubmit()">Upload</button>
 </div>
 
 <table>
@@ -12,7 +12,17 @@
 		<th>Last Updated</th>
 		<th class="right">Size</th>
 	</thead>
-	<tbody>
+	<tbody *ngIf="isLoading">
+		<tr>
+			<td colspan="99" class="center">Fetching media...</td>
+		</tr>
+	</tbody>
+	<tbody *ngIf="!isLoading && media && media.length == 0">
+		<tr>
+			<td colspan="99" class="center">No media</td>
+		</tr>
+	</tbody>
+	<tbody *ngIf="!isLoading && media && media.length > 0">
 		<tr *ngFor="let m of media">
 			<td class="min">
 				<mat-checkbox></mat-checkbox>
@@ -20,7 +30,7 @@
 			<td>{{ m.name }}</td>
 			<td>{{ m.extension }}</td>
 			<td>{{ m.createdOn | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-			<td class="right">{{ m.size }}</td>
+			<td class="right">{{ m.size | filesize }}</td>
 		</tr>
 	</tbody>
 </table>

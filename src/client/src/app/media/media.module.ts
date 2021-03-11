@@ -7,9 +7,10 @@ import { NgxFileDropModule } from 'ngx-file-drop';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxFilesizeModule } from 'ngx-filesize';
 
 @NgModule({
 	declarations: [MediaComponent],
-	imports: [CommonModule, MediaRoutingModule, NgxFileDropModule, MatButtonModule, MatCheckboxModule],
+	imports: [CommonModule, MediaRoutingModule, NgxFileDropModule, MatButtonModule, MatCheckboxModule, NgxFilesizeModule],
 })
 export class MediaModule {}

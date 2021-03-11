@@ -50,20 +50,72 @@ namespace Lightning.Controller.Host
 				{
 					new RenderTreeDefinition
 					{
-						Id = "renderTree1",
 						Layers = new()
 						{
 							new LayerDefinition
 							{
-								Id = "layer1",
 								Input = new FileInputLayerDefinition
 								{
 									Filename = "Alone_low.mp4"
 								}
 							},
+							new LayerDefinition
+							{
+								Input = new FileInputLayerDefinition()
+								{
+									Filename = "Test.mp4"
+								}
+							},
 							new WindowOutputDefinition()
 						}
-					}
+					},
+					new RenderTreeDefinition
+					{
+						Layers = new()
+						{
+							new LayerDefinition
+							{
+								Input = new FileInputLayerDefinition
+								{
+									Filename = "Alone_low.mp4"
+								}
+							},
+							new LayerDefinition
+							{
+								Input = new FileInputLayerDefinition()
+								{
+									Filename = "Test.mp4"
+								}
+							},
+							new LayerDefinition
+							{
+								Input = new FileInputLayerDefinition()
+								{
+									Filename = "Test.mp4"
+								}
+							},
+							new LayerDefinition
+							{
+								Input = new FileInputLayerDefinition()
+								{
+									Filename = "Test.mp4"
+								}
+							},
+						}
+					},
+					new RenderTreeDefinition
+					{
+						Layers = new()
+						{
+							new LayerDefinition
+							{
+								Input = new FileInputLayerDefinition
+								{
+									Filename = "Alone_low.mp4"
+								}
+							},
+						}
+					},
 				}
 			});
 
