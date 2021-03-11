@@ -1,34 +1,34 @@
 using Grpc.Core;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
-using Lightning.Core.Rendering;
 using Lightning.Core.Utils;
 using Lightning.Node.Communications;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Lightning.Node.Lifetime
 {
 	internal class GrpcNodeLifetimeService : ICreateOnStartup
 	{
-		private readonly INodeStateManager _stateManager;
+		private readonly INodeLifetimeReceiver _lifetimeReceiver;
 		private GrpcLifetimeService.GrpcLifetimeServiceClient _grpcClient = null!;
 
 		public GrpcNodeLifetimeService(IConnectionManager connectionManager,
-									   IHostApplicationLifetime hostLifetime,
-									   INodeStateManager stateManager)
+									   INodeLifetimeNotifier nodeliftime,
+									   INodeLifetimeReceiver lifetimeReceiver)
 		{
-			_stateManager = stateManager;
+			_lifetimeReceiver = lifetimeReceiver;
 
 			//TODO: Maye check if application is already started.
-			hostLifetime.ApplicationStarted.Register(() =>
+			nodeliftime.CommandResponded += (s, e) =>
 			{
-				_grpcClient = connectionManager.GetLifetimeServiceClient();
-
-				Task.Run(GetLifeTimeUpdatesAsync);
-			});
+				if (e.Response == NodeCommandResponse.IsConnected)
+				{
+					_grpcClient = connectionManager.GetLifetimeServiceClient();
+					Task.Run(GetLifeTimeUpdatesAsync);
+				}
+			};
 		}
 
 		#region HandleGrpc Stream
@@ -46,14 +46,15 @@ namespace Lightning.Node.Lifetime
 
 			await foreach (var command in result.ResponseStream.ReadAllAsync())
 			{
-				HandleRequest(command);
+				//TODO: not sure if we should await the result...
+				_ = HandleRequestAsync(command);
 			}
 			//TODO: Handle Reconnect
 		}
 
 		private async IAsyncEnumerable<NodeCommandResponseMessage> HandleResponseAllAsync()
 		{
-			await foreach (var response in _stateManager.GetNodeCommandResponseAllAsync())
+			await foreach (var response in _lifetimeReceiver.GetNodeCommandResponsesAllAsync())
 			{
 				var message = new NodeCommandResponseMessage
 				{
@@ -64,14 +65,11 @@ namespace Lightning.Node.Lifetime
 
 		}
 
-		private  void HandleRequest(NodeCommandRequestMessage message)
+		private async Task HandleRequestAsync(NodeCommandRequestMessage message)
 		{
 			//TODO: Handle it more Secure...
 			var command = (NodeCommandRequest)message.Command;
-
-			//TODO: Check Conditions if it can be set?
-			//TODO: Set to internal State...like ready, live, etc..
-			_stateManager.ReportNodeCommandRequestAsync(command);
+			await _lifetimeReceiver.InvokeCommandRequestAsync(command);
 		}
 		#endregion
 

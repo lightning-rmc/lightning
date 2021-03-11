@@ -12,6 +12,8 @@ namespace Lightning.Core.Lifetime
 		GoReady = 1,
 		ShowInfo = 2,
 		HideInfo = 3,
-		TryConnecting = 4
+		TryConnecting = 4,
+		OnNodeStarted = 5,
+		OnNodeShutdown = 6,
 	}
 }

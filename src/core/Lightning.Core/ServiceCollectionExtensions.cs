@@ -2,6 +2,7 @@ using Lightning.Core.Configuration;
 using Lightning.Core.Presentation;
 using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Time;
+using Lightning.Core.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -44,7 +45,9 @@ namespace Lightning.Core
 
 		public static IServiceCollection AddOpenCVWindowHost(this IServiceCollection services)
 		{
-			services.TryAddSingleton<IWindowHost<Mat>, OpenCVWindowHost>();
+			services.TryAddSingleton<OpenCVWindowHost>();
+			services.TryAddSingleton<IWindowHost<Mat>>(p => p.GetRequiredService<OpenCVWindowHost>());
+			services.AddCreateOnStartup(p => p.GetRequiredService<OpenCVWindowHost>());
 			if (services.Any(s => s.ServiceType == typeof(IWindowHost<Mat>)))
 			{
 				services.TryAddSingleton<IWindowHost>(sp => sp.GetRequiredService<IWindowHost<Mat>>());

@@ -18,10 +18,6 @@ namespace Lightning.Core.Configuration
 			Context = changedObject;
 		}
 
-		public ConfigurationChangedEventArgs()
-		{
-		}
-
 		public ConfigurationChangedContext Context { init; get; }
 	}
 }

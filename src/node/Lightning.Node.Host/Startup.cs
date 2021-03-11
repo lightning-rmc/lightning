@@ -38,7 +38,6 @@ namespace Lightning.Node.Host
 			{
 				services.AddGrpcRemoteServices();
 			}
-			services.AddHostedService<NodeBootStrapper>();
 		}
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
