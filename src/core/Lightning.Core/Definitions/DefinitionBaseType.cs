@@ -40,10 +40,7 @@ namespace Lightning.Core.Definitions
 			//TODO: Remove TryCatch
 			try
 			{
-				ConfigurationChanged?.Invoke(this, new()
-				{
-					Context = new ConfigurationValueChangedContext<TValue>(id, name, Type, value)
-				});
+				ConfigurationChanged?.Invoke(this, new(new ConfigurationValueChangedContext<TValue>(id, name, Type, value)));
 			}
 			catch (Exception e)
 			{

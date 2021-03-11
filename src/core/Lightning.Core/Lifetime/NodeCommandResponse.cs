@@ -14,6 +14,8 @@ namespace Lightning.Core.Lifetime
 		IsConnected = 3,
 		ShowingInfo = 4,
 		HidingInfo = 5,
+		NodeIsStarted = 6,
+		NodeIsShutdown = 7,
 		HasError = 255,
 	}
 }

@@ -9,9 +9,9 @@ namespace Lightning.Core.Configuration
 	public abstract record ConfigurationChangedContext(string Id, ConfigurationChangedTarget Target);
 
 
-	public record ConfigurationValueChangedContext<TValue>(string Id, string Name, ConfigurationChangedTarget Target, TValue Value)
+	public record ConfigurationValueChangedContext<TValue>(string Id, string PropertyName, ConfigurationChangedTarget Target, TValue Value)
 		: ConfigurationChangedContext(Id, Target);
 
 
-	public record ConfiguartionStructurChangedContext();
+	public record ConfigurationStructurChangedContext();
 }

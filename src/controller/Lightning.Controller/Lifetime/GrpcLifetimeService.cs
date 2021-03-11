@@ -3,7 +3,6 @@ using Lightning.Controller.Utils;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
@@ -23,7 +22,15 @@ namespace Lightning.Controller.Lifetime
 			_logger = logger;
 		}
 
-		public override async Task Connect(
+		public override Task<ConnectResponse> Connect(ConnectMessage request, ServerCallContext context)
+		{
+			var nodeId = context.GetHttpContext().GetNodeId();
+			_nodeLifetimeService.TryRegisterNode(nodeId);
+
+			return Task.FromResult<ConnectResponse>(new());
+		}
+
+		public override async Task NodeCommandChannel(
 			IAsyncStreamReader<NodeCommandResponseMessage> requestStream,
 			IServerStreamWriter<NodeCommandRequestMessage> responseStream,
 			ServerCallContext context)
@@ -34,13 +41,7 @@ namespace Lightning.Controller.Lifetime
 			{
 				await foreach (var response in requestStream.ReadAllAsync())
 				{
-					if ((NodeCommandResponse)response.Command == NodeCommandResponse.IsConnected)
-					{
-						_nodeLifetimeService.TryRegisterNode(nodeId);
-					} else
-					{
-						await _lifetimeServicePublisher.SetNodeResponseAsync(nodeId, (NodeCommandResponse)response.Command);
-					}
+					await _lifetimeServicePublisher.SetNodeResponseAsync(nodeId, (NodeCommandResponse)response.Command);
 				}
 			});
 

@@ -1,18 +1,16 @@
+using Lightning.Core.Lifetime;
+using Lightning.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenCvSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using System.Xaml;
 
 namespace Lightning.Core.Presentation
 {
-	internal class OpenCVWindowHost : IWindowHost<Mat>, IDisposable
+	internal class OpenCVWindowHost : IWindowHost<Mat>, IDisposable, ICreateOnStartup
 	{
 		private readonly ILogger<OpenCVWindowHost>? _logger;
 		private readonly FeatureFlags _featureFlags;
@@ -20,12 +18,23 @@ namespace Lightning.Core.Presentation
 		private bool _isWindowShowing;
 		private Window? _window;
 
-		public OpenCVWindowHost(IOptions<FeatureFlags> featureFlagsOptions, ILogger<OpenCVWindowHost>? logger = null)
+		public OpenCVWindowHost(IOptions<FeatureFlags> featureFlagsOptions,
+			INodeLifetimeNotifier nodeLifetime,
+			ILogger<OpenCVWindowHost>? logger = null)
 		{
 			_isWindowShowing = false;
 			_logger = logger;
 			_featureFlags = featureFlagsOptions.Value;
-
+			nodeLifetime.CommandRequested += (s, e) =>
+			{
+				if (e.Request == NodeCommandRequest.OnNodeStarted)
+				{
+					e.AddTask(Task.Run(() =>
+					{
+						ShowWindow();
+					}, e.Token));
+				}
+			};
 		}
 
 

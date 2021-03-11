@@ -1,12 +1,11 @@
 using Grpc.Core;
-using Grpc.Core.Interceptors;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,15 +17,30 @@ namespace Lightning.Node.Communications
 		private readonly string _httpClientName = "Controller";
 		private readonly IConnectionResolver _connectionResolver;
 		private readonly IConfiguration _configuration;
+		private readonly INodeLifetimeNotifier _nodeLifetimeNotifier;
+		private readonly ILogger<ConnectionManager>? _logger;
 		private readonly NodeConfiguration _nodeConfiguration;
 		private ServiceProvider? _serviceProvider;
 
-		public ConnectionManager(IConnectionResolver connectionResolver, IConfiguration configuration, IOptions<NodeConfiguration> options)
+		public ConnectionManager(IConnectionResolver connectionResolver,
+			IConfiguration configuration,
+			IOptions<NodeConfiguration> options,
+			INodeLifetimeNotifier nodeLifetimeNotifier,
+			ILogger<ConnectionManager>? logger = null)
 		{
+			_serviceProvider = null;
 			_connectionResolver = connectionResolver;
 			_configuration = configuration;
-			_serviceProvider = null;
+			_nodeLifetimeNotifier = nodeLifetimeNotifier;
 			_nodeConfiguration = options.Value;
+			_logger = logger;
+			_nodeLifetimeNotifier.CommandRequested += (s, e) =>
+			{
+				if (e.Request == NodeCommandRequest.TryConnecting)
+				{
+					e.AddTask(SearchAndAuthenticateForServerAsync(e.Token));
+				}
+			};
 		}
 
 		public bool ServerFound { get; private set; }
@@ -73,7 +87,7 @@ namespace Lightning.Node.Communications
 			collection.AddGrpcClient<GrpcProjectEditService.GrpcProjectEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-				
+
 
 			}).AddInterceptor<NodeIdInterceptor>();
 			collection.AddGrpcClient<GrpcLifetimeService.GrpcLifetimeServiceClient>(opt =>
@@ -91,12 +105,11 @@ namespace Lightning.Node.Communications
 			collection.AddHttpClient(_httpClientName, client =>
 			{
 				client.BaseAddress = baseUri;
-
 			});
 			_serviceProvider = collection.BuildServiceProvider();
 
-			//var result = GetLifetimeServiceClient().Connect();
-			//await result.RequestStream.WriteAsync(new NodeCommandResponseMessage() { Command = (int)NodeCommandResponse.IsConnected });
+			//TODO: Handle Response
+			_ = await GetLifetimeServiceClient().ConnectAsync(new());
 		}
 
 		public void Dispose()

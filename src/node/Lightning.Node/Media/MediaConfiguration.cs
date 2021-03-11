@@ -8,6 +8,6 @@ namespace Lightning.Node.Media
 {
 	public class MediaConfiguration
 	{
-		public string StoragePath { get; set; }
+		public string StoragePath { get; set; } = string.Empty;
 	}
 }
