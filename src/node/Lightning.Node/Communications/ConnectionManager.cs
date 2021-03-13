@@ -17,7 +17,7 @@ namespace Lightning.Node.Communications
 		private readonly string _httpClientName = "Controller";
 		private readonly IConnectionResolver _connectionResolver;
 		private readonly IConfiguration _configuration;
-		private readonly INodeLifetimeNotifier _nodeLifetimeNotifier;
+		private readonly INodeCommandNotifier _nodeLifetimeNotifier;
 		private readonly ILogger<ConnectionManager>? _logger;
 		private readonly NodeConfiguration _nodeConfiguration;
 		private ServiceProvider? _serviceProvider;
@@ -25,7 +25,7 @@ namespace Lightning.Node.Communications
 		public ConnectionManager(IConnectionResolver connectionResolver,
 			IConfiguration configuration,
 			IOptions<NodeConfiguration> options,
-			INodeLifetimeNotifier nodeLifetimeNotifier,
+			INodeCommandNotifier nodeLifetimeNotifier,
 			ILogger<ConnectionManager>? logger = null)
 		{
 			_serviceProvider = null;

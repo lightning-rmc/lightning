@@ -1,4 +1,4 @@
-using Lightning.Core.Definitions.Layers;
+using Lightning.Core.Definitions;
 using Lightning.Core.Presentation;
 using OpenCvSharp;
 using System;

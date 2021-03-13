@@ -1,5 +1,5 @@
 using Lightning.Core.Configuration;
-using Lightning.Core.Definitions.Layers;
+using Lightning.Core.Definitions;
 using Lightning.Core.Media;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;

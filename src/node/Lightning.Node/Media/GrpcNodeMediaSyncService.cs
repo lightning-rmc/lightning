@@ -23,7 +23,7 @@ namespace Lightning.Node.Media
 		private HttpClient _http = null!;
 
 		public GrpcNodeMediaSyncService(IConnectionManager connectionManager,
-			INodeLifetimeNotifier nodeLifetime,
+			INodeCommandNotifier nodeLifetime,
 			IOptions<NodeConfiguration> options,
 			ILogger<GrpcNodeMediaSyncService>? logger = null)
 		{
@@ -37,12 +37,13 @@ namespace Lightning.Node.Media
 						_grpcClient = connectionManager.GetMediaServiceClient();
 						_http = connectionManager.GetHttpClient();
 						await SyncAllMediaAsync();
+						_ = Task.Run(GetMediaSyncUpdatesAsync);
 					}));
 				}
 			};
 			_options = options.Value;
 			Directory.CreateDirectory(_options.Media.StoragePath);
-			_ = Task.Run(GetMediaSyncUpdatesAsync);
+		
 		}
 
 		public async Task DownloadMediaAsync(string fileName)

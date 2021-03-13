@@ -13,8 +13,7 @@
 
 	<ItemGroup>
 	  <None Update="LightningConfig.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 

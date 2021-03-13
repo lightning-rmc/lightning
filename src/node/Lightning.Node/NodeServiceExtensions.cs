@@ -32,10 +32,10 @@ namespace Lightning.Node
 			services.AddNodeConfiguration(configuration);
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
 			services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
-			services.TryAddSingleton<NodeLifeTimeService>();
-			services.TryAddSingleton<INodeLifetimeReceiver>(p => p.GetRequiredService<NodeLifeTimeService>());
-			services.TryAddSingleton<INodeLifetimeNotifier>(p => p.GetRequiredService<NodeLifeTimeService>());
-			services.AddHostedService<NodeBootStrapper>();
+			services.TryAddSingleton<NodeCommandHandler>();
+			services.TryAddSingleton<INodeCommandReceiver>(p => p.GetRequiredService<NodeCommandHandler>());
+			services.TryAddSingleton<INodeCommandNotifier>(p => p.GetRequiredService<NodeCommandHandler>());
+			services.AddHostedService<NodeCommandBootstrapper>();
 			//TODO: Refactor find right place
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
 			return services;

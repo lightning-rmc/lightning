@@ -1,6 +1,6 @@
 using Lightning.Core.Configuration;
 
-namespace Lightning.Core.Definitions.Layers
+namespace Lightning.Core.Definitions
 {
 	public class FileInputLayerDefinition : InputLayerBaseDefinition
 	{

@@ -1,5 +1,4 @@
 using Lightning.Core.Definitions;
-using Lightning.Core.Definitions.Layers;
 
 namespace Lightning.Controller.Host.DTO
 {

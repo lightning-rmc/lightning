@@ -11,17 +11,17 @@ namespace Lightning.Node.Lifetime
 {
 	internal class GrpcNodeLifetimeService : ICreateOnStartup
 	{
-		private readonly INodeLifetimeReceiver _lifetimeReceiver;
+		private readonly INodeCommandReceiver _NodeCommandReceiver;
 		private GrpcLifetimeService.GrpcLifetimeServiceClient _grpcClient = null!;
 
 		public GrpcNodeLifetimeService(IConnectionManager connectionManager,
-									   INodeLifetimeNotifier nodeliftime,
-									   INodeLifetimeReceiver lifetimeReceiver)
+									   INodeCommandNotifier nodeCommandNotifier,
+									   INodeCommandReceiver nodeCommandReceiver)
 		{
-			_lifetimeReceiver = lifetimeReceiver;
+			_NodeCommandReceiver = nodeCommandReceiver;
 
 			//TODO: Maye check if application is already started.
-			nodeliftime.CommandResponded += (s, e) =>
+			nodeCommandNotifier.CommandResponded += (s, e) =>
 			{
 				if (e.Response == NodeCommandResponse.IsConnected)
 				{
@@ -54,7 +54,7 @@ namespace Lightning.Node.Lifetime
 
 		private async IAsyncEnumerable<NodeCommandResponseMessage> HandleResponseAllAsync()
 		{
-			await foreach (var response in _lifetimeReceiver.GetNodeCommandResponsesAllAsync())
+			await foreach (var response in _NodeCommandReceiver.GetCommandResponsesAllAsync())
 			{
 				var message = new NodeCommandResponseMessage
 				{
@@ -69,7 +69,7 @@ namespace Lightning.Node.Lifetime
 		{
 			//TODO: Handle it more Secure...
 			var command = (NodeCommandRequest)message.Command;
-			await _lifetimeReceiver.InvokeCommandRequestAsync(command);
+			await _NodeCommandReceiver.InvokeCommandRequestAsync(command);
 		}
 		#endregion
 

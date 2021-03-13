@@ -2,7 +2,6 @@ using Lightning.Controller.Host.DTO;
 using Lightning.Controller.Projects;
 using Lightning.Core.Definitions;
 using Lightning.Core.Definitions.Collections;
-using Lightning.Core.Definitions.Layers;
 using Microsoft.AspNetCore.Mvc;
 using Portable.Xaml;
 using System;

@@ -9,12 +9,12 @@ using Lightning.Core.Lifetime;
 
 namespace Lightning.Node.Lifetime
 {
-	internal class NodeBootStrapper : IHostedService
+	internal class NodeCommandBootstrapper : IHostedService
 	{
-		private readonly INodeLifetimeReceiver _receiver;
-		private readonly ILogger<NodeBootStrapper>? _logger;
+		private readonly INodeCommandReceiver _receiver;
+		private readonly ILogger<NodeCommandBootstrapper>? _logger;
 
-		public NodeBootStrapper(INodeLifetimeReceiver receiver, ILogger<NodeBootStrapper>? logger = null)
+		public NodeCommandBootstrapper(INodeCommandReceiver receiver, ILogger<NodeCommandBootstrapper>? logger = null)
 		{
 			_receiver = receiver;
 			_logger = logger;
@@ -22,12 +22,12 @@ namespace Lightning.Node.Lifetime
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			await _receiver.InvokeCommandRequestAsync(NodeCommandRequest.OnNodeStarted, cancellationToken);
+			await _receiver.InvokeCommandRequestAsync(NodeCommandRequest.OnStart, cancellationToken);
 		}
 
 		public async Task StopAsync(CancellationToken cancellationToken)
 		{
-			await _receiver.InvokeCommandRequestAsync(NodeCommandRequest.OnNodeShutdown, cancellationToken);
+			await _receiver.InvokeCommandRequestAsync(NodeCommandRequest.OnShutdown, cancellationToken);
 		}
 	}
 }

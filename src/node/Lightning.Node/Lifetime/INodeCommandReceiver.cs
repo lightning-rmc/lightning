@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Lifetime
 {
-	public interface INodeLifetimeReceiver
+	public interface INodeCommandReceiver : ICommandReceiver<NodeCommandRequest, NodeCommandResponse>
 	{
-		Task InvokeCommandRequestAsync(NodeCommandRequest request, CancellationToken token = default);
-
-		IAsyncEnumerable<NodeCommandResponse> GetNodeCommandResponsesAllAsync();
+		
 	}
 }

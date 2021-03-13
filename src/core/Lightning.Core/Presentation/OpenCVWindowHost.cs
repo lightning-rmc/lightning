@@ -19,7 +19,7 @@ namespace Lightning.Core.Presentation
 		private Window? _window;
 
 		public OpenCVWindowHost(IOptions<FeatureFlags> featureFlagsOptions,
-			INodeLifetimeNotifier nodeLifetime,
+			INodeCommandNotifier nodeLifetime,
 			ILogger<OpenCVWindowHost>? logger = null)
 		{
 			_isWindowShowing = false;
@@ -27,7 +27,7 @@ namespace Lightning.Core.Presentation
 			_featureFlags = featureFlagsOptions.Value;
 			nodeLifetime.CommandRequested += (s, e) =>
 			{
-				if (e.Request == NodeCommandRequest.OnNodeStarted)
+				if (e.Request == NodeCommandRequest.OnStart)
 				{
 					e.AddTask(Task.Run(() =>
 					{

@@ -21,13 +21,22 @@ namespace Lightning.Controller
 			services.TryAddSingleton<NodeLifetimeService>();
 			services.TryAddSingleton<INodeLifetimeService>(sp => sp.GetRequiredService<NodeLifetimeService>());
 			services.TryAddSingleton<INodeLifetimeRequestResponsePublisher>(sp => sp.GetRequiredService<NodeLifetimeService>());
+
+			services.TryAddSingleton<ControllerCommandHandler>();
+			services.TryAddSingleton<IControllerCommandNotifier>(p => p.GetRequiredService<ControllerCommandHandler>());
+			services.TryAddSingleton<IControllerCommandReceiver>(p => p.GetRequiredService<ControllerCommandHandler>());
+
+			services.AddHostedService<ControllerCommandBootstrapper>();
 			return services;
 		}
 
-		public static IServiceCollection AddControllerServices(this IServiceCollection services)
+		public static IServiceCollection AddControllerServices(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.AddNodeLifetime();
+			services.AddMediaServices(configuration);
 			services.TryAddSingleton<IProjectManager, ProjectManager>();
+			services.AddCreateOnStartup<ProjectLoader>();
+			services.Configure<ControllerSettings>(configuration.GetSection("Controller"));
 			return services;
 		}
 

@@ -17,7 +17,7 @@ namespace Lightning.Core.Lifetime
 				NodeCommandRequest.HideInfo => NodeCommandResponse.HidingInfo,
 				NodeCommandRequest.ShowInfo => NodeCommandResponse.ShowingInfo,
 				NodeCommandRequest.TryConnecting => NodeCommandResponse.IsConnected,
-				NodeCommandRequest.OnNodeStarted => NodeCommandResponse.NodeIsStarted,
+				NodeCommandRequest.OnStart => NodeCommandResponse.IsStarted,
 				_ => throw new InvalidOperationException($"command {request} has no related response!")
 			};
 		}

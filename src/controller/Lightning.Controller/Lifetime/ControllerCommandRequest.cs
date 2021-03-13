@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Lifetime
+namespace Lightning.Controller.Lifetime
 {
-	public enum NodeCommandRequest
+	public enum ControllerCommandRequest
 	{
-		GoLive,
-		GoReady,
-		ShowInfo,
-		HideInfo,
-		TryConnecting,
 		OnStart,
 		OnShutdown,
 	}
