@@ -21,7 +21,7 @@ namespace Lightning.Controller.Lifetime
 		IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId);
 		IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync();
 
-		Task SetNodeCommandRequestsAsync(NodeCommandRequest request, string? nodeId = null);
+		Task SetNodeCommandRequestAsync(NodeCommandRequest request, string? nodeId = null);
 
 	}
 }

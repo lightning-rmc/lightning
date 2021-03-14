@@ -100,7 +100,7 @@ namespace Lightning.Controller.Lifetime
 			return true;
 		}
 
-		public async Task SetNodeCommandRequestsAsync(NodeCommandRequest request, string? nodeId = null)
+		public async Task SetNodeCommandRequestAsync(NodeCommandRequest request, string? nodeId = null)
 		{
 			if (nodeId is not null)
 			{
@@ -122,7 +122,10 @@ namespace Lightning.Controller.Lifetime
 			{
 				foreach (var node in _nodeStates.Keys)
 				{
-					await SetNodeCommandRequestsAsync(request, node);
+					await SetNodeCommandRequestAsync(request, node);
+
+					//TODO: Not Should if this is the right place
+					_ = SetNodeResponseAsync(node, NodeCommandResponse.IsPreparing);
 				}
 			}
 		}
