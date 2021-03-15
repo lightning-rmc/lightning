@@ -42,14 +42,22 @@ namespace Lightning.Controller.Projects
 		public bool ImportProject(string import)
 		{
 			//TODO: Check exception handling if Config is broken..
-			if (XamlServices.Parse(import) is not ProjectDefinition project)
+			try
 			{
-				_logger?.LogError("The project string could not be read in. It is broken! Check manually where the problem is.");
+				if (XamlServices.Parse(import) is not ProjectDefinition project)
+				{
+					_logger?.LogError("The project string could not be read in. It is broken! Check manually where the problem is.");
+					return false;
+				}
+				_logger?.LogInformation("Am existing project from string will be created.");
+				ImportProject(project);
+				return true;
+			}
+			catch (Exception e)
+			{
+				_logger?.LogWarning(e,"Could not deserialize the project file.");
 				return false;
 			}
-			_logger?.LogInformation("Am existing project from string will be created.");
-			ImportProject(project);
-			return true;
 		}
 
 		public void CreateNewProject()

@@ -18,7 +18,7 @@
 		</NodeDefinition>
 	</ProjectDefinition.Nodes>
 	<ProjectDefinition.RenderTrees>
-		<RenderTreeDefinition>
+		<RenderTreeDefinition Id="AwesomeRenderTree">
 			<RenderTreeDefinition.Layers>
 				<LayerDefinition>
 					<LayerDefinition.Input>
@@ -28,8 +28,6 @@
 				<WindowOutputDefinition />
 			</RenderTreeDefinition.Layers>
 		</RenderTreeDefinition>
-
-
 		<RenderTreeDefinition>
 		</RenderTreeDefinition>
 	</ProjectDefinition.RenderTrees>
