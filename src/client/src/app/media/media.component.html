@@ -1,12 +1,18 @@
 <h2 class="subtitle">Media</h2>
 <div class="header">
 	<input type="file" #input multiple (change)="handleFileInput($any($event.target).files)">
-	<button mat-raised-button color="primary" [disabled]="!files || files.length == 0" (click)="onSubmit()">Upload</button>
+	<button mat-raised-button [disabled]="!files || files.length == 0" (click)="onSubmit()">Upload</button>
 </div>
 
+<div class="actions">
+	<button mat-raised-button [disabled]="!isSomeSelected()" (click)="deleteSelected()">Delete</button>
+	<button mat-raised-button [disabled]="isLoading" (click)="loadMedia(false)">Reload media</button>
+</div>
 <table>
 	<thead>
-		<th></th>
+		<th>
+			<mat-checkbox [checked]="isAllSelected()" (change)="onAllSelectChange($event.checked)"></mat-checkbox>
+		</th>
 		<th>Name</th>
 		<th>Type</th>
 		<th>Last Updated</th>
@@ -25,11 +31,11 @@
 	<tbody *ngIf="!isLoading && media && media.length > 0">
 		<tr *ngFor="let m of media">
 			<td class="min">
-				<mat-checkbox></mat-checkbox>
+				<mat-checkbox [checked]="m.selected" (change)="m.selected = $event.checked"></mat-checkbox>
 			</td>
 			<td>{{ m.name }}</td>
 			<td>{{ m.extension }}</td>
-			<td>{{ m.createdOn | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+			<td>{{ m.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
 			<td class="right">{{ m.size | filesize }}</td>
 		</tr>
 	</tbody>

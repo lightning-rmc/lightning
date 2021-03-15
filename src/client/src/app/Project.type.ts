@@ -1,6 +1,6 @@
 export interface Project {
 	media: Media[];
-	nodes: Node[],
+	nodes: Node[];
 	layerGroups: LayerGroup[];
 }
 
@@ -18,8 +18,8 @@ export interface Node {
 		resulution: {
 			width: number;
 			height: number;
-		}
-	}
+		};
+	};
 }
 
 export interface LayerGroup {
@@ -29,7 +29,9 @@ export interface LayerGroup {
 
 export interface Layer {
 	id: string;
-	source: string;
+	source: {
+		source: string;
+	};
 	restartAfterStop?: boolean;
 	transformation?: {
 		x: number;
@@ -37,7 +39,7 @@ export interface Layer {
 		scaleX: number;
 		scaleY: number;
 		rotation: number;
-	},
+	};
 	color?: any;
 	opacity?: number;
 	blendMode?: any;

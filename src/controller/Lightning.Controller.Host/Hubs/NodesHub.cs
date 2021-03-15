@@ -27,10 +27,9 @@ namespace Lightning.Controller.Host.Hubs
 			}
 		}
 
-
 		public async Task NotifyNodeStateUpdate(string nodeId, NodeCommandResponse command)
 		{
-			await Clients.All.SendAsync("nodeStateUpdate", nodeId, command);
+			await Clients.All.SendAsync("nodeStateUpdate", nodeId, command.ToString());
 		}
 
 		public async Task NotifyNodeConnected(string nodeId)

@@ -11,6 +11,7 @@ import { LayerTransformComponent } from './layer-details/layer-transform/layer-t
 import { LayerColorComponent } from './layer-details/layer-color/layer-color.component';
 import { LayerBlendComponent } from './layer-details/layer-blend/layer-blend.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
 	declarations: [
@@ -23,6 +24,6 @@ import { MatButtonModule } from '@angular/material/button';
 		LayerColorComponent,
 		LayerBlendComponent,
 	],
-	imports: [CommonModule, EditRoutingModule, MatButtonModule],
+	imports: [CommonModule, EditRoutingModule, MatButtonModule, MatSelectModule],
 })
 export class EditModule {}

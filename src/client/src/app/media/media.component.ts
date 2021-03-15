@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { setMaxListeners } from 'process';
 import { NotificationService } from '../shared/notifications/notification.service';
 import { MediaService } from './media.service';
 import { Media } from './models/Media.type';
@@ -15,7 +16,7 @@ export class MediaComponent implements OnInit {
 	inputElement!: ElementRef;
 
 	files?: FileList;
-	media: Media[] = [];
+	media: (Media & { selected: boolean })[] = [];
 
 	isLoading = false;
 
@@ -23,10 +24,27 @@ export class MediaComponent implements OnInit {
 		await this.loadMedia();
 	}
 
-	async loadMedia(): Promise<void> {
+	isAllSelected(): boolean {
+		return this.media?.length > 0 ? this.media.every((m) => m.selected) : false;
+	}
+
+	isSomeSelected(): boolean {
+		return this.media.some((m) => m.selected);
+	}
+
+	onAllSelectChange(value: boolean): void {
+		this.media.forEach((m) => (m.selected = value));
+	}
+
+	async loadMedia(useCache = true): Promise<void> {
 		this.isLoading = true;
 		try {
-			this.media = await this.service.getAllMedia();
+			const media = await this.service.getAllMedia(useCache);
+
+			this.media = media.map((m) => ({
+				...m,
+				selected: false,
+			}));
 		} catch (error) {
 			this.notify.error('Failed to fetch media');
 		} finally {
@@ -52,5 +70,14 @@ export class MediaComponent implements OnInit {
 			this.inputElement.nativeElement.value = '';
 			await this.loadMedia();
 		}
+	}
+
+	async deleteSelected(): Promise<void> {
+		const namesToDelete = this.media.filter(m => m.selected).map(m => m.name);
+		for (const filename of namesToDelete) {
+			await this.service.deleteMedia(filename);
+		}
+
+		await this.loadMedia();
 	}
 }

@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lightning.Core.Lifetime
 {
@@ -18,6 +14,7 @@ namespace Lightning.Core.Lifetime
 				NodeCommandRequest.ShowInfo => NodeCommandResponse.ShowingInfo,
 				NodeCommandRequest.TryConnecting => NodeCommandResponse.IsConnected,
 				NodeCommandRequest.OnStart => NodeCommandResponse.IsStarted,
+				NodeCommandRequest.OnShutdown => NodeCommandResponse.IsShutdown,
 				_ => throw new InvalidOperationException($"command {request} has no related response!")
 			};
 		}

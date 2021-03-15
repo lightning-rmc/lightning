@@ -13,21 +13,4 @@ export class NodeDetailsComponent implements OnInit {
 	constructor() {}
 
 	ngOnInit(): void {}
-
-	getStateName(state?: NodeState): string {
-		switch (state) {
-			case NodeState.Edit:
-				return 'EDIT';
-			case NodeState.Live:
-				return 'LIVE';
-			case NodeState.Info:
-				return 'INFO';
-			case NodeState.Offline:
-				return 'OFFLINE';
-			case NodeState.Error:
-				return 'ERROR';
-			default:
-				return 'UNKNOWN';
-		}
-	}
 }

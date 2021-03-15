@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment as env } from 'src/environments/environment';
-import { LayerGroup } from '../Project.type';
+import { Layer, LayerGroup } from '../Project.type';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,7 +13,23 @@ export class EditService {
 		return this.http.get<LayerGroup[]>(`${env.api.url}/rendertrees`).toPromise();
 	}
 
-	async addLayerToGroup(groupId: string) {
-		return this.http.post(`${env.api.url}/rendertrees/${groupId}/layers`, undefined).toPromise();
+	async getLayer(layerId: string): Promise<Layer> {
+		return this.http.get<Layer>(`${env.api.url}/layers/${layerId}`).toPromise();
+	}
+
+	async addLayerToGroup(groupId: string): Promise<void> {
+		return this.http.post<void>(`${env.api.url}/rendertrees/${groupId}/layers`, undefined).toPromise();
+	}
+
+	async addGroup(): Promise<void> {
+		return this.http.post<void>(`${env.api.url}/rendertrees`, undefined).toPromise();
+	}
+
+	async setLayerSource(layerId: string, filename: string): Promise<void> {
+		return this.http
+			.put<void>(`${env.api.url}/layers/${layerId}/source`, {
+				filename,
+			})
+			.toPromise();
 	}
 }

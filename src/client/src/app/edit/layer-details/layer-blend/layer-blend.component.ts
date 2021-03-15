@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Layer } from 'src/app/Project.type';
 
 @Component({
 	selector: 'app-layer-blend',
@@ -7,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayerBlendComponent implements OnInit {
 	constructor() {}
+
+	@Input()
+	layer!: Layer;
 
 	ngOnInit(): void {}
 }

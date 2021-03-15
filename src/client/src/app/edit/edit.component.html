@@ -2,7 +2,7 @@
 
 <button mat-button (click)="fetchRenderTrees()">Re-Fetch</button>
 <div class="master-detail">
-	<app-layer-matrix [groups]="groups" class="master" (addLayer)="addLayerForGroup($event)"></app-layer-matrix>
+	<app-layer-matrix [groups]="groups" class="master" (addLayer)="addLayerForGroup($event)" (addGroup)="addGroup()"></app-layer-matrix>
 	<div class="outlet">
 		<router-outlet></router-outlet>
 	</div>

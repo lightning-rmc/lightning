@@ -22,16 +22,25 @@ export class NodesService {
 	}
 
 
-	private async connect() {
+	private async connect(): Promise<void> {
 		try {
 			await this.connection.start();
 			console.log('Connection to SignalR Hub established');
 
 			// Registering event handlers
-			this.connection.on('nodeStateUpdate', (nodeId: string, state: NodeState) => this.nodeStateChange.next({ id: nodeId, state }));
+			this.connection.on('nodeStateUpdate', this.onNodeStateUpdate);
 		} catch (err) {
 			console.error('Connection to SignalR Hub failed', err);
 		}
+	}
+
+	private onNodeStateUpdate(nodeId: string, state: string): void {
+		console.log('node state update', {
+			nodeId,
+			state
+		});
+
+		this.nodeStateChange.next({ id: nodeId, state });
 	}
 
 	async getNodes(): Promise<Node[]> {

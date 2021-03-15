@@ -29,13 +29,22 @@ namespace Lightning.Controller.Media
 		}
 
 
-		public IEnumerable<Core.Media.Media> GetFiles(bool ignoreCache = false)
+		public IEnumerable<Core.Media.Media> GetFiles(bool useCache = true)
 		{
 			var dirInfo = new DirectoryInfo(_settings.StoragePath);
 
 			foreach (var file in dirInfo.GetFiles())
 			{
-				var hash = _hashCache.GetOrAdd(file.Name, k => ComputeHash(file.FullName));
+				string hash;
+				
+				if (useCache)
+				{
+					hash = _hashCache.GetOrAdd(file.Name, k => ComputeHash(file.FullName));
+				} else
+				{
+					hash = ComputeHash(file.FullName);
+					_hashCache.TryAdd(file.FullName, hash);
+				}
 
 				var link = $"http://localhost:5000/media/{file.Name}";
 
@@ -70,6 +79,19 @@ namespace Lightning.Controller.Media
 			using var stream = File.OpenRead(fullName);
 			var hash = algorithm.ComputeHash(stream);
 			return BitConverter.ToString(hash);
+		}
+
+		public void DeleteFile(string filename)
+		{
+			var path = Path.Combine(_settings.StoragePath, filename);
+			_logger.LogDebug("path: {}", path);
+			File.Delete(path);
+		}
+
+		public bool ExistsMedia(string filename)
+		{
+			var path = Path.Combine(_settings.StoragePath, filename);
+			return File.Exists(path);
 		}
 	}
 }

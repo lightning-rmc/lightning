@@ -1,1 +1,6 @@
-<p>layer-source works!</p>
+<mat-form-field appearance="fill">
+	<mat-label>Source</mat-label>
+	<mat-select (valueChange)="onSelectionChange($event)" [value]="layer.source.source">
+		<mat-option *ngFor="let m of media" [value]="m.name">{{ m.name }}</mat-option>
+	</mat-select>
+</mat-form-field>

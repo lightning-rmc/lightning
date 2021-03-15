@@ -29,6 +29,8 @@ namespace Lightning.Controller.Projects
 		IEnumerable<NodeDefinition> GetNodes();
 		IEnumerable<RenderTreeDefinition> GetRenderTrees();
 
+		RenderTreeDefinition? TryAddRenderTree();
+
 		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 
 	}

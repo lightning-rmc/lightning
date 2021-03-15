@@ -2,6 +2,7 @@ using Lightning.Controller.Host.DTO;
 using Lightning.Controller.Lifetime;
 using Lightning.Controller.Projects;
 using Lightning.Core.Definitions;
+using Lightning.Core.Lifetime;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,12 @@ namespace Lightning.Controller.Host.Controller
 			var nodes = _projectManager.GetNodes();
 
 			var result = from definition in nodes
-						 join state in states on definition.Id equals state.NodeId
+						 join state in states on definition.Id equals state.NodeId into temp
+						 from node in temp.DefaultIfEmpty((NodeId: definition.Id, State: NodeState.Offline))
 						 select new NodeDTO(
 							 definition.Id,
 							 definition.Name,
-							 state.State,
+							 node.State.ToString(),
 							 definition.FramesPerSecond,
 							 new(definition.Resolution.Width, definition.Resolution.Height)
 						);
