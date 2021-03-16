@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace Lightning.Controller.Lifetime
 			};
 		}
 
-		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default)
+		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync([EnumeratorCancellation]CancellationToken token = default)
 		{
 			var channel = Channel.CreateUnbounded<NodeStateUpdate>();
 			_allUpdatesChannelBag.TryAdd(channel, null);
