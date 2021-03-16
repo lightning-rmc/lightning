@@ -28,11 +28,11 @@ namespace Lightning.Controller.Projects
 				+= CommandNotifier_CommandRequested;
 		}
 
-		
+
 
 		private void CommandNotifier_CommandRequested(object? sender, StateChangeRequestEventArgs<ControllerState> e)
 		{
-			if (e.Request == ControllerState.Start)
+			if (e.State == ControllerState.Start)
 			{
 				e.AddTask(Task.Run(async () =>
 				{
@@ -64,6 +64,13 @@ namespace Lightning.Controller.Projects
 						_projectManager.CreateNewProject();
 					}
 				}));
+			}
+			if (e.State == ControllerState.Shutdown)
+			{
+				e.AddTask(Task.Run(async () =>
+				{
+					await PersistProjectAsync(e.Token);
+				},e.Token));
 			}
 		}
 

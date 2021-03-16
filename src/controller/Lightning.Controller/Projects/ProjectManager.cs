@@ -1,17 +1,12 @@
 using Lightning.Core.Configuration;
 using Lightning.Core.Definitions;
-using Lightning.Core.Definitions.Collections;
 using Microsoft.Extensions.Logging;
 using Portable.Xaml;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace Lightning.Controller.Projects
 {
@@ -55,7 +50,7 @@ namespace Lightning.Controller.Projects
 			}
 			catch (Exception e)
 			{
-				_logger?.LogWarning(e,"Could not deserialize the project file.");
+				_logger?.LogWarning(e, "Could not deserialize the project file.");
 				return false;
 			}
 		}
@@ -115,7 +110,7 @@ namespace Lightning.Controller.Projects
 			{
 				_logger?.LogWarning("The renderTree with the id '{id}' could not be found.", renderTreeId);
 			}
-			return rendertree; 
+			return rendertree;
 		}
 
 		public RenderTreeDefinition? TryGetRenderTreeForNode(string nodeId)
@@ -171,7 +166,7 @@ namespace Lightning.Controller.Projects
 
 		private void Project_ConfigurationChanged(object? sender, ConfigurationChangedEventArgs e)
 		{
-			
+
 			_configurationsChangedChannel.Writer.TryWrite(e.Context);
 		}
 
@@ -199,6 +194,18 @@ namespace Lightning.Controller.Projects
 			}
 
 			return null;
+		}
+
+		public bool TryAddNode(string id)
+		{
+			if (_project is not null)
+			{
+				if (!_project.Nodes.Any(n => n.Id == id))
+				{
+					_project.Nodes.Add(new NodeDefinition() { Id = id });
+				}
+			}
+			return false;
 		}
 	}
 }

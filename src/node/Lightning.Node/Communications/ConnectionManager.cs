@@ -37,7 +37,7 @@ namespace Lightning.Node.Communications
 			_logger = logger;
 			_nodeLifetimeNotifier.StateChangeRequested += (s, e) =>
 			{
-				if (e.Request == NodeState.Connected)
+				if (e.State == NodeState.Connected)
 				{
 					e.AddTask(SearchAndAuthenticateForServerAsync(e.Token));
 				}

@@ -18,12 +18,12 @@ namespace Lightning.Core.Lifetime
 		{
 			NodeId = nodeId;
 			_tasks = new List<Task>();
-			Request = request;
+			State = request;
 			Token = token;
 		}
 
 		public string? NodeId { get; }
-		public TState Request { get; }
+		public TState State { get; }
 		public CancellationToken Token { get; }
 
 		public void AddTask(Task task)

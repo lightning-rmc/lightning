@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace Lightning.Controller.Host
 {
@@ -28,6 +29,8 @@ namespace Lightning.Controller.Host
 			services.AddCors();
 			services.AddControllers();
 			services.AddGrpc();
+			services.Configure<HostOptions>(
+						opts => opts.ShutdownTimeout = TimeSpan.FromSeconds(15));
 		}
 
 

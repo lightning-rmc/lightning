@@ -30,7 +30,7 @@ namespace Lightning.Node.Rendering
 			_featureFlags = featureFlagsOptions.Value;
 			nodeLifetime.StateChangeRequested += (s, e) =>
 			{
-				if (e.Request == NodeState.Start)
+				if (e.State == NodeState.Start)
 				{
 					e.AddTask(Task.Run(() =>
 					{
