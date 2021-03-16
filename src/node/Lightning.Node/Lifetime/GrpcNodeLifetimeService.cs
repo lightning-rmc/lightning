@@ -23,7 +23,7 @@ namespace Lightning.Node.Lifetime
 			//TODO: Maye check if application is already started.
 			nodeCommandNotifier.StateChanged += (s, e) =>
 			{
-				if (e.Response == NodeState.Connected)
+				if (e.State == NodeState.Connected)
 				{
 					_grpcClient = connectionManager.GetLifetimeServiceClient();
 					Task.Run(GetLifeTimeUpdatesAsync);

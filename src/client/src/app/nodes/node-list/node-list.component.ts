@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Node } from '../models/Node.type';
-import { NodeState } from '../models/NodeState.enum';
+import { NodeState } from '../models/NodeState.type';
 
 @Component({
 	selector: 'app-node-list',
@@ -8,8 +8,6 @@ import { NodeState } from '../models/NodeState.enum';
 	styleUrls: ['./node-list.component.scss'],
 })
 export class NodeListComponent implements OnInit {
-	NodeState = NodeState;
-
 	@Input() nodes?: Node[];
 	@Input() selectedNode?: Node;
 	@Input() isLoading?: boolean = false;

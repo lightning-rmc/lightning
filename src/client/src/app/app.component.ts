@@ -1,4 +1,6 @@
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { EditService } from './edit/edit.service';
+import { NodesService } from './nodes/nodes.service';
 import { ProjectService } from './project.service';
 import { NotificationService } from './shared/notifications/notification.service';
 
@@ -13,7 +15,13 @@ export class AppComponent {
 
 	isMenuOpen = false;
 
-	constructor(private renderer: Renderer2, private projectService: ProjectService, private notify: NotificationService) {
+	constructor(
+		private renderer: Renderer2,
+		private projectService: ProjectService,
+		private nodesService: NodesService,
+		private editService: EditService,
+		private notify: NotificationService
+	) {
 		this.renderer.listen('window', 'click', (e: Event) => {
 			if (!this.toggleButton.nativeElement.contains(e.target) && !this.menu?.nativeElement.contains(e.target)) {
 				this.isMenuOpen = false;

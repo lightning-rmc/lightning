@@ -7,6 +7,6 @@ namespace Lightning.Controller.Host.DTO
 {
 	public class MediaDTO : Core.Media.Media
 	{
-		public Uri _self { get; set; } = new Uri("");
+		public Uri? _self { get; set; }
 	}
 }

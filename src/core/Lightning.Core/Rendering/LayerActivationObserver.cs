@@ -18,7 +18,7 @@ namespace Lightning.Core.Rendering
 
 			Task.Run(async () =>
 			{
-				var result = client.GelLayerActivationStream(new());
+				var result = client.GetLayerActivationStream(new());
 				await foreach (var layerActivation in result.ResponseStream.ReadAllAsync())
 				{
 					if (layers.TryGetValue(layerActivation.LayerId, out var layer))

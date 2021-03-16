@@ -3,9 +3,9 @@
 	<div class="node" *ngFor="let node of nodes" (click)="selectNode.emit(node)" [class.node--selected]="node == selectedNode">
 		<span
 		class="node-state"
-		[class.node-state__online]="node.state !== NodeState.Offline && node.state !== NodeState.Error"
-		[class.node-state__offline]="node.state === NodeState.Offline"
-		[class.node-state__error]="node.state === NodeState.Error"
+		[class.node-state__online]="node.state !== 'Offline' && node.state !== 'Error'"
+		[class.node-state__offline]="node.state === 'Offline'"
+		[class.node-state__error]="node.state === 'Error'"
 		></span>
 		<span class="node-name">{{ node.name ? node.name : 'No name specified' }}</span>
 	</div>

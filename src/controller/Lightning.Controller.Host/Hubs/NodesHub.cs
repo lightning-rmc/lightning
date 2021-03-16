@@ -1,29 +1,30 @@
 using Lightning.Controller.Lifetime;
 using Lightning.Core.Lifetime;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace Lightning.Controller.Host.Hubs
 {
 	public class NodesHub : Hub
 	{
 		private readonly INodeLifetimeService _lifetimeService;
+		private readonly ILogger<NodesHub>? _logger;
 
-		public NodesHub(INodeLifetimeService lifetimeService)
+		public NodesHub(INodeLifetimeService lifetimeService, ILogger<NodesHub>? logger = null)
 		{
 			_lifetimeService = lifetimeService;
+			_logger = logger;
 		}
 
 
 		public async override Task OnConnectedAsync()
 		{
-			await foreach (var (NodeId, Command) in _lifetimeService.GetAllNodeStatsAllAsync())
+			await foreach (var update in _lifetimeService.GetAllNodeStatesAllAsync())
 			{
-				await NotifyNodeStateUpdate(NodeId, Command);
+				_logger?.LogDebug("Got node state update {update} for node {node}", update.State, update.NodeId);
+				await NotifyNodeStateUpdate(update.NodeId, update.State);
 			}
 		}
 
@@ -33,14 +34,10 @@ namespace Lightning.Controller.Host.Hubs
 			await Clients.All.SendAsync("nodeStateUpdate", nodeId, command.ToString());
 		}
 
+
 		public async Task NotifyNodeConnected(string nodeId)
 		{
 			await Clients.All.SendAsync("nodeConnected", nodeId);
-		}
-
-		public async Task RequestMessage()
-		{
-			await Task.Delay(1000);
 		}
 	}
 }

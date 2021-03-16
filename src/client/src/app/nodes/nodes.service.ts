@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Node } from './models/Node.type';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment as env } from 'src/environments/environment';
-import { NodeState } from './models/NodeState.enum';
+import { NodeState } from './models/NodeState.type';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 export class NodesService {
 	private connection: HubConnection;
 
-	private nodeStateChange = new Subject<{ id: string, state: NodeState }>();
+	private nodeStateChange = new Subject<{ id: string; state: NodeState }>();
 	public nodeStateChange$ = this.nodeStateChange.asObservable();
 
 	constructor(private http: HttpClient) {
@@ -21,26 +21,19 @@ export class NodesService {
 		this.connect();
 	}
 
-
 	private async connect(): Promise<void> {
 		try {
-			await this.connection.start();
 			console.log('Connection to SignalR Hub established');
 
 			// Registering event handlers
-			this.connection.on('nodeStateUpdate', this.onNodeStateUpdate);
+			this.connection.on('nodeStateUpdate', (nodeId: string, state: NodeState) => {
+				this.nodeStateChange.next({ id: nodeId, state });
+			});
+
+			await this.connection.start();
 		} catch (err) {
 			console.error('Connection to SignalR Hub failed', err);
 		}
-	}
-
-	private onNodeStateUpdate(nodeId: string, state: string): void {
-		console.log('node state update', {
-			nodeId,
-			state
-		});
-
-		this.nodeStateChange.next({ id: nodeId, state });
 	}
 
 	async getNodes(): Promise<Node[]> {

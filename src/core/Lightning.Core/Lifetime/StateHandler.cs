@@ -23,7 +23,7 @@ namespace Lightning.Core.Lifetime
 		{
 			_responseChannel = Channel.CreateUnbounded<TState>();
 			_logger = logger;
-			StateChanged += (s, e) => StateChangedCallback(e.Response); 
+			StateChanged += (s, e) => StateChangedCallback(e.State);
 		}
 
 		public IAsyncEnumerable<TState> GetStateResponsesAllAsync()
