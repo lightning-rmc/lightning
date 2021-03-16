@@ -1,0 +1,17 @@
+@import "src/variables";
+
+:host {
+	padding: 0.5rem 1rem;
+	min-height: 3rem;
+	display: flex;
+	flex-direction: column;
+	background: $color-dark;
+	border-radius: 0.25rem;
+	box-shadow: 0.1rem 0.1rem 0.2rem 0 rgba(0, 0, 0, 0.5);
+	gap: 0.25rem;
+}
+
+.type {
+	font-size: 0.8em;
+	opacity: 0.6;
+}

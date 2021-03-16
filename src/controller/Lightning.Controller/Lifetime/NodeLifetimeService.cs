@@ -42,8 +42,23 @@ namespace Lightning.Controller.Lifetime
 			};
 		}
 
-		public IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default) =>
-			_allUpdatesChannel.Reader.ReadAllAsync(token);
+
+		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default)
+		{
+			try
+			{
+				await foreach (var update in _allUpdatesChannel.Reader.ReadAllAsync())
+				{
+					yield return update;
+				}
+
+			}
+			finally
+			{
+				// Remove custom channel here
+			}
+		}
+
 
 		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
 			=> _nodeStates.Select(kv => (kv.Key, kv.Value));
@@ -107,6 +122,7 @@ namespace Lightning.Controller.Lifetime
 			}
 		}
 
+
 		public async Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default)
 		{
 			if (nodeId is not null)
@@ -137,6 +153,7 @@ namespace Lightning.Controller.Lifetime
 			}
 		}
 
+
 		public IAsyncEnumerable<NodeState> GetNodeRequestStatesAllAsync(string nodeId, CancellationToken token = default)
 		{
 			if (_nodeStateRequestChannels.TryGetValue(nodeId, out var channel))
@@ -146,10 +163,12 @@ namespace Lightning.Controller.Lifetime
 			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 		}
 
+
 		public async Task SetNodeStateResponseAsync(string nodeId, NodeState state, CancellationToken token = default)
 		{
 			_logger?.LogInformation("Node {nodeId} state update: {state}", nodeId, state);
 			await _allUpdatesChannel.Writer.WriteAsync(new(nodeId, state));
+
 			_nodeStates.AddOrUpdate(nodeId, state, (key, old) => state);
 		}
 	}

@@ -107,3 +107,15 @@ $navbar-item-transition: all 0.2s ease-out;
 	flex-grow: 1;
 	overflow-y: auto;
 }
+
+
+.notification-outlet {
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	width: calc(100% - 2rem);
+	max-width: 30rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
