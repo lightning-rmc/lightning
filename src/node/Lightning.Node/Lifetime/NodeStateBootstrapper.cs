@@ -8,12 +8,12 @@ using Lightning.Core.Lifetime;
 
 namespace Lightning.Node.Lifetime
 {
-	internal class NodeCommandBootstrapper : IHostedService
+	internal class NodeStateBootstrapper : IHostedService
 	{
 		private readonly INodeStateReceiver _receiver;
-		private readonly ILogger<NodeCommandBootstrapper>? _logger;
+		private readonly ILogger<NodeStateBootstrapper>? _logger;
 
-		public NodeCommandBootstrapper(INodeStateReceiver receiver, ILogger<NodeCommandBootstrapper>? logger = null)
+		public NodeStateBootstrapper(INodeStateReceiver receiver, ILogger<NodeStateBootstrapper>? logger = null)
 		{
 			_receiver = receiver;
 			_logger = logger;

@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 namespace Lightning.Core.Lifetime
 {
 	public interface IStateReceiver<TState>
-	{ 
+	{
+		TState State { get; }
+
 		Task InvokeStateChangeAsync(TState request, CancellationToken token = default);
 
 		IAsyncEnumerable<TState> GetStateResponsesAllAsync();

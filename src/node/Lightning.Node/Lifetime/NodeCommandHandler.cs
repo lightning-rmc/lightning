@@ -13,7 +13,7 @@ namespace Lightning.Node.Lifetime
 
 		public NodeState State { get; }
 
-		protected override async Task InvokeSubsequentStateRequest(NodeState response)
+		protected override async Task StateChangedCallback(NodeState response)
 		{
 			switch (response)
 			{

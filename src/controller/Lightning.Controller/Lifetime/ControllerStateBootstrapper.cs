@@ -4,23 +4,19 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
 {
-	public class ControllerCommandBootstrapper : IHostedService
+	public class ControllerStateBootstrapper : IHostedService
 	{
 		private readonly IControllerStateReceiver _commandReceiver;
 
-		public ControllerCommandBootstrapper(IControllerStateReceiver commandReceiver)
+		public ControllerStateBootstrapper(IControllerStateReceiver commandReceiver)
 		{
 			_commandReceiver = commandReceiver;
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
-		{
-			await _commandReceiver.InvokeStateChangeAsync(ControllerState.Start, cancellationToken);
-		}
+			=> await _commandReceiver.InvokeStateChangeAsync(ControllerState.Start, cancellationToken);
 
 		public async Task StopAsync(CancellationToken cancellationToken)
-		{
-			await _commandReceiver.InvokeStateChangeAsync(ControllerState.Shutdown, cancellationToken);
-		}
+			=> await _commandReceiver.InvokeStateChangeAsync(ControllerState.Shutdown, cancellationToken);
 	}
 }

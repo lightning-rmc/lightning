@@ -26,7 +26,7 @@ namespace Lightning.Controller
 			services.TryAddSingleton<IControllerStateNotifier>(p => p.GetRequiredService<ControllerStateHandler>());
 			services.TryAddSingleton<IControllerStateReceiver>(p => p.GetRequiredService<ControllerStateHandler>());
 
-			services.AddHostedService<ControllerCommandBootstrapper>();
+			services.AddHostedService<ControllerStateBootstrapper>();
 			return services;
 		}
 

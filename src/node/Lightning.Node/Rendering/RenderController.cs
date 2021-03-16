@@ -28,12 +28,14 @@ namespace Lightning.Node.Rendering
 		{
 			if (e.Request == NodeState.Live)
 			{
-
+				_renderTimer.StartTimer();
+				e.AddTask(Task.Run(async () => await _renderHost.StartAsync()));
 			}
 
 			if (e.Request == NodeState.Ready)
 			{
-
+				_renderTimer.StopTimer();
+				_renderHost.Stop();
 			}
 		}
 	}

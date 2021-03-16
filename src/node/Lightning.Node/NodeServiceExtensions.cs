@@ -33,7 +33,7 @@ namespace Lightning.Node
 			services.TryAddSingleton<NodeCommandHandler>();
 			services.TryAddSingleton<INodeStateReceiver>(p => p.GetRequiredService<NodeCommandHandler>());
 			services.TryAddSingleton<INodeStateNotifier>(p => p.GetRequiredService<NodeCommandHandler>());
-			services.AddHostedService<NodeCommandBootstrapper>();
+			services.AddHostedService<NodeStateBootstrapper>();
 			//TODO: Refactor find right place
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
 			return services;

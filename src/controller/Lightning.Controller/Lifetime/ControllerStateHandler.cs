@@ -10,14 +10,23 @@ namespace Lightning.Controller.Lifetime
 		IControllerStateNotifier,
 		IControllerStateReceiver
 	{
-		public ControllerStateHandler(ILogger<ControllerStateHandler>? logger = null) : base(logger)
-		{
+		private readonly INodeLifetimeService _nodeLifetimeService;
 
+		public ControllerStateHandler(INodeLifetimeService nodeLifetimeService, ILogger<ControllerStateHandler>? logger = null) : base(logger)
+		{
+			_nodeLifetimeService = nodeLifetimeService;
 		}
 
-		protected override Task InvokeSubsequentStateRequest(ControllerState response)
+		protected override async Task StateChangedCallback(ControllerState response)
 		{
-			return Task.CompletedTask;
+			if (response == ControllerState.Live)
+			{
+				await _nodeLifetimeService.GoLiveAsync();
+			}
+			if (response == ControllerState.Ready)
+			{
+				await _nodeLifetimeService.GoReadyAsync();
+			}
 		}
 	}
 }
