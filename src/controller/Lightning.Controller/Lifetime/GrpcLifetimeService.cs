@@ -3,6 +3,8 @@ using Lightning.Controller.Utils;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
@@ -38,20 +40,32 @@ namespace Lightning.Controller.Lifetime
 			var nodeId = context.GetHttpContext().GetNodeId();
 			_ = Task.Run(async () =>
 			{
-				await foreach (var response in requestStream.ReadAllAsync())
+				try
 				{
-					await _lifetimeServicePublisher.SetNodeStateResponseAsync(nodeId, (NodeState)response.State);
+					await foreach (var response in requestStream.ReadAllAsync(context.CancellationToken))
+					{
+						_logger.LogDebug("Node {nodeId} state update: {state}", nodeId, (NodeState)response.State);
+						await _lifetimeServicePublisher.SetNodeStateResponseAsync(nodeId, (NodeState)response.State);
+					}
+				}
+				catch
+				{
+					_logger?.LogWarning("Node disconnected {nodeId}", nodeId);
+					await _lifetimeServicePublisher.SetNodeStateResponseAsync(nodeId, NodeState.Offline);
 				}
 			});
-
-			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestStatesAllAsync(nodeId))
+			try
 			{
-				var message = new NodeStateResponseMessage
+				await foreach (var request in _lifetimeServicePublisher.GetNodeRequestStatesAllAsync(nodeId, context.CancellationToken))
 				{
-					State = (int)request
-				};
-				await responseStream.WriteAsync(message);
+					var message = new NodeStateResponseMessage
+					{
+						State = (int)request
+					};
+					await responseStream.WriteAsync(message);
+				}
 			}
+			catch { }
 		}
 
 		public override Task NodeCommandChannel(
@@ -62,7 +76,7 @@ namespace Lightning.Controller.Lifetime
 			return Task.CompletedTask;
 		}
 
-		public override async Task GelLayerActivationStream(GeneralRequest request,
+		public override async Task GetLayerActivationStream(GeneralRequest request,
 			IServerStreamWriter<LayerActivationMessage> responseStream,
 			ServerCallContext context)
 		{

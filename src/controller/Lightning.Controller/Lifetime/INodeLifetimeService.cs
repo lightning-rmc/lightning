@@ -1,9 +1,7 @@
 using Lightning.Core.Lifetime;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
@@ -20,9 +18,11 @@ namespace Lightning.Controller.Lifetime
 
 		//TODO: Check if needed? maybe not?
 		IAsyncEnumerable<NodeState> GetNodeStatsAllAsync(string nodeId, CancellationToken token = default);
-		IAsyncEnumerable<(string NodeId, NodeState State)> GetAllNodeStatsAllAsync(CancellationToken token = default);
+		IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default);
 
 		Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default);
 
 	}
+
+	public record NodeStateUpdate(string NodeId, NodeState State);
 }

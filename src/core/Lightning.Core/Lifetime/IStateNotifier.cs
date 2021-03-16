@@ -37,10 +37,10 @@ namespace Lightning.Core.Lifetime
 		public StateChangedResponseEventArgs(TState response, string? nodeId = null)
 		{
 			NodeId = nodeId;
-			Response = response;
+			State = response;
 		}
 
 		public string? NodeId { get; }
-		public TState Response { get; }
+		public TState State { get; }
 	}
 }

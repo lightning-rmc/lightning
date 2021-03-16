@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Node } from '../models/Node.type';
-import { NodeState } from '../models/NodeState.enum';
+import { NodeState } from '../models/NodeState.type';
 
 @Component({
 	selector: 'app-node-details',

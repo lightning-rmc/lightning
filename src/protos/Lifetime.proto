@@ -8,7 +8,7 @@ package Lightning;
 service GrpcLifetimeService {
 	rpc NodeStateChannel(stream NodeStateRequestMessage) returns (stream NodeStateResponseMessage) {}
 	rpc NodeCommandChannel(stream NodeCommandResponseMessage) returns (stream NodeCommandRequestMessage) {}
-	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
+	rpc GetLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 	rpc Connect(ConnectMessage) returns (ConnectResponse) {}
 }
 
