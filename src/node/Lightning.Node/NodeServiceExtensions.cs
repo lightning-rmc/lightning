@@ -29,7 +29,8 @@ namespace Lightning.Node
 			services.AddFeatureFlags(configuration);
 			services.AddNodeConfiguration(configuration);
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
-			services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
+			services.AddCreateOnStartup<MediaSyncService>();
+			services.TryAddSingleton<IMediaSyncService>(p => p.GetRequiredService<MediaSyncService>());
 			services.TryAddSingleton<NodeCommandHandler>();
 			services.TryAddSingleton<INodeStateReceiver>(p => p.GetRequiredService<NodeCommandHandler>());
 			services.TryAddSingleton<INodeStateNotifier>(p => p.GetRequiredService<NodeCommandHandler>());
@@ -61,7 +62,7 @@ namespace Lightning.Node
 				throw new ArgumentNullException(nameof(services));
 
 			services.AddRenderingCore();
-			services.TryAddSingleton<IRenderTreeBuilder<Mat>,NodeRenderTreeBuilder>();
+			services.TryAddSingleton<IRenderTreeBuilder<Mat>, NodeRenderTreeBuilder>();
 			return services;
 		}
 	}

@@ -1,3 +1,4 @@
+using Lightning.Controller.Host.DTO;
 using Lightning.Controller.Media;
 using Lightning.Core.Definitions;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Lightning.Controller.Host.Controller
 {
@@ -14,6 +16,7 @@ namespace Lightning.Controller.Host.Controller
 	[ApiController]
 	public class MediaController : ControllerBase
 	{
+		private readonly string MEDIA_ENDPOINT_PREFIX = "http://localhost:5000/media/";
 		private readonly IMediaService _mediaService;
 		private readonly ILogger _logger;
 
@@ -24,10 +27,20 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 		[HttpGet]
-		public IEnumerable<Core.Media.Media> GetStoredFiles([FromQuery] bool useCache = true)
+		public IEnumerable<MediaDTO> GetStoredFiles([FromQuery] bool useCache = true)
 		{
 			_logger.LogDebug("use cache: {}", useCache);
-			return _mediaService.GetFiles(useCache);
+			var files = _mediaService.GetFiles(useCache);
+			return files.Select(f => new MediaDTO
+			{
+				Name = f.Name,
+				Extension = f.Extension,
+				CreatedOn = f.CreatedOn,
+				ModifiedOn = f.ModifiedOn,
+				Size = f.Size,
+				Hash = f.Hash,
+				_self = new Uri(MEDIA_ENDPOINT_PREFIX + f.Name)
+			});
 		}
 
 		[HttpDelete("{filename}")]

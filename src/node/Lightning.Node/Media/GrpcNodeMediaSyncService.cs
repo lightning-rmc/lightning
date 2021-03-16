@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Media
 {
-	internal class GrpcNodeMediaSyncService : ICreateOnStartup, IMediaSyncService
+	internal class GrpcNodeMediaSyncService : ICreateOnStartup
 	{
 		private readonly ILogger? _logger;
 		private readonly NodeConfiguration _options;
@@ -28,23 +28,9 @@ namespace Lightning.Node.Media
 			IOptions<NodeConfiguration> options,
 			ILogger<GrpcNodeMediaSyncService>? logger = null)
 		{
-			_logger = logger;
-			nodeLifetime.StateChangeRequested += (s, e) =>
-			{
-				if (e.Request == NodeState.Ready)
-				{
-					e.AddTask(Task.Run(async () =>
-					{
-						_grpcClient = connectionManager.GetMediaServiceClient();
-						_http = connectionManager.GetHttpClient();
-						await SyncAllMediaAsync();
-						_ = Task.Run(GetMediaSyncUpdatesAsync);
-					}));
-				}
-			};
-			_options = options.Value;
-			Directory.CreateDirectory(_options.Media.StoragePath);
-		
+			_grpcClient = connectionManager.GetMediaServiceClient();
+			_http = connectionManager.GetHttpClient();
+			_ = Task.Run(GetMediaSyncUpdatesAsync);
 		}
 
 		public async Task DownloadMediaAsync(string fileName)
