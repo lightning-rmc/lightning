@@ -4,25 +4,24 @@ using System.Threading.Tasks;
 
 namespace Lightning.Node.Lifetime
 {
-	public class NodeCommandHandler : CommandHandler<NodeCommandRequest, NodeCommandResponse>, INodeCommandNotifier, INodeCommandReceiver
+	public class NodeCommandHandler : StateHandler<NodeState>, INodeStateNotifier, INodeStateReceiver
 	{
 		public NodeCommandHandler(ILogger<NodeCommandHandler>? logger = null) : base(logger)
 		{
 
 		}
 
-		protected override NodeCommandResponse ConvertRequestToResponse(NodeCommandRequest request)
-			=> NodeCommandHelper.ConvertRequestoResponse(request);
+		public NodeState State { get; }
 
-		protected override async Task InvokeSubsequentRequest(NodeCommandResponse response)
+		protected override async Task InvokeSubsequentStateRequest(NodeState response)
 		{
 			switch (response)
 			{
-				case NodeCommandResponse.IsStarted:
-					await InvokeCommandRequestAsync(NodeCommandRequest.TryConnecting);
+				case NodeState.Start:
+					await InvokeStateChangeAsync(NodeState.Connected);
 					break;
-				case NodeCommandResponse.IsConnected:
-					await InvokeCommandRequestAsync(NodeCommandRequest.GoReady);
+				case NodeState.Connected:
+					await InvokeStateChangeAsync(NodeState.Ready);
 					break;
 			}
 		}

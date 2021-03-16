@@ -6,21 +6,21 @@ namespace Lightning.Controller.Lifetime
 {
 	public class ControllerCommandBootstrapper : IHostedService
 	{
-		private readonly IControllerCommandReceiver _commandReceiver;
+		private readonly IControllerStateReceiver _commandReceiver;
 
-		public ControllerCommandBootstrapper(IControllerCommandReceiver commandReceiver)
+		public ControllerCommandBootstrapper(IControllerStateReceiver commandReceiver)
 		{
 			_commandReceiver = commandReceiver;
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			await _commandReceiver.InvokeCommandRequestAsync(ControllerCommandRequest.OnStart, cancellationToken);
+			await _commandReceiver.InvokeStateChangeAsync(ControllerState.Start, cancellationToken);
 		}
 
 		public async Task StopAsync(CancellationToken cancellationToken)
 		{
-			await _commandReceiver.InvokeCommandRequestAsync(ControllerCommandRequest.OnShutdown, cancellationToken);
+			await _commandReceiver.InvokeStateChangeAsync(ControllerState.Shutdown, cancellationToken);
 		}
 	}
 }

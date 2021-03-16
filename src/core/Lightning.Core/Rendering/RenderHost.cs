@@ -39,7 +39,6 @@ namespace Lightning.Core.Rendering
 					Priority = ThreadPriority.Highest,
 					IsBackground = true
 				}.Start(layer);
-				_timer.StartTimer();
 				_logger?.LogDebug("RenderHost is started.");
 			}
 			else
@@ -63,14 +62,11 @@ namespace Lightning.Core.Rendering
 			}
 		}
 
-
-
 		public void Stop()
 		{
 			if (IsRunning)
 			{
 				IsRunning = false;
-				_timer.StopTimer();
 				_logger?.LogDebug("RenderHost is stopped.");
 			}
 			else

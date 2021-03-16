@@ -1,6 +1,7 @@
 using Grpc.Core;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
+using Lightning.Node.Lifetime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace Lightning.Node.Communications
 		private readonly string _httpClientName = "Controller";
 		private readonly IConnectionResolver _connectionResolver;
 		private readonly IConfiguration _configuration;
-		private readonly INodeCommandNotifier _nodeLifetimeNotifier;
+		private readonly INodeStateNotifier _nodeLifetimeNotifier;
 		private readonly ILogger<ConnectionManager>? _logger;
 		private readonly NodeConfiguration _nodeConfiguration;
 		private ServiceProvider? _serviceProvider;
@@ -25,7 +26,7 @@ namespace Lightning.Node.Communications
 		public ConnectionManager(IConnectionResolver connectionResolver,
 			IConfiguration configuration,
 			IOptions<NodeConfiguration> options,
-			INodeCommandNotifier nodeLifetimeNotifier,
+			INodeStateNotifier nodeLifetimeNotifier,
 			ILogger<ConnectionManager>? logger = null)
 		{
 			_serviceProvider = null;
@@ -34,9 +35,9 @@ namespace Lightning.Node.Communications
 			_nodeLifetimeNotifier = nodeLifetimeNotifier;
 			_nodeConfiguration = options.Value;
 			_logger = logger;
-			_nodeLifetimeNotifier.CommandRequested += (s, e) =>
+			_nodeLifetimeNotifier.StateChangeRequested += (s, e) =>
 			{
-				if (e.Request == NodeCommandRequest.TryConnecting)
+				if (e.Request == NodeState.Connected)
 				{
 					e.AddTask(SearchAndAuthenticateForServerAsync(e.Token));
 				}

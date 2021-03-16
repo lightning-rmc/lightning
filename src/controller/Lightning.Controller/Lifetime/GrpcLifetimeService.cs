@@ -29,11 +29,7 @@ namespace Lightning.Controller.Lifetime
 
 			return Task.FromResult<ConnectResponse>(new());
 		}
-
-		public override async Task NodeCommandChannel(
-			IAsyncStreamReader<NodeCommandResponseMessage> requestStream,
-			IServerStreamWriter<NodeCommandRequestMessage> responseStream,
-			ServerCallContext context)
+		public override async Task NodeStateChannel(IAsyncStreamReader<NodeStateRequestMessage> requestStream, IServerStreamWriter<NodeStateResponseMessage> responseStream, ServerCallContext context)
 		{
 			//TODO: handle stream closing
 			var nodeId = context.GetHttpContext().GetNodeId();
@@ -41,18 +37,26 @@ namespace Lightning.Controller.Lifetime
 			{
 				await foreach (var response in requestStream.ReadAllAsync())
 				{
-					await _lifetimeServicePublisher.SetNodeResponseAsync(nodeId, (NodeCommandResponse)response.Command);
+					await _lifetimeServicePublisher.SetNodeStateResponseAsync(nodeId, (NodeState)response.State);
 				}
 			});
 
-			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestsAllAsync(nodeId))
+			await foreach (var request in _lifetimeServicePublisher.GetNodeRequestStatesAllAsync(nodeId))
 			{
-				var message = new NodeCommandRequestMessage
+				var message = new NodeStateResponseMessage
 				{
-					Command = (int)request
+					State = (int)request
 				};
 				await responseStream.WriteAsync(message);
 			}
+		}
+
+		public override Task NodeCommandChannel(
+			IAsyncStreamReader<NodeCommandResponseMessage> requestStream,
+			IServerStreamWriter<NodeCommandRequestMessage> responseStream,
+			ServerCallContext context)
+		{
+			return Task.CompletedTask;
 		}
 
 		public override async Task GelLayerActivationStream(GeneralRequest request,

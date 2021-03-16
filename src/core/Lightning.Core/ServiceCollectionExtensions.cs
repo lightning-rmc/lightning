@@ -1,5 +1,4 @@
 using Lightning.Core.Configuration;
-using Lightning.Core.Presentation;
 using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Time;
 using Lightning.Core.Utils;
@@ -45,9 +44,6 @@ namespace Lightning.Core
 
 		public static IServiceCollection AddOpenCVWindowHost(this IServiceCollection services)
 		{
-			services.TryAddSingleton<OpenCVWindowHost>();
-			services.TryAddSingleton<IWindowHost<Mat>>(p => p.GetRequiredService<OpenCVWindowHost>());
-			services.AddCreateOnStartup(p => p.GetRequiredService<OpenCVWindowHost>());
 			if (services.Any(s => s.ServiceType == typeof(IWindowHost<Mat>)))
 			{
 				services.TryAddSingleton<IWindowHost>(sp => sp.GetRequiredService<IWindowHost<Mat>>());

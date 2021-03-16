@@ -16,7 +16,7 @@ namespace Lightning.Controller.Projects
 		private readonly IProjectManager _projectManager;
 		private readonly ILogger<ProjectLoader>? _logger;
 
-		public ProjectLoader(IControllerCommandNotifier commandNotifier,
+		public ProjectLoader(IControllerStateNotifier commandNotifier,
 			IProjectManager projectManager,
 			IOptions<ControllerSettings> options,
 			ILogger<ProjectLoader>? logger = null)
@@ -24,13 +24,15 @@ namespace Lightning.Controller.Projects
 			_config = options.Value;
 			_projectManager = projectManager;
 			_logger = logger;
-			commandNotifier.CommandRequested
+			commandNotifier.StateChangeRequested
 				+= CommandNotifier_CommandRequested;
 		}
 
-		private void CommandNotifier_CommandRequested(object? sender, CommandRequestEventArgs<ControllerCommandRequest> e)
+		
+
+		private void CommandNotifier_CommandRequested(object? sender, StateChangeRequestEventArgs<ControllerState> e)
 		{
-			if (e.Request == ControllerCommandRequest.OnStart)
+			if (e.Request == ControllerState.Start)
 			{
 				e.AddTask(Task.Run(async () =>
 				{
@@ -63,27 +65,7 @@ namespace Lightning.Controller.Projects
 					}
 				}));
 			}
-
-			//if (e.Request == ControllerCommandRequest.OnShutdown)
-			//{
-			//	e.AddTask(Task.Run(async () =>
-			//	{
-			//		var path = Path.Combine(Environment.CurrentDirectory, _config.ProjectPath);
-			//		var project = _projectManager.ExportProject();
-			//		if (project is null)
-			//		{
-			//			_logger?.LogWarning("Could not serialize the project. project will not be saved.");
-			//		}
-			//		else
-			//		{
-			//			_logger?.LogInformation("Save project in file: '{path}'", path);
-			//			//TODO: handle Exceptions
-			//			await File.WriteAllTextAsync(_config.ProjectPath, project, e.Token);
-			//		}
-			//	}));
-			//}
 		}
-
 
 		public async Task PersistProjectAsync(CancellationToken token = default)
 		{

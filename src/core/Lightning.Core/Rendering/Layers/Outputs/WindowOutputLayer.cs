@@ -1,5 +1,4 @@
 using Lightning.Core.Definitions;
-using Lightning.Core.Presentation;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;

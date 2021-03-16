@@ -22,9 +22,9 @@ namespace Lightning.Controller
 			services.TryAddSingleton<INodeLifetimeService>(sp => sp.GetRequiredService<NodeLifetimeService>());
 			services.TryAddSingleton<INodeLifetimeRequestResponsePublisher>(sp => sp.GetRequiredService<NodeLifetimeService>());
 
-			services.TryAddSingleton<ControllerCommandHandler>();
-			services.TryAddSingleton<IControllerCommandNotifier>(p => p.GetRequiredService<ControllerCommandHandler>());
-			services.TryAddSingleton<IControllerCommandReceiver>(p => p.GetRequiredService<ControllerCommandHandler>());
+			services.TryAddSingleton<ControllerStateHandler>();
+			services.TryAddSingleton<IControllerStateNotifier>(p => p.GetRequiredService<ControllerStateHandler>());
+			services.TryAddSingleton<IControllerStateReceiver>(p => p.GetRequiredService<ControllerStateHandler>());
 
 			services.AddHostedService<ControllerCommandBootstrapper>();
 			return services;

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
 {
-	public enum ControllerCommandRequest
+	public enum ControllerState
 	{
-		OnStart,
-		OnShutdown,
+		Start,
+		Ready,
+		Live,
+		Shutdown,
 	}
 }

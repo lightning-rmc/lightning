@@ -9,6 +9,8 @@ namespace Lightning.Controller.Lifetime
 	public enum ControllerCommandResponse
 	{
 		OnStarted,
-		OnShutdown
+		OnShutdown,
+		IsReady,
+		IsLive
 	}
 }
