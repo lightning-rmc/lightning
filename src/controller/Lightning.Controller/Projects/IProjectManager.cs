@@ -23,6 +23,7 @@ namespace Lightning.Controller.Projects
 		RenderTreeDefinition? TryGetRenderTreeForNode(string nodeId);
 
 		NodeDefinition? TryGetNode(string id);
+		bool TryAddNode(string id);
 
 		LayerBaseDefinition? TryGetLayer(string id);
 

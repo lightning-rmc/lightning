@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -14,20 +15,17 @@ namespace Lightning.Controller.Lifetime
 	internal class NodeLifetimeService : INodeLifetimeService, INodeLifetimeRequestResponsePublisher
 	{
 		private readonly ILogger<NodeLifetimeService>? _logger;
-		//TODO: maybe change to ConcurrentDictionary
-		private readonly Dictionary<string, Channel<NodeState>> _nodeStateResponseChannels;
 		private readonly Dictionary<string, Channel<NodeState>> _nodeStateRequestChannels;
 		private readonly ConcurrentDictionary<string, NodeState> _nodeStates;
-		private readonly Channel<NodeStateUpdate> _allUpdatesChannel;
+		private readonly ConcurrentDictionary<Channel<NodeStateUpdate>, object?> _allUpdatesChannelBag;
 		private readonly IProjectManager _projectManager;
 
 
 		public NodeLifetimeService(IProjectManager projectManager, ILogger<NodeLifetimeService>? logger = null)
 		{
 			_projectManager = projectManager;
-			_nodeStateResponseChannels = new Dictionary<string, Channel<NodeState>>();
 			_nodeStateRequestChannels = new Dictionary<string, Channel<NodeState>>();
-			_allUpdatesChannel = Channel.CreateUnbounded<NodeStateUpdate>(new() { SingleReader = false, SingleWriter = false });
+			_allUpdatesChannelBag = new ConcurrentDictionary<Channel<NodeStateUpdate>, object?>();
 			_nodeStates = new ConcurrentDictionary<string, NodeState>();
 			_logger = logger;
 
@@ -42,36 +40,25 @@ namespace Lightning.Controller.Lifetime
 			};
 		}
 
-
-		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default)
+		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync([EnumeratorCancellation]CancellationToken token = default)
 		{
+			var channel = Channel.CreateUnbounded<NodeStateUpdate>();
+			_allUpdatesChannelBag.TryAdd(channel, null);
 			try
 			{
-				await foreach (var update in _allUpdatesChannel.Reader.ReadAllAsync())
+				await foreach (var state in channel.Reader.ReadAllAsync(token))
 				{
-					yield return update;
+					yield return state;
 				}
-
 			}
 			finally
 			{
-				// Remove custom channel here
+				_allUpdatesChannelBag.TryRemove(channel, out _);
 			}
 		}
-
 
 		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
 			=> _nodeStates.Select(kv => (kv.Key, kv.Value));
-
-
-		public IAsyncEnumerable<NodeState> GetNodeStatsAllAsync(string nodeId, CancellationToken token = default)
-		{
-			if (_nodeStateResponseChannels.TryGetValue(nodeId, out var channel))
-			{
-				return channel.Reader.ReadAllAsync(token);
-			}
-			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
-		}
 
 
 		public bool TryRemoveNode(string nodeId)
@@ -80,11 +67,6 @@ namespace Lightning.Controller.Lifetime
 			{
 				requestsChannel.Writer.TryComplete();
 				_nodeStateRequestChannels.Remove(nodeId);
-			}
-			if (_nodeStateResponseChannels.TryGetValue(nodeId, out var responseChannel))
-			{
-				responseChannel.Writer.TryComplete();
-				_nodeStateResponseChannels.Remove(nodeId);
 			}
 			_nodeStates.Remove(nodeId, out _);
 			return true;
@@ -97,12 +79,7 @@ namespace Lightning.Controller.Lifetime
 			{
 				item.Value.Writer.TryComplete();
 			}
-			foreach (var item in _nodeStateResponseChannels)
-			{
-				item.Value.Writer.TryComplete();
-			}
 			_nodeStateRequestChannels.Clear();
-			_nodeStateResponseChannels.Clear();
 			_nodeStates.Clear();
 		}
 
@@ -113,8 +90,9 @@ namespace Lightning.Controller.Lifetime
 			{
 				_nodeStates.AddOrUpdate(nodeId, NodeState.Offline, (key, old) => NodeState.Offline);
 				_nodeStateRequestChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
-				_nodeStateResponseChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
 				_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
+				var result = _projectManager.TryAddNode(nodeId);
+				//TODO: add logging
 			}
 			else
 			{
@@ -167,8 +145,18 @@ namespace Lightning.Controller.Lifetime
 		public async Task SetNodeStateResponseAsync(string nodeId, NodeState state, CancellationToken token = default)
 		{
 			_logger?.LogInformation("Node {nodeId} state update: {state}", nodeId, state);
-			await _allUpdatesChannel.Writer.WriteAsync(new(nodeId, state));
-
+			foreach (var channel in _allUpdatesChannelBag.Keys.ToArray())
+			{
+				try
+				{
+					await channel.Writer.WriteAsync(new NodeStateUpdate(nodeId, state), token);
+				}
+				catch (Exception e)
+				{
+					//TODO: add logging
+					_logger?.LogWarning(e, "SetNodeStateResponseAsync");
+				}
+			}
 			_nodeStates.AddOrUpdate(nodeId, state, (key, old) => state);
 		}
 	}

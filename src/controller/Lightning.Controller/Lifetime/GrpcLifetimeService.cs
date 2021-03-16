@@ -13,14 +13,17 @@ namespace Lightning.Controller.Lifetime
 	{
 		private readonly INodeLifetimeRequestResponsePublisher _lifetimeServicePublisher;
 		private readonly INodeLifetimeService _nodeLifetimeService;
+		private readonly ILayerActivationService _layerActivationService;
 		private readonly ILogger<GrpcLifetimeService>? _logger;
 
 		public GrpcLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
 			INodeLifetimeService nodeLifetimeService,
+			ILayerActivationService layerActivationService,
 			ILogger<GrpcLifetimeService>? logger = null)
 		{
 			_lifetimeServicePublisher = lifetimeServicePublisher;
 			_nodeLifetimeService = nodeLifetimeService;
+			_layerActivationService = layerActivationService;
 			_logger = logger;
 		}
 
@@ -77,24 +80,12 @@ namespace Lightning.Controller.Lifetime
 			IServerStreamWriter<LayerActivationMessage> responseStream,
 			ServerCallContext context)
 		{
-			await responseStream.WriteAsync(new()
+			//TODO: it will send the message anyway,
+			//		better it should send the message only if the node has the related layer
+			await foreach (var layer in _layerActivationService.GetLayerActivationsAllAsync())
 			{
-				Active = true,
-				LayerId = "myLayer"
-			});
-			await Task.Delay(4000);
-
-			await responseStream.WriteAsync(new()
-			{
-				Active = false,
-				LayerId = "myLayer"
-			});
-			await responseStream.WriteAsync(new()
-			{
-				Active = true,
-				LayerId = "myLayer"
-			});
-			await Task.Delay(20000);
+				await responseStream.WriteAsync(new LayerActivationMessage { Active = layer.Active, LayerId = layer.LayerId });
+			}
 		}
 	}
 }

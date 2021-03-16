@@ -26,13 +26,13 @@ namespace Lightning.Node.Rendering
 
 		private void CommandNotifier_CommandRequested(object? sender, StateChangeRequestEventArgs<NodeState> e)
 		{
-			if (e.Request == NodeState.Live)
+			if (e.State == NodeState.Live)
 			{
 				_renderTimer.StartTimer();
 				e.AddTask(Task.Run(async () => await _renderHost.StartAsync()));
 			}
 
-			if (e.Request == NodeState.Ready)
+			if (e.State == NodeState.Ready)
 			{
 				_renderTimer.StopTimer();
 				_renderHost.Stop();

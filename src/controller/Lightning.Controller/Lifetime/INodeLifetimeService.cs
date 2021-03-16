@@ -16,8 +16,6 @@ namespace Lightning.Controller.Lifetime
 		void TryRegisterNode(string nodeId);
 		bool TryRemoveNode(string nodeId);
 
-		//TODO: Check if needed? maybe not?
-		IAsyncEnumerable<NodeState> GetNodeStatsAllAsync(string nodeId, CancellationToken token = default);
 		IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default);
 
 		Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default);
