@@ -12,4 +12,7 @@ export class LayerMatrixComponent {
 
 	@Output()
 	addLayer = new EventEmitter<string>();
+
+	@Output()
+	addGroup = new EventEmitter<string>();
 }

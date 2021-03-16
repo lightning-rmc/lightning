@@ -85,17 +85,19 @@ namespace Lightning.Controller.Lifetime
 			_nodeStates.Clear();
 		}
 
-		public bool TryRegisterNode(string nodeId)
+		public void TryRegisterNode(string nodeId)
 		{
-			if (_nodeStates.ContainsKey(nodeId))
+			if (!_nodeStates.ContainsKey(nodeId))
 			{
-				return false;
+				_nodeStates.Add(nodeId, NodeState.Offline);
+				_nodeStateRequestChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
+				_nodeStateResponseChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
+				_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
 			}
-			_nodeStates.Add(nodeId, NodeState.Offline);
-			_nodeStateRequestChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
-			_nodeStateResponseChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
-			_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
-			return true;
+			else
+			{
+				//TODO: Add logging
+			}
 		}
 
 		public async Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default)

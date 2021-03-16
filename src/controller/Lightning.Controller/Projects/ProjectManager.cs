@@ -188,5 +188,17 @@ namespace Lightning.Controller.Projects
 		{
 			return _project?.RenderTrees.ToArray() ?? Enumerable.Empty<RenderTreeDefinition>();
 		}
+
+		public RenderTreeDefinition? TryAddRenderTree()
+		{
+			if (_project is not null)
+			{
+				var newRenderTree = new RenderTreeDefinition();
+				_project.RenderTrees.Add(newRenderTree);
+				return newRenderTree;
+			}
+
+			return null;
+		}
 	}
 }

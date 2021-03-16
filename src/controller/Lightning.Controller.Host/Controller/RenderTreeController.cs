@@ -37,6 +37,18 @@ namespace Lightning.Controller.Host.Controller
 			}
 		}
 
+		[HttpPost]
+		public IActionResult AddRenderTree()
+		{
+			var newRenderTree = _projectManager.TryAddRenderTree();
+			if (newRenderTree is not null)
+			{
+				return Ok(newRenderTree);
+			}
+
+			throw new Exception("Could not create render tree");
+		}
+
 		[HttpGet("{renderTreeId}")]
 		public ActionResult<RenderTreeDTO> GetRenderTree([FromRoute] string renderTreeId)
 		{

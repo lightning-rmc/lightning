@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
@@ -23,9 +24,24 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 		[HttpGet]
-		public IEnumerable<Core.Media.Media> GetStoredFiles([FromQuery] bool ignoreCache = false)
+		public IEnumerable<Core.Media.Media> GetStoredFiles([FromQuery] bool useCache = true)
 		{
-			return _mediaService.GetFiles(ignoreCache);
+			_logger.LogDebug("use cache: {}", useCache);
+			return _mediaService.GetFiles(useCache);
+		}
+
+		[HttpDelete("{filename}")]
+		public IActionResult DeleteMedia([FromRoute] string filename)
+		{
+			try
+			{
+				_mediaService.DeleteFile(filename);
+				return Ok();
+			}
+			catch (FileNotFoundException)
+			{
+				return NotFound();
+			}
 		}
 
 		[HttpPost("upload")]

@@ -15,7 +15,7 @@ namespace Lightning.Controller.Lifetime
 
 		//TODO: Change return type to ResponseObject?
 		//TODO: Change argument to more useful data, e.g. max display size or fps
-		bool TryRegisterNode(string nodeId);
+		void TryRegisterNode(string nodeId);
 		bool TryRemoveNode(string nodeId);
 
 		//TODO: Check if needed? maybe not?

@@ -5,9 +5,9 @@
 	<div class="tab" (click)="activeTab = 'blend'" [class.tab--active]="activeTab == 'blend'">Blend</div>
 </div>
 
-<div class="outlet">
-	<app-layer-source [layer]="" *ngIf="activeTab == 'source'"></app-layer-source>
-	<app-layer-transform *ngIf="activeTab == 'transform'"></app-layer-transform>
-	<app-layer-color *ngIf="activeTab == 'color'"></app-layer-color>
-	<app-layer-blend *ngIf="activeTab == 'blend'"></app-layer-blend>
+<div class="outlet" *ngIf="layer">
+	<app-layer-source [layer]="layer" *ngIf="activeTab == 'source'" (sourceChange)="onSourceChange($event)"></app-layer-source>
+	<app-layer-transform [layer]="layer" *ngIf="activeTab == 'transform'"></app-layer-transform>
+	<app-layer-color [layer]="layer" *ngIf="activeTab == 'color'"></app-layer-color>
+	<app-layer-blend [layer]="layer" *ngIf="activeTab == 'blend'"></app-layer-blend>
 </div>

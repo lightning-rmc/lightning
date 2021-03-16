@@ -5,11 +5,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Projects
 {
-	public class ProjectLoader : ICreateOnStartup
+	public class ProjectLoader : ICreateOnStartup, IProjectLoader
 	{
 		private readonly ControllerSettings _config;
 		private readonly IProjectManager _projectManager;
@@ -26,6 +27,8 @@ namespace Lightning.Controller.Projects
 			commandNotifier.StateChangeRequested
 				+= CommandNotifier_CommandRequested;
 		}
+
+		
 
 		private void CommandNotifier_CommandRequested(object? sender, StateChangeRequestEventArgs<ControllerState> e)
 		{
@@ -62,24 +65,21 @@ namespace Lightning.Controller.Projects
 					}
 				}));
 			}
+		}
 
-			if (e.Request == ControllerState.Shutdown)
+		public async Task PersistProjectAsync(CancellationToken token = default)
+		{
+			var path = Path.Combine(Environment.CurrentDirectory, _config.ProjectPath);
+			var project = _projectManager.ExportProject();
+			if (project is null)
 			{
-				e.AddTask(Task.Run(async () =>
-				{
-					var path = Path.Combine(Environment.CurrentDirectory, _config.ProjectPath);
-					var project = _projectManager.ExportProject();
-					if (project is null)
-					{
-						_logger?.LogWarning("Could not serialize the project. project will not be saved.");
-					}
-					else
-					{
-						_logger?.LogInformation("Save project in file: '{path}'", path);
-						//TODO: handle Exceptions
-						await File.WriteAllTextAsync(_config.ProjectPath, project, e.Token);
-					}
-				}));
+				_logger?.LogWarning("Could not serialize the project. project will not be saved.");
+			}
+			else
+			{
+				_logger?.LogInformation("Save project in file: '{path}'", path);
+				//TODO: handle Exceptions
+				await File.WriteAllTextAsync(_config.ProjectPath, project, token);
 			}
 		}
 	}

@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MediaService } from 'src/app/media/media.service';
+import { Media } from 'src/app/media/models/Media.type';
 import { Layer } from 'src/app/Project.type';
 
 @Component({
@@ -7,10 +9,21 @@ import { Layer } from 'src/app/Project.type';
 	styleUrls: ['./layer-source.component.scss'],
 })
 export class LayerSourceComponent implements OnInit {
-	constructor() {}
+	constructor(private mediaService: MediaService) {}
 
 	@Input()
 	layer!: Layer;
 
-	ngOnInit(): void {}
+	media: Media[] = [];
+
+	@Output()
+	sourceChange = new EventEmitter<string>();
+
+	async ngOnInit(): Promise<void> {
+		this.media = await this.mediaService.getAllMedia();
+	}
+
+	onSelectionChange(filename: string): void {
+		this.sourceChange.emit(filename);
+	}
 }

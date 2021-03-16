@@ -10,11 +10,15 @@ import { UploadResult } from './models/UploadResult.type';
 export class MediaService {
 	constructor(private http: HttpClient) {}
 
-	public getAllMedia() {
-		return this.http.get<Media[]>(`${env.api.url}/media`).toPromise();
+	public getAllMedia(useCache = true): Promise<Media[]> {
+		return this.http.get<Media[]>(`${env.api.url}/media`, {
+			params: {
+				useCache: String(useCache)
+			}
+		}).toPromise();
 	}
 
-	public uploadFiles(fileList: FileList) {
+	public uploadFiles(fileList: FileList): Promise<UploadResult> {
 		const files: File[] = [];
 		for (let i = 0; i < fileList.length; i++) {
 			files.push(fileList.item(i)!);
@@ -26,5 +30,9 @@ export class MediaService {
 		}
 
 		return this.http.post<UploadResult>(`${env.api.url}/media/upload`, formData).toPromise();
+	}
+
+	public deleteMedia(filename: string): Promise<object> {
+		return this.http.delete(`${env.api.url}/media/${filename}`).toPromise();
 	}
 }

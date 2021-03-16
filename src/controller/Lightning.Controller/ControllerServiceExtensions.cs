@@ -35,7 +35,9 @@ namespace Lightning.Controller
 			services.AddNodeLifetime();
 			services.AddMediaServices(configuration);
 			services.TryAddSingleton<IProjectManager, ProjectManager>();
-			services.AddCreateOnStartup<ProjectLoader>();
+			services.TryAddSingleton<ProjectLoader>();
+			services.TryAddSingleton<IProjectLoader>(p => p.GetRequiredService<ProjectLoader>());
+			services.AddCreateOnStartup(p => p.GetRequiredService<ProjectLoader>());
 			services.Configure<ControllerSettings>(configuration.GetSection("Controller"));
 			return services;
 		}
