@@ -1,3 +1,4 @@
+using Lightning.Core.Media;
 using Lightning.Core.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -39,24 +40,22 @@ namespace Lightning.Controller.Media
 				
 				if (useCache)
 				{
-					hash = _hashCache.GetOrAdd(file.Name, k => ComputeHash(file.FullName));
+					hash = _hashCache.GetOrAdd(file.Name, k => MediaUtil.ComputeHash(file.FullName));
 				} else
 				{
-					hash = ComputeHash(file.FullName);
+					hash = MediaUtil.ComputeHash(file.FullName);
 					_hashCache.TryAdd(file.FullName, hash);
 				}
 
-				var link = $"http://localhost:5000/media/{file.Name}";
-
-				yield return new(
-					file.Name,
-					file.Extension,
-					file.Length,
-					file.CreationTime,
-					file.LastWriteTime,
-					hash,
-					new Uri(link)
-				);
+				yield return new Core.Media.Media()
+				{
+					Name = file.Name,
+					Extension = file.Extension,
+					CreatedOn = file.CreationTime,
+					ModifiedOn = file.LastWriteTime,
+					Hash = hash,
+					Size = file.Length
+				};
 			}
 		}
 
@@ -72,14 +71,6 @@ namespace Lightning.Controller.Media
 		public IAsyncEnumerable<(string fileName, UpdateType updateType)> GetUpdatesAllAsync()
 			=> _updates.Reader.ReadAllAsync();
 
-
-		private string ComputeHash(string fullName)
-		{
-			using var algorithm = SHA256.Create();
-			using var stream = File.OpenRead(fullName);
-			var hash = algorithm.ComputeHash(stream);
-			return BitConverter.ToString(hash);
-		}
 
 		public void DeleteFile(string filename)
 		{
