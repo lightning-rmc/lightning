@@ -3,6 +3,7 @@ using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
 using Lightning.Core.Utils;
 using Lightning.Node.Communications;
+using Lightning.Node.Lifetime;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -23,14 +24,14 @@ namespace Lightning.Node.Media
 		private HttpClient _http = null!;
 
 		public GrpcNodeMediaSyncService(IConnectionManager connectionManager,
-			INodeCommandNotifier nodeLifetime,
+			INodeStateNotifier nodeLifetime,
 			IOptions<NodeConfiguration> options,
 			ILogger<GrpcNodeMediaSyncService>? logger = null)
 		{
 			_logger = logger;
-			nodeLifetime.CommandRequested += (s, e) =>
+			nodeLifetime.StateChangeRequested += (s, e) =>
 			{
-				if (e.Request == NodeCommandRequest.GoReady)
+				if (e.Request == NodeState.Ready)
 				{
 					e.AddTask(Task.Run(async () =>
 					{

@@ -21,14 +21,14 @@ namespace Lightning.Controller.Host.Hubs
 
 		public async override Task OnConnectedAsync()
 		{
-			await foreach (var (NodeId, Command) in _lifetimeService.GetAllNodeCommandsAllAsync())
+			await foreach (var (NodeId, Command) in _lifetimeService.GetAllNodeStatsAllAsync())
 			{
 				await NotifyNodeStateUpdate(NodeId, Command);
 			}
 		}
 
 
-		public async Task NotifyNodeStateUpdate(string nodeId, NodeCommandResponse command)
+		public async Task NotifyNodeStateUpdate(string nodeId, NodeState command)
 		{
 			await Clients.All.SendAsync("nodeStateUpdate", nodeId, command);
 		}

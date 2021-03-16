@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
@@ -10,7 +11,7 @@ namespace Lightning.Controller.Lifetime
 
 	public interface INodeLifetimeRequestResponsePublisher
 	{
-		IAsyncEnumerable<NodeCommandRequest> GetNodeRequestsAllAsync(string nodeId);
-		Task SetNodeResponseAsync(string nodeId, NodeCommandResponse nodeCommand);
+		IAsyncEnumerable<NodeState> GetNodeRequestStatesAllAsync(string nodeId, CancellationToken token = default);
+		Task SetNodeStateResponseAsync(string nodeId, NodeState nodeState, CancellationToken token = default);
 	}
 }

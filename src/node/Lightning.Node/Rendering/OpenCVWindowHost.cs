@@ -1,5 +1,8 @@
+using Lightning.Core;
 using Lightning.Core.Lifetime;
+using Lightning.Core.Rendering;
 using Lightning.Core.Utils;
+using Lightning.Node.Lifetime;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenCvSharp;
@@ -8,7 +11,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Presentation
+namespace Lightning.Node.Rendering
 {
 	internal class OpenCVWindowHost : IWindowHost<Mat>, IDisposable, ICreateOnStartup
 	{
@@ -19,15 +22,15 @@ namespace Lightning.Core.Presentation
 		private Window? _window;
 
 		public OpenCVWindowHost(IOptions<FeatureFlags> featureFlagsOptions,
-			INodeCommandNotifier nodeLifetime,
+			INodeStateNotifier nodeLifetime,
 			ILogger<OpenCVWindowHost>? logger = null)
 		{
 			_isWindowShowing = false;
 			_logger = logger;
 			_featureFlags = featureFlagsOptions.Value;
-			nodeLifetime.CommandRequested += (s, e) =>
+			nodeLifetime.StateChangeRequested += (s, e) =>
 			{
-				if (e.Request == NodeCommandRequest.OnStart)
+				if (e.Request == NodeState.Start)
 				{
 					e.AddTask(Task.Run(() =>
 					{

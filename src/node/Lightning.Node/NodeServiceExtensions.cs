@@ -1,5 +1,4 @@
 using Lightning.Core;
-using Lightning.Core.Lifetime;
 using Lightning.Core.Media;
 using Lightning.Core.Rendering;
 using Lightning.Core.Utils;
@@ -12,10 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OpenCvSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lightning.Node
 {
@@ -26,6 +21,9 @@ namespace Lightning.Node
 			if (services is null)
 				throw new ArgumentNullException(nameof(services));
 
+			services.TryAddSingleton<OpenCVWindowHost>();
+			services.TryAddSingleton<IWindowHost<Mat>>(p => p.GetRequiredService<OpenCVWindowHost>());
+			services.AddCreateOnStartup(p => p.GetRequiredService<OpenCVWindowHost>());
 			services.AddNodeRendering();
 			services.AddOpenCVWindowHost();
 			services.AddFeatureFlags(configuration);
@@ -33,8 +31,8 @@ namespace Lightning.Node
 			services.AddCreateOnStartup<GrpcNodeLifetimeService>();
 			services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
 			services.TryAddSingleton<NodeCommandHandler>();
-			services.TryAddSingleton<INodeCommandReceiver>(p => p.GetRequiredService<NodeCommandHandler>());
-			services.TryAddSingleton<INodeCommandNotifier>(p => p.GetRequiredService<NodeCommandHandler>());
+			services.TryAddSingleton<INodeStateReceiver>(p => p.GetRequiredService<NodeCommandHandler>());
+			services.TryAddSingleton<INodeStateNotifier>(p => p.GetRequiredService<NodeCommandHandler>());
 			services.AddHostedService<NodeCommandBootstrapper>();
 			//TODO: Refactor find right place
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();

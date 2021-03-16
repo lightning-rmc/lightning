@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -14,19 +14,19 @@ namespace Lightning.Controller.Lifetime
 	{
 		private readonly ILogger<NodeLifetimeService>? _logger;
 		//TODO: maybe change to ConcurrentDictionary
-		private readonly Dictionary<string, Channel<NodeCommandResponse>> _nodeCommandResponsesChannels;
-		private readonly Dictionary<string, Channel<NodeCommandRequest>> _nodeCommandRequestsChannels;
+		private readonly Dictionary<string, Channel<NodeState>> _nodeStateResponseChannels;
+		private readonly Dictionary<string, Channel<NodeState>> _nodeStateRequestChannels;
 		private readonly Dictionary<string, NodeState> _nodeStates;
-		private readonly Channel<(string nodeId, NodeCommandResponse state)> _allUpdatesChannel;
+		private readonly Channel<(string nodeId, NodeState state)> _allUpdatesChannel;
 		private readonly IProjectManager _projectManager;
 
 
 		public NodeLifetimeService(IProjectManager projectManager, ILogger<NodeLifetimeService>? logger = null)
 		{
 			_projectManager = projectManager;
-			_nodeCommandResponsesChannels = new Dictionary<string, Channel<NodeCommandResponse>>();
-			_nodeCommandRequestsChannels = new Dictionary<string, Channel<NodeCommandRequest>>();
-			_allUpdatesChannel = Channel.CreateUnbounded<(string, NodeCommandResponse)>();
+			_nodeStateResponseChannels = new Dictionary<string, Channel<NodeState>>();
+			_nodeStateRequestChannels = new Dictionary<string, Channel<NodeState>>();
+			_allUpdatesChannel = Channel.CreateUnbounded<(string, NodeState)>();
 			_nodeStates = new Dictionary<string, NodeState>();
 			_logger = logger;
 
@@ -40,33 +40,31 @@ namespace Lightning.Controller.Lifetime
 				}
 			};
 		}
-
-		public IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync()
-			=> _allUpdatesChannel.Reader.ReadAllAsync();
-
-		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
-			=> _nodeStates.Select(kv => (kv.Key, kv.Value));
-
-		public IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId)
+		public IAsyncEnumerable<(string NodeId, NodeState State)> GetAllNodeStatsAllAsync(CancellationToken token = default) =>
+			_allUpdatesChannel.Reader.ReadAllAsync(token);
+		public IAsyncEnumerable<NodeState> GetNodeStatsAllAsync(string nodeId, CancellationToken token = default)
 		{
-			if (_nodeCommandResponsesChannels.TryGetValue(nodeId, out var channel))
+			if (_nodeStateResponseChannels.TryGetValue(nodeId, out var channel))
 			{
-				return channel.Reader.ReadAllAsync();
+				return channel.Reader.ReadAllAsync(token);
 			}
 			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 		}
 
+		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
+			=> _nodeStates.Select(kv => (kv.Key, kv.Value));
+
 		public bool TryRemoveNode(string nodeId)
 		{
-			if (_nodeCommandRequestsChannels.TryGetValue(nodeId, out var requestsChannel))
+			if (_nodeStateRequestChannels.TryGetValue(nodeId, out var requestsChannel))
 			{
 				requestsChannel.Writer.TryComplete();
-				_nodeCommandRequestsChannels.Remove(nodeId);
+				_nodeStateRequestChannels.Remove(nodeId);
 			}
-			if (_nodeCommandResponsesChannels.TryGetValue(nodeId, out var responseChannel))
+			if (_nodeStateResponseChannels.TryGetValue(nodeId, out var responseChannel))
 			{
 				responseChannel.Writer.TryComplete();
-				_nodeCommandResponsesChannels.Remove(nodeId);
+				_nodeStateResponseChannels.Remove(nodeId);
 			}
 			_nodeStates.Remove(nodeId);
 			return true;
@@ -74,16 +72,16 @@ namespace Lightning.Controller.Lifetime
 
 		private void ClearAllNodes()
 		{
-			foreach (var item in _nodeCommandRequestsChannels)
+			foreach (var item in _nodeStateRequestChannels)
 			{
 				item.Value.Writer.TryComplete();
 			}
-			foreach (var item in _nodeCommandResponsesChannels)
+			foreach (var item in _nodeStateResponseChannels)
 			{
 				item.Value.Writer.TryComplete();
 			}
-			_nodeCommandRequestsChannels.Clear();
-			_nodeCommandResponsesChannels.Clear();
+			_nodeStateRequestChannels.Clear();
+			_nodeStateResponseChannels.Clear();
 			_nodeStates.Clear();
 		}
 
@@ -94,13 +92,13 @@ namespace Lightning.Controller.Lifetime
 				return false;
 			}
 			_nodeStates.Add(nodeId, NodeState.Offline);
-			_nodeCommandRequestsChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandRequest>());
-			_nodeCommandResponsesChannels.Add(nodeId, Channel.CreateUnbounded<NodeCommandResponse>());
+			_nodeStateRequestChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
+			_nodeStateResponseChannels.Add(nodeId, Channel.CreateUnbounded<NodeState>());
 			_logger?.LogInformation("Register new Node with id:'{nodeId}'.", nodeId);
 			return true;
 		}
 
-		public async Task SetNodeCommandRequestAsync(NodeCommandRequest request, string? nodeId = null)
+		public async Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default)
 		{
 			if (nodeId is not null)
 			{
@@ -109,9 +107,9 @@ namespace Lightning.Controller.Lifetime
 					throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 				}
 
-				if (_nodeCommandRequestsChannels.TryGetValue(nodeId, out var channel))
+				if (_nodeStateRequestChannels.TryGetValue(nodeId, out var channel))
 				{
-					await channel.Writer.WriteAsync(request);
+					await channel.Writer.WriteAsync(request, token);
 				}
 				else
 				{
@@ -122,34 +120,38 @@ namespace Lightning.Controller.Lifetime
 			{
 				foreach (var node in _nodeStates.Keys)
 				{
-					await SetNodeCommandRequestAsync(request, node);
+					await SetNodeCommandRequestAsync(request, node, token);
 
 					//TODO: Not Should if this is the right place
-					_ = SetNodeResponseAsync(node, NodeCommandResponse.IsPreparing);
+					_ = SetNodeStateResponseAsync(node, NodeState.Preparing, CancellationToken.None);
 				}
 			}
 		}
 
-		public IAsyncEnumerable<NodeCommandRequest> GetNodeRequestsAllAsync(string nodeId)
+		public IAsyncEnumerable<NodeState> GetNodeRequestStatesAllAsync(string nodeId, CancellationToken token = default)
 		{
-			if (_nodeCommandRequestsChannels.TryGetValue(nodeId, out var channel))
+			if (_nodeStateRequestChannels.TryGetValue(nodeId, out var channel))
 			{
-				return channel.Reader.ReadAllAsync();
+				return channel.Reader.ReadAllAsync(token);
 			}
 			throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 		}
 
-		public async Task SetNodeResponseAsync(string nodeId, NodeCommandResponse nodeCommand)
+		public async Task SetNodeStateResponseAsync(string nodeId, NodeState nodeCommand, CancellationToken token = default)
 		{
-			if (_nodeCommandResponsesChannels.TryGetValue(nodeId, out var channel))
+			if (_nodeStateResponseChannels.TryGetValue(nodeId, out var channel))
 			{
-				await channel.Writer.WriteAsync(nodeCommand);
+				await channel.Writer.WriteAsync(nodeCommand, token);
 			}
 			else
 			{
 				throw new KeyNotFoundException($"{nameof(nodeId)}: '{nodeId}'");
 			}
-			await _allUpdatesChannel.Writer.WriteAsync((nodeId, nodeCommand));
+			await _allUpdatesChannel.Writer.WriteAsync((nodeId, nodeCommand), token);
 		}
+
+
+
+
 	}
 }

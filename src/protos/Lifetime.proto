@@ -6,6 +6,7 @@ option csharp_namespace = "Lightning.Core.Generated";
 package Lightning;
 
 service GrpcLifetimeService {
+	rpc NodeStateChannel(stream NodeStateRequestMessage) returns (stream NodeStateResponseMessage) {}
 	rpc NodeCommandChannel(stream NodeCommandResponseMessage) returns (stream NodeCommandRequestMessage) {}
 	rpc GelLayerActivationStream(GeneralRequest) returns (stream LayerActivationMessage) {}
 	rpc Connect(ConnectMessage) returns (ConnectResponse) {}
@@ -13,23 +14,35 @@ service GrpcLifetimeService {
 
 
 message ConnectMessage {
-
+	int32 state = 1;
 }
 
 message ConnectResponse {
 
 }
 
-message NodeCommandRequestMessage {
+message NodeStateRequestMessage {
 	//Note: CommandCodes are defined in the C# Code as Enum
 	//		under Lifetime as NodeCommandRequest
-	int32 command = 1;
+	int32 state = 1;
+}
+
+message NodeStateResponseMessage {
+	//Note: CommandCodes are defined in the C# Code as Enum
+	//		under Lifetime as NodeCommandRequest
+	int32 state = 1;
+	int32 errorCode = 2;
+}
+
+message NodeCommandRequestMessage {
+	string command = 1;
+	bool flag = 2;
 }
 
 message NodeCommandResponseMessage {
-	//Note: CommandCodes are defined in the C# Code as Enum
-	//		under Lifetime as NodeCommandResponse
-	int32 command = 1;
+	string command = 1;
+	bool flag = 2;
+	bool acceped = 3;
 }
 
 message LayerActivationMessage {

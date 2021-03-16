@@ -6,12 +6,12 @@ namespace Lightning.Controller.Lifetime
 	public static class LifetimeServiceExtensions
 	{
 		public static Task GoLiveAsync(this INodeLifetimeService lifetimeService)
-			=> lifetimeService.SetNodeCommandRequestAsync(NodeCommandRequest.GoLive, null);
+			=> lifetimeService.SetNodeCommandRequestAsync(NodeState.Live, null);
 		public static Task GoReadyAsync(this INodeLifetimeService lifetimeService)
-			=> lifetimeService.SetNodeCommandRequestAsync(NodeCommandRequest.GoReady, null);
-		public static Task ShowNodeInfoAsync(this INodeLifetimeService lifetimeService, string? nodeId = null)
-			=> lifetimeService.SetNodeCommandRequestAsync(NodeCommandRequest.ShowInfo, nodeId);
-		public static Task HideNodeInfoAsync(this INodeLifetimeService lifetimeService, string? nodeId = null)
-			=> lifetimeService.SetNodeCommandRequestAsync(NodeCommandRequest.HideInfo, nodeId);
+			=> lifetimeService.SetNodeCommandRequestAsync(NodeState.Ready, null);
+		//public static Task ShowNodeInfoAsync(this INodeLifetimeService lifetimeService, string? nodeId = null)
+		//	=> lifetimeService.SetNodeCommandRequestAsync(NodeState.ShowInfo, nodeId);
+		//public static Task HideNodeInfoAsync(this INodeLifetimeService lifetimeService, string? nodeId = null)
+		//	=> lifetimeService.SetNodeCommandRequestAsync(NodeState.HideInfo, nodeId);
 	}
 }

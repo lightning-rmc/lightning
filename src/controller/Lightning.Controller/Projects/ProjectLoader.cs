@@ -15,7 +15,7 @@ namespace Lightning.Controller.Projects
 		private readonly IProjectManager _projectManager;
 		private readonly ILogger<ProjectLoader>? _logger;
 
-		public ProjectLoader(IControllerCommandNotifier commandNotifier,
+		public ProjectLoader(IControllerStateNotifier commandNotifier,
 			IProjectManager projectManager,
 			IOptions<ControllerSettings> options,
 			ILogger<ProjectLoader>? logger = null)
@@ -23,13 +23,13 @@ namespace Lightning.Controller.Projects
 			_config = options.Value;
 			_projectManager = projectManager;
 			_logger = logger;
-			commandNotifier.CommandRequested
+			commandNotifier.StateChangeRequested
 				+= CommandNotifier_CommandRequested;
 		}
 
-		private void CommandNotifier_CommandRequested(object? sender, CommandRequestEventArgs<ControllerCommandRequest> e)
+		private void CommandNotifier_CommandRequested(object? sender, StateChangeRequestEventArgs<ControllerState> e)
 		{
-			if (e.Request == ControllerCommandRequest.OnStart)
+			if (e.Request == ControllerState.Start)
 			{
 				e.AddTask(Task.Run(async () =>
 				{
@@ -63,7 +63,7 @@ namespace Lightning.Controller.Projects
 				}));
 			}
 
-			if (e.Request == ControllerCommandRequest.OnShutdown)
+			if (e.Request == ControllerState.Shutdown)
 			{
 				e.AddTask(Task.Run(async () =>
 				{

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lightning.Controller.Lifetime
@@ -18,10 +19,10 @@ namespace Lightning.Controller.Lifetime
 		bool TryRemoveNode(string nodeId);
 
 		//TODO: Check if needed? maybe not?
-		IAsyncEnumerable<NodeCommandResponse> GetNodeCommandsAllAsync(string nodeId);
-		IAsyncEnumerable<(string NodeId, NodeCommandResponse Command)> GetAllNodeCommandsAllAsync();
+		IAsyncEnumerable<NodeState> GetNodeStatsAllAsync(string nodeId, CancellationToken token = default);
+		IAsyncEnumerable<(string NodeId, NodeState State)> GetAllNodeStatsAllAsync(CancellationToken token = default);
 
-		Task SetNodeCommandRequestAsync(NodeCommandRequest request, string? nodeId = null);
+		Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default);
 
 	}
 }

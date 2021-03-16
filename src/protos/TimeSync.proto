@@ -1,15 +1,18 @@
 syntax = "proto3";
-import "google/protobuf/empty.proto";
 
 option csharp_namespace = "Lightning.Core.Generated";
 
 package Lightning;
 
 service GrpcTimeService {
-	rpc GetSychronisationStream(google.protobuf.Empty) returns (stream TimestampMessage) {}
+	rpc GetSychronisationStream(RequestTimestampStream) returns (stream TimestampMessage) {}
+}
+
+message RequestTimestampStream {
+
 }
 
 message TimestampMessage {
-	int32 frame =1 ;
-	
+	int32 tick = 1;
+	int32 type = 2;
 }

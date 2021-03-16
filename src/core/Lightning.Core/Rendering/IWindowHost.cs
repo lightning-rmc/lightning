@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Presentation
+namespace Lightning.Core.Rendering
 {
 
 	public interface IWindowHost : IDisposable
