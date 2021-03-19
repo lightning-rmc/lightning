@@ -15,6 +15,15 @@ namespace Lightning.Controller.Utils
 		public UnobservedExceptionsLoggerService(ILogger<UnobservedExceptionsLoggerService> logger)
 		{
 			_logger = logger;
+
+			TaskScheduler.UnobservedTaskException += (s, e) =>
+			{
+				_logger?.LogError(e.Exception,"Uncaught exception was thrown in a unobserved Task.");
+			};
+			AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+			{
+				_logger?.LogCritical(e.ExceptionObject as Exception, "Uncaught exception was thrown. The runtime will terminate:{terminate}", e.IsTerminating);
+			};
 		}
 	}
 }
