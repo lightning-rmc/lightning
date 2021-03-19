@@ -77,7 +77,7 @@ namespace Lightning.Controller.Projects
 
 		public LayerBaseDefinition? TryGetLayer(string id)
 		{
-			if (_project?.RenderTrees is IEnumerable<RenderTreeDefinition> renderTrees)
+			if (_project?.LayerGroups is IEnumerable<RenderTreeDefinition> renderTrees)
 			{
 				foreach (var renderTree in renderTrees)
 				{
@@ -102,18 +102,18 @@ namespace Lightning.Controller.Projects
 			return node;
 		}
 
-		public RenderTreeDefinition? TryGetRenderTree(string renderTreeId)
+		public LayerGroupDefinition? TryGetLayerGroup(string layerGroupId)
 		{
 			//TODO: Maybe Log if the node does not exist?
-			var rendertree = _project?.RenderTrees.FirstOrDefault(r => r.Id == renderTreeId);
-			if (rendertree is null)
+			var layerGroup = _project?.LayerGroups.FirstOrDefault(r => r.Id == layerGroupId);
+			if (layerGroup is null)
 			{
-				_logger?.LogWarning("The renderTree with the id '{id}' could not be found.", renderTreeId);
+				_logger?.LogWarning("The renderTree with the id '{id}' could not be found.", layerGroupId);
 			}
-			return rendertree;
+			return layerGroup;
 		}
 
-		public RenderTreeDefinition? TryGetRenderTreeForNode(string nodeId)
+		public LayerGroupDefinition? TryGetLayerGroupForNode(string nodeId)
 		{
 			throw new NotImplementedException();
 		}
@@ -130,9 +130,9 @@ namespace Lightning.Controller.Projects
 			projectDefinition.ConfigurationChanged += Project_ConfigurationChanged;
 
 			//TODO:Check CollectionChanges
-			foreach (var renderTrees in projectDefinition.RenderTrees)
+			foreach (var layerGroup in projectDefinition.LayerGroups)
 			{
-				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged += Project_ConfigurationChanged);
+				TraverseLayers(layerGroup.RenderTree.Layers, layer => layer.ConfigurationChanged += Project_ConfigurationChanged);
 			}
 		}
 
@@ -143,9 +143,9 @@ namespace Lightning.Controller.Projects
 			projectDefinition.ConfigurationChanged -= Project_ConfigurationChanged;
 
 			//Check CollectionChanges
-			foreach (var renderTrees in projectDefinition.RenderTrees)
+			foreach (var renderTrees in projectDefinition.LayerGroups)
 			{
-				TraverseLayers(renderTrees.Layers, layer => layer.ConfigurationChanged -= Project_ConfigurationChanged);
+				TraverseLayers(renderTrees.RenderTree.Layers, layer => layer.ConfigurationChanged -= Project_ConfigurationChanged);
 			}
 		}
 
@@ -179,17 +179,17 @@ namespace Lightning.Controller.Projects
 			return _project?.Nodes.ToArray() ?? Enumerable.Empty<NodeDefinition>();
 		}
 
-		public IEnumerable<RenderTreeDefinition> GetRenderTrees()
+		public IEnumerable<LayerGroupDefinition> GetLayerGroups()
 		{
-			return _project?.RenderTrees.ToArray() ?? Enumerable.Empty<RenderTreeDefinition>();
+			return _project?.LayerGroups.ToArray() ?? Enumerable.Empty<LayerGroupDefinition>();
 		}
 
-		public RenderTreeDefinition? TryAddRenderTree()
+		public LayerGroupDefinition? TryAddLayerGroup()
 		{
 			if (_project is not null)
 			{
-				var newRenderTree = new RenderTreeDefinition();
-				_project.RenderTrees.Add(newRenderTree);
+				var newRenderTree = new LayerGroupDefinition();
+				_project.LayerGroups.Add(newRenderTree);
 				return newRenderTree;
 			}
 
