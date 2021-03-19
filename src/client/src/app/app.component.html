@@ -72,3 +72,7 @@
 <div class="router-outlet">
 	<router-outlet></router-outlet>
 </div>
+
+<div class="notification-outlet">
+	<app-notification *ngFor="let notification of notifications" [notification]="notification"></app-notification>
+</div>

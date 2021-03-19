@@ -1,7 +1,8 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { EditService } from './edit/edit.service';
 import { NodesService } from './nodes/nodes.service';
 import { ProjectService } from './project.service';
+import { Notification } from './shared/notifications/Notification.model';
 import { NotificationService } from './shared/notifications/notification.service';
 
 @Component({
@@ -9,11 +10,13 @@ import { NotificationService } from './shared/notifications/notification.service
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	@ViewChild('toggleButton') toggleButton!: ElementRef;
 	@ViewChild('menu') menu!: ElementRef;
 
 	isMenuOpen = false;
+
+	notifications: Notification[] = [];
 
 	constructor(
 		private renderer: Renderer2,
@@ -26,6 +29,15 @@ export class AppComponent {
 			if (!this.toggleButton.nativeElement.contains(e.target) && !this.menu?.nativeElement.contains(e.target)) {
 				this.isMenuOpen = false;
 			}
+		});
+	}
+
+	ngOnInit(): void {
+		this.notify.onNewNotification$.subscribe({
+			next: (notification) => {
+				this.notifications.push(notification);
+				setTimeout(() => this.notifications.splice(this.notifications.indexOf(notification), 1), notification.duration || 5000);
+			},
 		});
 	}
 

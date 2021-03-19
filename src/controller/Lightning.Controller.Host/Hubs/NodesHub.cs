@@ -23,7 +23,6 @@ namespace Lightning.Controller.Host.Hubs
 		{
 			await foreach (var update in _lifetimeService.GetAllNodeStatesAllAsync())
 			{
-				_logger?.LogDebug("Got node state update {update} for node {node}", update.State, update.NodeId);
 				await NotifyNodeStateUpdate(update.NodeId, update.State);
 			}
 		}
