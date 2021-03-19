@@ -32,6 +32,9 @@ namespace Lightning.Controller.Projects
 
 		RenderTreeDefinition? TryAddRenderTree();
 
+		bool TryRemoveRenderTree(string renderTreeId);
+		bool TryRemoveLayer(string layerId);
+
 		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 
 	}

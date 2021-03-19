@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, HostBinding } from '@angular/core';
 import { Notification } from '../Notification.model';
 
 @Component({
@@ -10,6 +10,21 @@ import { Notification } from '../Notification.model';
 export class NotificationComponent {
 	constructor() {}
 
+	@HostBinding('class.error')
+	get isError(): boolean {
+		return this.notification.type === 'ERROR';
+	}
+
+	@HostBinding('class.info')
+	get isInfo(): boolean {
+		return this.notification.type === 'INFO';
+	}
+
 	@Input()
 	notification!: Notification;
+
+
+	get formattedMessage(): string {
+		return this.notification.message.replace('\n', '<br>');
+	}
 }

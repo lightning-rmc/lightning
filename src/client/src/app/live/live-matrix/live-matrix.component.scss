@@ -1,0 +1,70 @@
+@import "src/variables";
+
+$gap: 1rem;
+
+:host {
+	display: block;
+	border: 0.2rem solid $color-dark;
+	margin: 1rem 0;
+	padding: 1rem;
+	height: 100%;
+}
+
+.groups {
+	display: flex;
+	flex-direction: column;
+	gap: $gap;
+}
+
+.group {
+	flex-basis: 9rem;
+	display: flex;
+	flex-direction: row;
+	gap: $gap;
+}
+
+.group__name {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 16rem;
+	text-align: center;
+	background: $color-dark;
+}
+
+.group__layers {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	gap: $gap;
+}
+
+.layer {
+	flex: 0 1 16rem;
+	border: 0.3rem solid $color-dark;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	cursor: pointer;
+
+	&--active {
+		opacity: 1;
+		animation: layerPulse 1s infinite alternate;
+	}
+}
+
+.group__name, .layer {
+	border-radius: 0.5rem;
+}
+
+
+@keyframes layerPulse {
+	from {
+		border-color: darken($color-primary, 10%);
+	}
+	to {
+		border-color: lighten($color-primary, 30%);
+	}
+}

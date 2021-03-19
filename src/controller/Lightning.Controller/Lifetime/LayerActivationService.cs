@@ -11,7 +11,7 @@ namespace Lightning.Controller.Lifetime
 	public class LayerActivationService : ILayerActivationService
 	{
 		private readonly ConcurrentDictionary<string, bool> _layerActivations;
-		private readonly Channel<(string LayerId, bool Active)> _layerActivationUpdates;
+		private readonly Channel<(string LayerId, bool IsActive)> _layerActivationUpdates;
 		public LayerActivationService(ILogger<LayerActivationService>? logger = null)
 		{
 			//TODO: Handle state management?
@@ -28,13 +28,13 @@ namespace Lightning.Controller.Lifetime
 			}, CancellationToken.None); //TODO: end if the service will be disposed.
 		}
 
-		public IAsyncEnumerable<(string LayerId, bool Active)> GetLayerActivationsAllAsync(CancellationToken token = default)
+		public IAsyncEnumerable<(string LayerId, bool IsActive)> GetLayerActivationsAllAsync(CancellationToken token = default)
 		{
 			return _layerActivationUpdates.Reader.ReadAllAsync(token);
 		}
 
 		//TODO: Check Concurrence
-		public IEnumerable<(string LayerId, bool Active)> GetLayerActivationStates()
+		public IEnumerable<(string LayerId, bool IsActive)> GetLayerActivationStates()
 			=> _layerActivations.Select(kv => (kv.Key, kv.Value));
 
 		public async Task SetLayerActivationAsync(string layerId, bool active, CancellationToken token = default)

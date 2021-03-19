@@ -1,0 +1,13 @@
+<div class="groups">
+	<div class="group" *ngFor="let group of groups; let groupIndex = index">
+		<div class="group__name">
+			<div>OUT {{ groupIndex + 1 }}</div>
+			<small>Here goes the preview</small>
+		</div>
+		<div class="group__layers">
+			<div class="layer" *ngFor="let layer of group.layers; let layerIndex = index" [class.layer--active]="layer.isActive" (click)="setLayerActivation(layer, !layer.isActive)">
+				<div class="layer__name">{{ groupIndex + 1 }}.{{ layerIndex + 1 }}</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -49,20 +49,34 @@ namespace Lightning.Controller.Host.Controller
 
 			if (layer is LayerDefinition { Input: FileInputLayerDefinition fileInputLayer })
 			{
-				if (_mediaService.ExistsMedia(request.filename))
+				if (_mediaService.ExistsMedia(request.Filename))
 				{
-					fileInputLayer.Filename = request.filename;
+					fileInputLayer.Filename = request.Filename;
 					return Ok();
-				} else
+				}
+				else
 				{
-					return BadRequest($"File '{request.filename}' does not exist on the server");
+					return BadRequest($"File '{request.Filename}' does not exist on the server");
 				}
 			}
 
 			return BadRequest();
 		}
 
+		[HttpDelete("{layerId}")]
+		public IActionResult DeleteLayer([FromRoute] string layerId)
+		{
+			var success = _projectManager.TryRemoveLayer(layerId);
+			if (success)
+			{
+				return Ok();
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
 
-		public record SourceChangeRequest(string filename);
+		public record SourceChangeRequest(string Filename);
 	}
 }

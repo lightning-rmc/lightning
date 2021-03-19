@@ -17,19 +17,27 @@ export class EditService {
 		return this.http.get<Layer>(`${env.api.url}/layers/${layerId}`).toPromise();
 	}
 
-	async addLayerToGroup(groupId: string): Promise<void> {
-		return this.http.post<void>(`${env.api.url}/rendertrees/${groupId}/layers`, undefined).toPromise();
+	async addLayerToGroup(groupId: string): Promise<object> {
+		return this.http.post(`${env.api.url}/rendertrees/${groupId}/layers`, undefined).toPromise();
 	}
 
-	async addGroup(): Promise<void> {
-		return this.http.post<void>(`${env.api.url}/rendertrees`, undefined).toPromise();
+	async addGroup(): Promise<object> {
+		return this.http.post(`${env.api.url}/rendertrees`, undefined).toPromise();
 	}
 
-	async setLayerSource(layerId: string, filename: string): Promise<void> {
+	async setLayerSource(layerId: string, filename: string): Promise<object> {
 		return this.http
-			.put<void>(`${env.api.url}/layers/${layerId}/source`, {
+			.put(`${env.api.url}/layers/${layerId}/source`, {
 				filename,
 			})
 			.toPromise();
+	}
+
+	async deleteLayer(layerId: string): Promise<object> {
+		return this.http.delete(`${env.api.url}/layers/${layerId}`).toPromise();
+	}
+
+	async deleteGroup(groupId: string): Promise<object> {
+		return this.http.delete(`${env.api.url}/rendertrees/${groupId}`).toPromise();
 	}
 }

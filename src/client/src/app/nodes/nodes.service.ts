@@ -12,8 +12,11 @@ import { Subject } from 'rxjs';
 export class NodesService {
 	private connection: HubConnection;
 
-	private nodeStateChange = new Subject<{ id: string; state: NodeState }>();
-	public nodeStateChange$ = this.nodeStateChange.asObservable();
+	private nodeStateChangeSubject = new Subject<{ id: string; state: NodeState }>();
+	public nodeStateChange$ = this.nodeStateChangeSubject.asObservable();
+
+	private nodeConnectedSubject = new Subject<object>();
+	public nodeConnected$ = this.nodeConnectedSubject.asObservable();
 
 	constructor(private http: HttpClient) {
 		this.connection = new HubConnectionBuilder().withUrl(`${env.controller.url}/hubs/nodes`).build();
@@ -27,7 +30,11 @@ export class NodesService {
 
 			// Registering event handlers
 			this.connection.on('nodeStateUpdate', (nodeId: string, state: NodeState) => {
-				this.nodeStateChange.next({ id: nodeId, state });
+				this.nodeStateChangeSubject.next({ id: nodeId, state });
+			});
+
+			this.connection.on('nodeConnected', node => {
+				this.nodeConnectedSubject.next(node);
 			});
 
 			await this.connection.start();

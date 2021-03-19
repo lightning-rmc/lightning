@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { SubSink } from 'subsink';
 import { EditService } from './edit/edit.service';
 import { NodesService } from './nodes/nodes.service';
 import { ProjectService } from './project.service';
@@ -18,6 +19,8 @@ export class AppComponent implements OnInit {
 
 	notifications: Notification[] = [];
 
+	sink = new SubSink();
+
 	constructor(
 		private renderer: Renderer2,
 		private projectService: ProjectService,
@@ -33,11 +36,13 @@ export class AppComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.notify.onNewNotification$.subscribe({
-			next: (notification) => {
-				this.notifications.push(notification);
-				setTimeout(() => this.notifications.splice(this.notifications.indexOf(notification), 1), notification.duration || 5000);
-			},
+		this.sink.sink = this.notify.onNewNotification$.subscribe((notification) => {
+			this.notifications.push(notification);
+			setTimeout(() => this.notifications.splice(this.notifications.indexOf(notification), 1), notification.duration || 5000);
+		});
+
+		this.sink.sink = this.nodesService.nodeConnected$.subscribe((node) => {
+			this.notify.info('New node connected');
 		});
 	}
 

@@ -196,6 +196,47 @@ namespace Lightning.Controller.Projects
 			return null;
 		}
 
+		public bool TryRemoveRenderTree(string renderTreeId)
+		{
+			if (_project is null)
+			{
+				_logger.LogWarning("No project initialized, cannot delete render tree {renderTreeId}", renderTreeId);
+				return false;
+			}
+
+			foreach (var renderTree in _project.RenderTrees)
+			{
+				if (renderTree.Id == renderTreeId)
+				{
+					return _project.RenderTrees.Remove(renderTree);
+				}
+			}
+
+			return false;
+		}
+
+		public bool TryRemoveLayer(string layerId)
+		{
+			if (_project is null)
+			{
+				_logger.LogWarning("No project initialized, cannot delete layer {layerId}", layerId);
+				return false;
+			}
+
+			foreach (var renderTree in _project.RenderTrees)
+			{
+				foreach (var layer in renderTree.Layers)
+				{
+					if (layer.Id == layerId)
+					{
+						return renderTree.Layers.Remove(layer);
+					}
+				}
+			}
+
+			return false;
+		}
+
 		public bool TryAddNode(string id)
 		{
 			if (_project is not null)

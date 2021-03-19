@@ -1,5 +1,8 @@
 <div *ngFor="let group of groups; let groupIndex = index" class="group">
-	<div class="group-label" [routerLink]="'groups/' + group.id" routerLinkActive="group-label--active">{{ groupIndex + 1 }}</div>
+	<div class="group-label" [routerLink]="'groups/' + group.id" routerLinkActive="group-label--active">
+		{{ groupIndex + 1 }}
+		<i class="icon-delete fas fa-trash-alt" (click)="$event.stopPropagation(); deleteGroup.emit(group.id)"></i>
+	</div>
 	<div
 		*ngFor="let layer of group.layers; let layerIndex = index"
 		[routerLink]="'groups/' + group.id + '/layers/' + layer.id"
@@ -7,6 +10,7 @@
 		routerLinkActive="layer--active"
 	>
 		{{ groupIndex + 1 }}.{{ layerIndex + 1 }}
+		<i class="icon-delete fas fa-trash-alt" (click)="$event.stopPropagation(); deleteLayer.emit(layer.id)"></i>
 	</div>
 	<div class="layer-add" (click)="addLayer.emit(group.id)">+</div>
 </div>

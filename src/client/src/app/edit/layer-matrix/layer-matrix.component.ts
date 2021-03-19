@@ -15,4 +15,10 @@ export class LayerMatrixComponent {
 
 	@Output()
 	addGroup = new EventEmitter<string>();
+
+	@Output()
+	deleteLayer = new EventEmitter<string>();
+
+	@Output()
+	deleteGroup = new EventEmitter<string>();
 }
