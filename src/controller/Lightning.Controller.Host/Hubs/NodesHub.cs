@@ -21,22 +21,31 @@ namespace Lightning.Controller.Host.Hubs
 
 		public async override Task OnConnectedAsync()
 		{
-			await foreach (var update in _lifetimeService.GetAllNodeStatesAllAsync())
+			//TODO: Try Catch
+			try
 			{
-				await NotifyNodeStateUpdate(update.NodeId, update.State);
+				await foreach (var update in _lifetimeService.GetAllNodeStatesAllAsync(Context.ConnectionAborted))
+				{
+					await NotifyNodeStateUpdate(update.NodeId, update.State);
+				}
+
+			}
+			catch
+			{
+
 			}
 		}
 
 
 		public async Task NotifyNodeStateUpdate(string nodeId, NodeState command)
 		{
-			await Clients.All.SendAsync("nodeStateUpdate", nodeId, command.ToString());
+			await Clients.Caller.SendAsync("nodeStateUpdate", nodeId, command.ToString(),Context.ConnectionAborted);
 		}
 
 
 		public async Task NotifyNodeConnected(string nodeId)
 		{
-			await Clients.All.SendAsync("nodeConnected", nodeId);
+			await Clients.Caller.SendAsync("nodeConnected", nodeId, Context.ConnectionAborted);
 		}
 	}
 }

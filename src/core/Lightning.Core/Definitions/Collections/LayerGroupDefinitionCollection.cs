@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Definitions.Collections
 {
-	public class RenderTreeDefinitionCollection :
-		ObservableCollection<RenderTreeDefinition>
+	public class LayerGroupDefinitionCollection :
+		ObservableCollection<LayerGroupDefinition>
 	{
 
 	}

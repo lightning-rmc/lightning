@@ -19,8 +19,8 @@ namespace Lightning.Controller.Projects
 		bool ImportProject(string import);
 		void ImportProject(ProjectDefinition import);
 
-		RenderTreeDefinition? TryGetRenderTree(string renderTreeId);
-		RenderTreeDefinition? TryGetRenderTreeForNode(string nodeId);
+		LayerGroupDefinition? TryGetLayerGroup(string renderTreeId);
+		LayerGroupDefinition? TryGetLayerGroupForNode(string nodeId);
 
 		NodeDefinition? TryGetNode(string id);
 		bool TryAddNode(string id);
@@ -28,9 +28,9 @@ namespace Lightning.Controller.Projects
 		LayerBaseDefinition? TryGetLayer(string id);
 
 		IEnumerable<NodeDefinition> GetNodes();
-		IEnumerable<RenderTreeDefinition> GetRenderTrees();
+		IEnumerable<LayerGroupDefinition> GetLayerGroups();
 
-		RenderTreeDefinition? TryAddRenderTree();
+		LayerGroupDefinition? TryAddLayerGroup();
 
 		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 

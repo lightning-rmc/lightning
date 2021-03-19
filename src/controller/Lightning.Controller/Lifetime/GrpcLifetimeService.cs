@@ -82,9 +82,15 @@ namespace Lightning.Controller.Lifetime
 		{
 			//TODO: it will send the message anyway,
 			//		better it should send the message only if the node has the related layer
-			await foreach (var layer in _layerActivationService.GetLayerActivationsAllAsync())
+			try
 			{
-				await responseStream.WriteAsync(new LayerActivationMessage { Active = layer.Active, LayerId = layer.LayerId });
+				await foreach (var layer in _layerActivationService.GetLayerActivationsAllAsync(context.CancellationToken))
+				{
+					await responseStream.WriteAsync(new LayerActivationMessage { Active = layer.Active, LayerId = layer.LayerId });
+				}
+			}
+			catch 
+			{
 			}
 		}
 	}

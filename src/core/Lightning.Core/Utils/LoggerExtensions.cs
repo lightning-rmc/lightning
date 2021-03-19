@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Core.Rendering
+namespace Lightning.Core.Utils
 {
 	public static class LoggerExtensions
 	{

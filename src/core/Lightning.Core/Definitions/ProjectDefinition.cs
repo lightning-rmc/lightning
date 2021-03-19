@@ -20,14 +20,14 @@ namespace Lightning.Core.Definitions
 		public ProjectDefinition()
 		{
 			_nodes = new();
-			_renderTrees = new();
+			_layerGroups = new();
 		}
 
 		private NodeDefinitionCollection _nodes;
 		public NodeDefinitionCollection Nodes { get => _nodes; set => Set(ref _nodes, value); }
 
-		private RenderTreeDefinitionCollection _renderTrees;
-		public RenderTreeDefinitionCollection RenderTrees { get => _renderTrees; set => Set(ref _renderTrees, value); }
+		private LayerGroupDefinitionCollection _layerGroups;
+		public LayerGroupDefinitionCollection LayerGroups { get => _layerGroups; set => Set(ref _layerGroups, value); }
 
 		protected override ConfigurationChangedTarget Type => throw new NotImplementedException();
 	}

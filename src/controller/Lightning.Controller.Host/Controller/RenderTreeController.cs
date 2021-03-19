@@ -26,13 +26,13 @@ namespace Lightning.Controller.Host.Controller
 		[HttpGet]
 		public IEnumerable<RenderTreeDTO> GetRenderTrees()
 		{
-			var renderTrees = _projectManager.GetRenderTrees();
+			var renderTrees = _projectManager.GetLayerGroups();
 			foreach (var tree in renderTrees)
 			{
 				yield return new()
 				{
 					Id = tree.Id,
-					Layers = TransformLayers(tree.Layers)
+					Layers = TransformLayers(tree.RenderTree.Layers)
 				};
 			}
 		}
@@ -40,7 +40,7 @@ namespace Lightning.Controller.Host.Controller
 		[HttpPost]
 		public IActionResult AddRenderTree()
 		{
-			var newRenderTree = _projectManager.TryAddRenderTree();
+			var newRenderTree = _projectManager.TryAddLayerGroup();
 			if (newRenderTree is not null)
 			{
 				return Ok(newRenderTree);
@@ -52,13 +52,13 @@ namespace Lightning.Controller.Host.Controller
 		[HttpGet("{renderTreeId}")]
 		public ActionResult<RenderTreeDTO> GetRenderTree([FromRoute] string renderTreeId)
 		{
-			var result = _projectManager.TryGetRenderTree(renderTreeId);
+			var result = _projectManager.TryGetLayerGroup(renderTreeId);
 			if (result is not null)
 			{
 				return new RenderTreeDTO()
 				{
 					Id = result.Id,
-					Layers = TransformLayers(result.Layers)
+					Layers = TransformLayers(result.RenderTree.Layers)
 				};
 			}
 			else
@@ -70,7 +70,7 @@ namespace Lightning.Controller.Host.Controller
 		[HttpGet("fornode/{nodeId}")]
 		public string GetRenderTreeForNode([FromRoute] string nodeId)
 		{
-			var result = _projectManager.TryGetRenderTree(nodeId);
+			var result = _projectManager.TryGetLayerGroup(nodeId);
 			return XamlServices.Save(result);
 		}
 
@@ -78,7 +78,7 @@ namespace Lightning.Controller.Host.Controller
 		[HttpPost("{renderTreeId}/layers")]
 		public IActionResult AddLayerToRenderTree([FromRoute] string renderTreeId)
 		{
-			var renderTree = _projectManager.TryGetRenderTree(renderTreeId);
+			var renderTree = _projectManager.TryGetLayerGroup(renderTreeId);
 			if (renderTree is null)
 			{
 				return BadRequest($"RenderTree with id {renderTreeId} does not exist");
@@ -88,8 +88,8 @@ namespace Lightning.Controller.Host.Controller
 			{
 				Input = new FileInputLayerDefinition()
 			};
-			renderTree.Layers.Add(newLayer);
-			return Created(newLayer.Id, TransformLayers(renderTree.Layers));
+			renderTree.RenderTree.Layers.Add(newLayer);
+			return Created(newLayer.Id, TransformLayers(renderTree.RenderTree.Layers));
 		}
 
 

@@ -53,6 +53,7 @@ namespace Lightning.Controller.Lifetime
 			}
 			finally
 			{
+				channel.Writer.Complete();
 				_allUpdatesChannelBag.TryRemove(channel, out _);
 			}
 		}
@@ -145,7 +146,8 @@ namespace Lightning.Controller.Lifetime
 		public async Task SetNodeStateResponseAsync(string nodeId, NodeState state, CancellationToken token = default)
 		{
 			_logger?.LogInformation("Node {nodeId} state update: {state}", nodeId, state);
-			foreach (var channel in _allUpdatesChannelBag.Keys.ToArray())
+			var list = _allUpdatesChannelBag.Keys.ToArray();
+			foreach (var channel in list)
 			{
 				try
 				{
