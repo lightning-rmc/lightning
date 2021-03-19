@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Utils
+namespace Lightning.Core.Utils
 {
 	public class UnobservedExceptionsLoggerService : ICreateOnStartup
 	{

@@ -37,6 +37,7 @@ namespace Lightning.Node
 			services.AddHostedService<NodeStateBootstrapper>();
 			//TODO: Refactor find right place
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
+			services.AddCreateOnStartup<UnobservedExceptionsLoggerService>();
 			return services;
 		}
 

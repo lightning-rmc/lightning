@@ -29,6 +29,7 @@ namespace Lightning.Controller
 			services.TryAddSingleton<ILayerActivationService, LayerActivationService>();
 
 			services.AddHostedService<ControllerStateBootstrapper>();
+			services.AddCreateOnStartup<UnobservedExceptionsLoggerService>();
 			return services;
 		}
 
