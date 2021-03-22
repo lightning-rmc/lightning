@@ -1,4 +1,5 @@
 using Lightning.Controller.Lifetime;
+using Lightning.Controller.Lifetime.Controller;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
