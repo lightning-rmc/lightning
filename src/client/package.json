@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "smv": "yarn && ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

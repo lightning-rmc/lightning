@@ -81,10 +81,15 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 		[HttpGet("fornode/{nodeId}")]
-		public string GetLayerGroupForNode([FromRoute] string nodeId)
+		public IActionResult GetLayerGroupForNode([FromRoute] string nodeId)
 		{
-			var result = _projectManager.TryGetLayerGroup(nodeId);
-			return XamlServices.Save(result);
+			var result = _projectManager.TryGetLayerGroupForNode(nodeId);
+			if (result is null)
+			{
+				return BadRequest();
+			}
+			//TODO: change to LayerGroup
+			return new ObjectResult(XamlServices.Save(result.RenderTree));
 		}
 
 

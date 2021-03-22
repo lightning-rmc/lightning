@@ -1,5 +1,6 @@
 using Lightning.Core.Configuration;
 using Lightning.Core.Definitions;
+using Lightning.Core.Rendering.Time;
 using Microsoft.Extensions.Logging;
 using Portable.Xaml;
 using System;
@@ -115,7 +116,18 @@ namespace Lightning.Controller.Projects
 
 		public LayerGroupDefinition? TryGetLayerGroupForNode(string nodeId)
 		{
-			throw new NotImplementedException();
+			if (_project is null)
+			{
+				return null;
+			}
+			foreach (var layerGroup  in _project.LayerGroups)
+			{
+				if (layerGroup.Nodes.Any(id => id == nodeId))
+				{
+					return layerGroup;
+				}
+			}
+			return null;
 		}
 
 		private void RaiseProjectLoaded()
