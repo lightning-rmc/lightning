@@ -1,5 +1,6 @@
 using Lightning.Controller.Host.Hubs;
 using Lightning.Controller.Lifetime;
+using Lightning.Controller.Lifetime.Contracts;
 using Lightning.Controller.Media;
 using Lightning.Controller.Projects;
 using Microsoft.AspNetCore.Builder;
@@ -70,7 +71,7 @@ namespace Lightning.Controller.Host
 				endpoints.MapControllers();
 
 				//SignalR Services
-				endpoints.MapHub<NodesHub>("/hubs/nodes");
+				endpoints.MapHub<NodesHubReceiver>("/hubs/nodes");
 			});
 		}
 	}
