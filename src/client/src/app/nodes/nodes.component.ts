@@ -41,6 +41,9 @@ export class NodesComponent implements OnInit, OnDestroy {
 				node.state = update.state;
 			}
 		});
+		this.subs.sink = this.nodesService.nodeConnected$.subscribe(async (nodeId) => {
+			await this.fetchNodes();
+		});
 	}
 
 	ngOnDestroy(): void {
