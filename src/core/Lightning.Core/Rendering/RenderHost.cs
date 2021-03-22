@@ -10,14 +10,13 @@ using System.Threading.Tasks;
 
 namespace Lightning.Core.Rendering
 {
-	internal class RenderHost<TFrame> : IRenderHost
-		where TFrame : new()
+	internal abstract class RenderHost<TFrame> : IRenderHost
 	{
 		private readonly IRenderTimer _timer;
 		private readonly IRenderTreeBuilder<TFrame> _treeBuilder;
-		private readonly ILogger<RenderHost<TFrame>>? _logger;
+		private readonly ILogger? _logger;
 
-		public RenderHost(IRenderTimer timer, IRenderTreeBuilder<TFrame> treeBuilder, ILogger<RenderHost<TFrame>>? logger = null)
+		public RenderHost(IRenderTimer timer, IRenderTreeBuilder<TFrame> treeBuilder, ILogger? logger = null)
 		{
 			_timer = timer;
 			_treeBuilder = treeBuilder;
@@ -53,7 +52,7 @@ namespace Lightning.Core.Rendering
 
 			foreach (var ticks in _timer.GetTimerTicks())
 			{
-				var image = new TFrame();
+				var image = CreateFrame();
 				root.Process(image, ticks);
 				if (!IsRunning)
 				{
@@ -61,6 +60,8 @@ namespace Lightning.Core.Rendering
 				}
 			}
 		}
+		protected abstract TFrame CreateFrame();
+
 
 		public void Stop()
 		{

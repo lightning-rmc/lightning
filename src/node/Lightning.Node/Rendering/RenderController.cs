@@ -3,10 +3,6 @@ using Lightning.Core.Rendering;
 using Lightning.Core.Rendering.Time;
 using Lightning.Core.Utils;
 using Lightning.Node.Lifetime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Lightning.Node.Rendering
@@ -29,7 +25,11 @@ namespace Lightning.Node.Rendering
 			if (e.State == NodeState.Live)
 			{
 				_renderTimer.StartTimer();
-				e.AddTask(Task.Run(async () => await _renderHost.StartAsync()));
+				e.AddTask(Task.Run(async () =>
+				{
+					await _renderHost.StartAsync();
+				}));
+
 			}
 
 			if (e.State == NodeState.Ready)

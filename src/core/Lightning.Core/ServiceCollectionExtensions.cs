@@ -26,7 +26,7 @@ namespace Lightning.Core
 
 			//TODO:  Make it transient or move it in RenderFactory or something similar.
 			//       To get the possibility for multi instances of a IRenderHost.
-			services.TryAddSingleton<IRenderHost, RenderHost<Mat>>();
+			services.TryAddSingleton<IRenderHost, OpenCVRenderHost>();
 			services.AddGrpcTimer();
 			return services;
 		}

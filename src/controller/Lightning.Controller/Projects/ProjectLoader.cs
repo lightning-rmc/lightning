@@ -67,10 +67,10 @@ namespace Lightning.Controller.Projects
 			}
 			if (e.State == ControllerState.Shutdown)
 			{
-				e.AddTask(Task.Run(async () =>
-				{
-					await PersistProjectAsync(e.Token);
-				},e.Token));
+				//e.AddTask(Task.Run(async () =>
+				//{
+				//	await PersistProjectAsync(e.Token);
+				//},e.Token));
 			}
 		}
 

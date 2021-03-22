@@ -20,7 +20,6 @@ namespace Lightning.Core.Rendering.Layers
 			_definition = definition;
 			_child = child;
 			_input = input;
-			IsActive = true;
 		}
 
 

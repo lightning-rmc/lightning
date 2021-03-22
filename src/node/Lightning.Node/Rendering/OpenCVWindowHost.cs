@@ -85,7 +85,7 @@ namespace Lightning.Node.Rendering
 							frame.Dispose();
 						}
 						//TODO: Change to customizable parameter or use the FPS rate
-						Cv2.WaitKey(16);
+						Cv2.WaitKey(5);
 					}
 
 				}).Start();
