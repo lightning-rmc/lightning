@@ -19,23 +19,23 @@ export class LiveMatrixComponent implements OnInit, OnDestroy {
 	async ngOnInit(): Promise<void> {
 		this.groups = await this.edit.getRenderTrees();
 
-		this.sink.sink = this.live.layerActivationChanged$.subscribe((update) => this.syncLayerActivation(update.layerId, update.isActive));
+		this.live.getLayerActivationUpdates().subscribe(({ layerId, isActive }) => {
+			for (const group of this.groups) {
+				for (const layer of group.layers) {
+					if (layer.id === layerId) {
+						layer.isActive = isActive;
+					}
+				}
+			}
+		});
 	}
 
 	ngOnDestroy() {
 		this.sink.unsubscribe();
 	}
 
-	private syncLayerActivation(layerId: string, isActive: boolean) {
-		for (const group of this.groups) {
-			for (const layer of group.layers) {
-				layer.isActive = isActive;
-			}
-		}
-	}
 
 	public async setLayerActivation(layer: (Layer & { isActive?: boolean}), isActive: boolean) {
 		await this.live.setLayerActivation(layer.id, isActive);
-		layer.isActive = isActive;
 	}
 }

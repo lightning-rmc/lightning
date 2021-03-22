@@ -1,1 +1,1 @@
-export type NodeState = 'Ready' | 'Live' | 'Preparing' | 'Offline' | string;
+export type NodeState = 'Start' | 'Connected' | 'Ready' | 'Live' | 'Preparing' | 'Shutdown' | 'Offline' | 'Error';

@@ -8,12 +8,12 @@ namespace Lightning.Controller.Host.Controller
 {
 	[Route("api/layers")]
 	[ApiController]
-	public class LayersController : ControllerBase
+	public class LayersApiController : ControllerBase
 	{
 		private readonly IProjectManager _projectManager;
 		private readonly IMediaService _mediaService;
 
-		public LayersController(IProjectManager projectManager, IMediaService mediaService)
+		public LayersApiController(IProjectManager projectManager, IMediaService mediaService)
 		{
 			_projectManager = projectManager;
 			_mediaService = mediaService;

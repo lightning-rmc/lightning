@@ -1,4 +1,4 @@
-@import "src/variables";
+@import 'src/variables';
 
 $icon-size: 1.4rem;
 
@@ -32,7 +32,7 @@ $node-color: #3d4146;
 	.node-state {
 		height: $icon-size;
 		width: $icon-size;
-		background-color: #fff;
+		background-color: $color-dark;
 		border-radius: 50%;
 		flex-shrink: 0;
 
@@ -47,8 +47,8 @@ $node-color: #3d4146;
 		&__error {
 			background-color: hsl(0, $s, $l);
 		}
-		&__syncing {
-			background-color: hsl(50, $s, $l);
+		&__pending {
+			animation: pending-animation 0.7s ease-in-out infinite alternate-reverse;
 		}
 	}
 
@@ -60,4 +60,13 @@ $node-color: #3d4146;
 .no-nodes-message {
 	opacity: 0.4;
 	text-align: center;
+}
+
+@keyframes pending-animation {
+	from {
+		background-color: rgb(243, 113, 26, 0.1);
+	}
+	to {
+		background-color: rgb(243, 113, 26);
+	}
 }

@@ -5,7 +5,12 @@
 			<small>Here goes the preview</small>
 		</div>
 		<div class="group__layers">
-			<div class="layer" *ngFor="let layer of group.layers; let layerIndex = index" [class.layer--active]="layer.isActive" (click)="setLayerActivation(layer, !layer.isActive)">
+			<div
+				class="layer"
+				*ngFor="let layer of group.layers; let layerIndex = index"
+				[class.layer--active]="layer.isActive"
+				(click)="setLayerActivation(layer, !layer.isActive)"
+			>
 				<div class="layer__name">{{ groupIndex + 1 }}.{{ layerIndex + 1 }}</div>
 			</div>
 		</div>

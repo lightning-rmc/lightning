@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ControllerService } from '../controller.service';
 import { NotificationService } from '../shared/notifications/notification.service';
 import { LiveService } from './live.service';
 
@@ -8,16 +9,16 @@ import { LiveService } from './live.service';
 	styleUrls: ['./live.component.scss'],
 })
 export class LiveComponent implements OnInit {
-	constructor(private notify: NotificationService, private live: LiveService) {}
+	constructor(private notify: NotificationService, private controller: ControllerService) {}
 
 	ngOnInit(): void {}
 
 
 	async setLive() {
-		await this.live.setLiveState('LIVE');
+		await this.controller.setControllerState('LIVE');
 	}
 
 	async setNotLive() {
-		await this.live.setLiveState('NOTLIVE');
+		await this.controller.setControllerState('NOTLIVE');
 	}
 }

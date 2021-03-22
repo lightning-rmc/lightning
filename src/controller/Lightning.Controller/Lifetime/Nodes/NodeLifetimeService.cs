@@ -18,6 +18,7 @@ namespace Lightning.Controller.Lifetime.Nodes
 		private readonly Dictionary<string, Channel<NodeState>> _nodeStateRequestChannels;
 		private readonly ConcurrentDictionary<string, NodeState> _nodeStates;
 		private readonly ConcurrentDictionary<Channel<NodeStateUpdate>, object?> _allUpdatesChannels;
+		private readonly List<Channel<string>> _nodeConnectedUpdatesChannels;
 		private readonly IProjectManager _projectManager;
 
 
@@ -27,20 +28,21 @@ namespace Lightning.Controller.Lifetime.Nodes
 			_nodeStateRequestChannels = new Dictionary<string, Channel<NodeState>>();
 			_allUpdatesChannels = new ConcurrentDictionary<Channel<NodeStateUpdate>, object?>();
 			_nodeStates = new ConcurrentDictionary<string, NodeState>();
+			_nodeConnectedUpdatesChannels = new List<Channel<string>>();
 			_logger = logger;
 
-			_projectManager.ProjectLoaded += (s, e) =>
+			_projectManager.ProjectLoaded += async (s, e) =>
 			{
 				ClearAllNodes();
 				var nodes = _projectManager.GetNodes();
 				foreach (var node in nodes)
 				{
-					TryRegisterNode(node.Id);
+					await TryRegisterNodeAsync(node.Id);
 				}
 			};
 		}
 
-		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync([EnumeratorCancellation]CancellationToken token = default)
+		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync([EnumeratorCancellation] CancellationToken token = default)
 		{
 			var channel = Channel.CreateUnbounded<NodeStateUpdate>();
 			_allUpdatesChannels.TryAdd(channel, null);
@@ -57,6 +59,26 @@ namespace Lightning.Controller.Lifetime.Nodes
 				_allUpdatesChannels.TryRemove(channel, out _);
 			}
 		}
+
+
+		public async IAsyncEnumerable<string> GetAllNodeConnectedUpdatesAllAsync([EnumeratorCancellation] CancellationToken token = default)
+		{
+			var channel = Channel.CreateUnbounded<string>();
+			_nodeConnectedUpdatesChannels.Add(channel);
+			try
+			{
+				await foreach (var nodeId in channel.Reader.ReadAllAsync(token))
+				{
+					yield return nodeId;
+				}
+			}
+			finally
+			{
+				channel.Writer.Complete();
+				_nodeConnectedUpdatesChannels.Remove(channel);
+			}
+		}
+
 
 		public IEnumerable<(string NodeId, NodeState State)> GetAllNodeStates()
 			=> _nodeStates.Select(kv => (kv.Key, kv.Value));
@@ -85,8 +107,15 @@ namespace Lightning.Controller.Lifetime.Nodes
 		}
 
 
-		public void TryRegisterNode(string nodeId)
+		public async Task TryRegisterNodeAsync(string nodeId)
 		{
+			if (!_projectManager.GetNodes().Where(n => n.Id == nodeId).Any())
+			{
+				foreach (var channel in _nodeConnectedUpdatesChannels)
+				{
+					await channel.Writer.WriteAsync(nodeId);
+				}
+			}
 			if (!_nodeStates.ContainsKey(nodeId))
 			{
 				_nodeStates.AddOrUpdate(nodeId, NodeState.Offline, (key, old) => NodeState.Offline);

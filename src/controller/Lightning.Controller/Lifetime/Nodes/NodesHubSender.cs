@@ -13,8 +13,17 @@ namespace Lightning.Controller.Lifetime.Nodes
 			{
 				await foreach (var (nodeId, state) in nodeLifetimeService.GetAllNodeStatesAllAsync())
 				{
-					logger?.LogTrace("Send node state '{id}:{state}' to all signalR clients", nodeId, state);
+					logger?.LogDebug("Send node state '{id}:{state}' to all signalR clients", nodeId, state);
 					await hubContext.Clients.All.NodeStateUpdateAsync(nodeId, state.ToString());
+				}
+			});
+
+			_ = Task.Run(async () =>
+			{
+				await foreach (var nodeId in nodeLifetimeService.GetAllNodeConnectedUpdatesAllAsync())
+				{
+					logger?.LogDebug("Send node connected with id {nodeId}", nodeId);
+					await hubContext.Clients.All.NodeConnectedUpdateAsync(nodeId);
 				}
 			});
 		}

@@ -10,7 +10,7 @@ export class EditService {
 	constructor(private http: HttpClient) {}
 
 	async getRenderTrees(): Promise<LayerGroup[]> {
-		return this.http.get<LayerGroup[]>(`${env.api.url}/rendertrees`).toPromise();
+		return this.http.get<LayerGroup[]>(`${env.api.url}/layergroups`).toPromise();
 	}
 
 	async getLayer(layerId: string): Promise<Layer> {
@@ -18,11 +18,11 @@ export class EditService {
 	}
 
 	async addLayerToGroup(groupId: string): Promise<object> {
-		return this.http.post(`${env.api.url}/rendertrees/${groupId}/layers`, undefined).toPromise();
+		return this.http.post(`${env.api.url}/layergroups/${groupId}/layers`, undefined).toPromise();
 	}
 
 	async addGroup(): Promise<object> {
-		return this.http.post(`${env.api.url}/rendertrees`, undefined).toPromise();
+		return this.http.post(`${env.api.url}/layergroups`, undefined).toPromise();
 	}
 
 	async setLayerSource(layerId: string, filename: string): Promise<object> {
@@ -38,6 +38,6 @@ export class EditService {
 	}
 
 	async deleteGroup(groupId: string): Promise<object> {
-		return this.http.delete(`${env.api.url}/rendertrees/${groupId}`).toPromise();
+		return this.http.delete(`${env.api.url}/layergroups/${groupId}`).toPromise();
 	}
 }

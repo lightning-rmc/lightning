@@ -1,3 +1,4 @@
+using Lightning.Controller.Lifetime.Controller;
 using Lightning.Controller.Lifetime.Layers;
 using Lightning.Controller.Lifetime.Nodes;
 using Lightning.Controller.Media;
@@ -70,6 +71,7 @@ namespace Lightning.Controller.Host
 				endpoints.MapControllers();
 
 				//SignalR Services
+				endpoints.MapHub<ControllerHubReceiver>("/hubs/controller");
 				endpoints.MapHub<NodesHubReceiver>("/hubs/nodes");
 				endpoints.MapHub<LiveHubReceiver>("/hubs/live");
 			});

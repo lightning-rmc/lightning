@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.DTO
 {
-	public class RenderTreeDTO
+	public class LayerGroupDTO
 	{
 		public string Id { get; set; } = string.Empty;
 		public IEnumerable<LayerDTO> Layers { get; set; } = Enumerable.Empty<LayerDTO>();

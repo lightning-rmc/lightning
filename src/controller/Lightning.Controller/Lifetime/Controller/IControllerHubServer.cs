@@ -8,5 +8,7 @@ namespace Lightning.Controller.Lifetime.Controller
 {
 	public interface IControllerHubServer
 	{
+		Task GoLive();
+		Task GoReady();
 	}
 }

@@ -21,24 +21,14 @@ namespace Lightning.Controller.Lifetime.Layers
 			var activationStates = _activationService.GetLayerActivationStates();
 			foreach (var (LayerId, IsActive) in activationStates)
 			{
-				await SetLayerActivation(LayerId, IsActive);
+				await Clients.Caller.LayerActivationChangedAsync(LayerId, IsActive);
 			}
 		}
 
 
-		public async Task SetLayerActivation(string layerId, bool isActive)
+		public async Task SetLayerActivation(string layerId, bool active)
 		{
-			await _activationService.SetLayerActivationAsync(layerId, isActive);
-		}
-
-		public async Task ActivateLive()
-		{
-			await _controllerStateReceiver.InvokeStateChangeAsync(ControllerState.Live);
-		}
-
-		public async Task DeactivateLive()
-		{
-			await _controllerStateReceiver.InvokeStateChangeAsync(ControllerState.Ready);
+			await _activationService.SetLayerActivationAsync(layerId, active);
 		}
 	}
 }

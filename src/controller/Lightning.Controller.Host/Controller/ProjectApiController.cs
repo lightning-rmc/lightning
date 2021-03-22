@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
 {
-	[Route("api/[controller]")]
+	[Route("api/project")]
 	[ApiController]
-	public class ProjectController : ControllerBase
+	public class ProjectApiController : ControllerBase
 	{
 		private readonly IProjectLoader _projectLoader;
 
-		public ProjectController(IProjectLoader projectLoader)
+		public ProjectApiController(IProjectLoader projectLoader)
 		{
 			_projectLoader = projectLoader;
 		}

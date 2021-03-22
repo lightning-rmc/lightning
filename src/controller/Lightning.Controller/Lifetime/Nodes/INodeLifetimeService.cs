@@ -13,10 +13,11 @@ namespace Lightning.Controller.Lifetime.Nodes
 
 		//TODO: Change return type to ResponseObject?
 		//TODO: Change argument to more useful data, e.g. max display size or fps
-		void TryRegisterNode(string nodeId);
+		Task TryRegisterNodeAsync(string nodeId);
 		bool TryRemoveNode(string nodeId);
 
 		IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync(CancellationToken token = default);
+		IAsyncEnumerable<string> GetAllNodeConnectedUpdatesAllAsync(CancellationToken token = default);
 
 		Task SetNodeCommandRequestAsync(NodeState request, string? nodeId = null, CancellationToken token = default);
 

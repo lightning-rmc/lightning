@@ -5,6 +5,7 @@ import { environment as env } from 'src/environments/environment';
 import { NodeState } from './models/NodeState.type';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { NotificationService } from '../shared/notifications/notification.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -15,10 +16,10 @@ export class NodesService {
 	private nodeStateChangeSubject = new Subject<{ id: string; state: NodeState }>();
 	public nodeStateChange$ = this.nodeStateChangeSubject.asObservable();
 
-	private nodeConnectedSubject = new Subject<object>();
+	private nodeConnectedSubject = new Subject<{ nodeId: string }>();
 	public nodeConnected$ = this.nodeConnectedSubject.asObservable();
 
-	constructor(private http: HttpClient) {
+	constructor(private http: HttpClient, private notify: NotificationService) {
 		this.connection = new HubConnectionBuilder().withUrl(`${env.controller.url}/hubs/nodes`).build();
 
 		this.connect();
@@ -29,17 +30,18 @@ export class NodesService {
 			console.log('Connection to SignalR Hub established');
 
 			// Registering event handlers
-			this.connection.on('nodeStateUpdate', (nodeId: string, state: NodeState) => {
+			this.connection.on('NodeStateUpdateAsync', (nodeId: string, state: NodeState) => {
 				this.nodeStateChangeSubject.next({ id: nodeId, state });
 			});
 
-			this.connection.on('nodeConnected', node => {
-				this.nodeConnectedSubject.next(node);
+			this.connection.on('NodeConnectedUpdateAsync', (nodeId: string) => {
+				this.nodeConnectedSubject.next({ nodeId });
 			});
 
 			await this.connection.start();
-		} catch (err) {
-			console.error('Connection to SignalR Hub failed', err);
+		} catch (error) {
+			console.error('Could not connect to nodes hub', error);
+			this.notify.error('Could not establish live connection to hub:\n' + error.message);
 		}
 	}
 

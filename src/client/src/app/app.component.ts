@@ -41,8 +41,8 @@ export class AppComponent implements OnInit {
 			setTimeout(() => this.notifications.splice(this.notifications.indexOf(notification), 1), notification.duration || 5000);
 		});
 
-		this.sink.sink = this.nodesService.nodeConnected$.subscribe((node) => {
-			this.notify.info('New node connected');
+		this.sink.sink = this.nodesService.nodeConnected$.subscribe(({ nodeId }) => {
+			this.notify.info('New node connected: ' + nodeId);
 		});
 	}
 
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
 			await this.projectService.saveProject();
 			this.isMenuOpen = false;
 		} catch (error) {
-			this.notify.error('Could not save project on server');
+			this.notify.error('Could not save project');
 		}
 	}
 }

@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
 {
-	[Route("api/[controller]")]
+	[Route("api/nodes")]
 	[ApiController]
-	public class NodesController : ControllerBase
+	public class NodesApiController : ControllerBase
 	{
 		private readonly INodeLifetimeService _nodeLifetimeSerivce;
 		private readonly IProjectManager _projectManager;
 
-		public NodesController(INodeLifetimeService nodeLifetimeSerivce, IProjectManager projectManager)
+		public NodesApiController(INodeLifetimeService nodeLifetimeSerivce, IProjectManager projectManager)
 		{
 			_nodeLifetimeSerivce = nodeLifetimeSerivce;
 			_projectManager = projectManager;

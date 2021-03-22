@@ -12,15 +12,15 @@ using System.Linq;
 
 namespace Lightning.Controller.Host.Controller
 {
-	[Route("api/[controller]")]
+	[Route("api/media")]
 	[ApiController]
-	public class MediaController : ControllerBase
+	public class MediaApiController : ControllerBase
 	{
 		private readonly string MEDIA_ENDPOINT_PREFIX = "http://localhost:5000/media/";
 		private readonly IMediaService _mediaService;
 		private readonly ILogger _logger;
 
-		public MediaController(IMediaService mediaService, ILogger<MediaController> logger)
+		public MediaApiController(IMediaService mediaService, ILogger<MediaApiController> logger)
 		{
 			_mediaService = mediaService;
 			_logger = logger;

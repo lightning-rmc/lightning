@@ -10,8 +10,7 @@ import { NotificationService } from '../shared/notifications/notification.servic
 export class LiveService {
 	connection: HubConnection;
 
-	private layerActivationChangedSubject = new Subject<{ layerId: string; isActive: boolean }>();
-	public layerActivationChanged$ = this.layerActivationChangedSubject.asObservable();
+	private layerActivationChangedSubject = new Subject<{ layerId: string, isActive: boolean }>();
 
 	constructor(private notify: NotificationService) {
 		this.connection = new HubConnectionBuilder().withUrl(`${env.controller.url}/hubs/live`).build();
@@ -19,17 +18,19 @@ export class LiveService {
 		this.connect();
 	}
 
+	public getLayerActivationUpdates() {
+		return this.layerActivationChangedSubject.asObservable();
+	}
+
 	private async connect() {
-		this.connection.on('layerActivationChanged', this.handleLayerActivationChanged);
+		this.connection.on('LayerActivationChangedAsync', (layerId: string, isActive: boolean) => {
+			this.layerActivationChangedSubject.next({ layerId, isActive });
+		});
 		try {
 			await this.connection.start();
 		} catch (error) {
 			this.notify.error('Could not establish live connection to hub:\n' + error.message);
 		}
-	}
-
-	private handleLayerActivationChanged(layerId: string, isActive: boolean): void {
-		this.layerActivationChangedSubject.next({ layerId, isActive });
 	}
 
 	async setLayerActivation(layerId: string, isActive: boolean): Promise<void> {

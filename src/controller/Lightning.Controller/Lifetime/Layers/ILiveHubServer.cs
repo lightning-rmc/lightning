@@ -8,5 +8,6 @@ namespace Lightning.Controller.Lifetime.Layers
 {
 	public interface ILiveHubServer
 	{
+		Task SetLayerActivation(string layerId, bool active);
 	}
 }

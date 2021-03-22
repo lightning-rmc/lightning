@@ -28,12 +28,12 @@ namespace Lightning.Controller.Lifetime.Nodes
 			_logger = logger;
 		}
 
-		public override Task<ConnectResponse> Connect(ConnectMessage request, ServerCallContext context)
+		public override async Task<ConnectResponse> Connect(ConnectMessage request, ServerCallContext context)
 		{
 			var nodeId = context.GetHttpContext().GetNodeId();
-			_nodeLifetimeService.TryRegisterNode(nodeId);
+			await _nodeLifetimeService.TryRegisterNodeAsync(nodeId);
 
-			return Task.FromResult<ConnectResponse>(new());
+			return new();
 		}
 		public override async Task NodeStateChannel(IAsyncStreamReader<NodeStateRequestMessage> requestStream, IServerStreamWriter<NodeStateResponseMessage> responseStream, ServerCallContext context)
 		{

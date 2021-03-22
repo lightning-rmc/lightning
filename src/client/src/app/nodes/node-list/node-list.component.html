@@ -2,12 +2,14 @@
 <div class="nodes">
 	<div class="node" *ngFor="let node of nodes" (click)="selectNode.emit(node)" [class.node--selected]="node == selectedNode">
 		<span
-		class="node-state"
-		[class.node-state__online]="node.state !== 'Offline' && node.state !== 'Error'"
-		[class.node-state__offline]="node.state === 'Offline'"
-		[class.node-state__error]="node.state === 'Error'"
+			class="node-state"
+			[class.node-state__online]="node.state === 'Ready'"
+			[class.node-state__pending]="node.state === 'Start' || node.state === 'Connected' || node.state === 'Shutdown' || node.state === 'Preparing'"
+			[class.node-state__offline]="node.state === 'Offline'"
+			[class.node-state__error]="node.state === 'Error'"
+			[title]="node.state"
 		></span>
-		<span class="node-name">{{ node.name ? node.name : 'No name specified' }}</span>
+		<span class="node-name">{{ node.name || node.id }}</span>
 	</div>
 	<div class="no-nodes-message" *ngIf="nodes?.length == 0">No nodes registered</div>
 </div>

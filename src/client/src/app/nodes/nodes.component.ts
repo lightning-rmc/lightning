@@ -19,10 +19,14 @@ export class NodesComponent implements OnInit, OnDestroy {
 
 	isLoading = false;
 
+	async fetchNodes() {
+		this.nodes = await this.nodesService.getNodes();
+	}
+
 	async ngOnInit(): Promise<void> {
 		this.isLoading = true;
 		try {
-			this.nodes = await this.nodesService.getNodes();
+			await this.fetchNodes();
 		} catch (error) {
 			this.notify.error('Could not fetch nodes data');
 		} finally {
@@ -30,14 +34,12 @@ export class NodesComponent implements OnInit, OnDestroy {
 		}
 
 		// LIVE UPDATE SUBSCRIPTIONS
-		this.subs.sink = this.nodesService.nodeStateChange$.subscribe({
-			next: (update) => {
-				console.log('got node state update', update);
-				const node = this.nodes.find(n => n.id === update.id);
-				if (node) {
-					node.state = update.state;
-				}
-			},
+		this.subs.sink = this.nodesService.nodeStateChange$.subscribe(async (update) => {
+			console.log('got node state update', update);
+			const node = this.nodes.find((n) => n.id === update.id);
+			if (node) {
+				node.state = update.state;
+			}
 		});
 	}
 
