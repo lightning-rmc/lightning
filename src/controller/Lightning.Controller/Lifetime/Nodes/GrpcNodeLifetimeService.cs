@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Lightning.Controller.Lifetime.Layers;
 using Lightning.Controller.Utils;
 using Lightning.Core.Generated;
 using Lightning.Core.Lifetime;
@@ -84,9 +85,9 @@ namespace Lightning.Controller.Lifetime.Nodes
 			//		better it should send the message only if the node has the related layer
 			try
 			{
-				await foreach (var layer in _layerActivationService.GetLayerActivationsAllAsync(context.CancellationToken))
+				await foreach (var (LayerId, IsActive) in _layerActivationService.GetLayerActivationsAllAsync(context.CancellationToken))
 				{
-					await responseStream.WriteAsync(new LayerActivationMessage { Active = layer.IsActive, LayerId = layer.LayerId });
+					await responseStream.WriteAsync(new LayerActivationMessage { Active = IsActive, LayerId = LayerId });
 				}
 			}
 			catch 

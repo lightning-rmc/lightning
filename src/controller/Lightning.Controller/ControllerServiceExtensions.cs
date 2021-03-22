@@ -16,26 +16,11 @@ namespace Lightning.Controller
 {
 	public static class ControllerServiceExtensions
 	{
-		public static IServiceCollection AddNodeLifetime(this IServiceCollection services)
-		{
-			services.TryAddSingleton<NodeLifetimeService>();
-			services.TryAddSingleton<INodeLifetimeService>(sp => sp.GetRequiredService<NodeLifetimeService>());
-			services.TryAddSingleton<INodeLifetimeRequestResponsePublisher>(sp => sp.GetRequiredService<NodeLifetimeService>());
-
-			services.TryAddSingleton<ControllerStateHandler>();
-			services.TryAddSingleton<IControllerStateNotifier>(p => p.GetRequiredService<ControllerStateHandler>());
-			services.TryAddSingleton<IControllerStateReceiver>(p => p.GetRequiredService<ControllerStateHandler>());
-
-			services.TryAddSingleton<ILayerActivationService, LayerActivationService>();
-
-			services.AddHostedService<ControllerStateBootstrapper>();
-			services.AddCreateOnStartup<UnobservedExceptionsLoggerService>();
-			return services;
-		}
 
 		public static IServiceCollection AddControllerServices(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddNodeLifetime();
+			services.AddControllerLifetimeServices();
+			services.AddCreateOnStartup<UnobservedExceptionsLoggerService>();
 			services.AddMediaServices(configuration);
 			services.TryAddSingleton<IProjectManager, ProjectManager>();
 			services.TryAddSingleton<ProjectLoader>();
