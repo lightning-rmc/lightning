@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node", "node\Ligh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Node.Host", "node\Lightning.Node.Host\Lightning.Node.Host.csproj", "{76B6EC76-7DC1-4CE7-882F-24886F4D1FDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightning.Core.SourceGenerators", "core\Lightning.Core.SourceGenerators\Lightning.Core.SourceGenerators.csproj", "{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lightning.Core.SourceGenerators", "core\Lightning.Core.SourceGenerators\Lightning.Core.SourceGenerators.csproj", "{220819A5-5EE3-4F6D-B2FF-B9EB9CC134B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C5C0CB9-F9E0-4843-8338-2B287FDA7E65}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

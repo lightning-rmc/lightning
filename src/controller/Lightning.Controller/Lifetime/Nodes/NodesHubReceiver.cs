@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime.Contracts
+namespace Lightning.Controller.Lifetime.Nodes
 {
 	public class NodesHubReceiver : Hub<INodeHubClient>, INodeHubServer
 	{

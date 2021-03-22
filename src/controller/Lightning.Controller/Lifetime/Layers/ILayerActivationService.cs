@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Controller.Lifetime.Layers
 {
 	public interface ILayerActivationService
 	{

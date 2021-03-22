@@ -1,7 +1,7 @@
 using Lightning.Core.Lifetime;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Controller.Lifetime.Nodes
 {
 	public static class LifetimeServiceExtensions
 	{

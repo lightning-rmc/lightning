@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime.Contracts
+namespace Lightning.Controller.Lifetime.Nodes
 {
 	public class NodesHubSender : ICreateOnStartup
 	{

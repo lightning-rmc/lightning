@@ -2,7 +2,7 @@ using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Controller.Lifetime.Controller
 {
 	public class ControllerStateBootstrapper : IHostedService
 	{

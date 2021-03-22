@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime.Contracts
+namespace Lightning.Controller.Lifetime.Nodes
 {
 	public interface INodeHubClient
 	{

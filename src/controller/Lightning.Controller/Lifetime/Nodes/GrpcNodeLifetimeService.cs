@@ -7,19 +7,19 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Controller.Lifetime.Nodes
 {
-	public class GrpcLifetimeService : Core.Generated.GrpcLifetimeService.GrpcLifetimeServiceBase
+	public class GrpcNodeLifetimeService : Core.Generated.GrpcLifetimeService.GrpcLifetimeServiceBase
 	{
 		private readonly INodeLifetimeRequestResponsePublisher _lifetimeServicePublisher;
 		private readonly INodeLifetimeService _nodeLifetimeService;
 		private readonly ILayerActivationService _layerActivationService;
-		private readonly ILogger<GrpcLifetimeService>? _logger;
+		private readonly ILogger<GrpcNodeLifetimeService>? _logger;
 
-		public GrpcLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
+		public GrpcNodeLifetimeService(INodeLifetimeRequestResponsePublisher lifetimeServicePublisher,
 			INodeLifetimeService nodeLifetimeService,
 			ILayerActivationService layerActivationService,
-			ILogger<GrpcLifetimeService>? logger = null)
+			ILogger<GrpcNodeLifetimeService>? logger = null)
 		{
 			_lifetimeServicePublisher = lifetimeServicePublisher;
 			_nodeLifetimeService = nodeLifetimeService;

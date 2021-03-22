@@ -1,9 +1,10 @@
+using Lightning.Controller.Lifetime.Nodes;
 using Lightning.Core.Lifetime;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Controller.Lifetime.Controller
 {
 	internal class ControllerStateHandler :
 		StateHandler<ControllerState>,

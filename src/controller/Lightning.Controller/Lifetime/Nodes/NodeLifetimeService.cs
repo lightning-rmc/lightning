@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace Lightning.Controller.Lifetime
+namespace Lightning.Controller.Lifetime.Nodes
 {
 	internal class NodeLifetimeService : INodeLifetimeService, INodeLifetimeRequestResponsePublisher
 	{

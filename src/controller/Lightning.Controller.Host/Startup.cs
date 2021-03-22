@@ -1,7 +1,5 @@
-using Lightning.Controller.Host.Hubs;
-using Lightning.Controller.Lifetime;
-using Lightning.Controller.Lifetime.Contracts;
 using Lightning.Controller.Lifetime.Layers;
+using Lightning.Controller.Lifetime.Nodes;
 using Lightning.Controller.Media;
 using Lightning.Controller.Projects;
 using Microsoft.AspNetCore.Builder;
@@ -64,7 +62,7 @@ namespace Lightning.Controller.Host
 			app.UseEndpoints(endpoints =>
 			{
 				//Grpc Services
-				endpoints.MapGrpcService<GrpcLifetimeService>();
+				endpoints.MapGrpcService<GrpcNodeLifetimeService>();
 				endpoints.MapGrpcService<GrpcConfigurationService>();
 				endpoints.MapGrpcService<GrpcMediaService>();
 
