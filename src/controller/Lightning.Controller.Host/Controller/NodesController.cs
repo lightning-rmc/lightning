@@ -1,5 +1,6 @@
 using Lightning.Controller.Host.DTO;
 using Lightning.Controller.Lifetime;
+using Lightning.Controller.Lifetime.Nodes;
 using Lightning.Controller.Projects;
 using Lightning.Core.Definitions;
 using Lightning.Core.Lifetime;
