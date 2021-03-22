@@ -1,4 +1,5 @@
 using Lightning.Core.Configuration;
+using Lightning.Core.Definitions.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,16 @@ namespace Lightning.Core.Definitions
 			_timerConfig = new();
 		}
 
-		private TimerDefinition _timerConfig;
+		private NodeLinkCollection	_nodes;
 
+		public NodeLinkCollection Nodes
+		{
+			get => _nodes;
+			set => Set(ref _nodes, value);
+		}
+
+
+		private TimerDefinition _timerConfig;
 		public TimerDefinition TimerConfig
 		{
 			get => _timerConfig;
