@@ -9,9 +9,9 @@ namespace Lightning.Controller.Lifetime
 {
 	public interface ILayerActivationService
 	{
-		IEnumerable<(string LayerId, bool Active)> GetLayerActivationStates();
+		IEnumerable<(string LayerId, bool IsActive)> GetLayerActivationStates();
 
-		IAsyncEnumerable<(string LayerId, bool Active)> GetLayerActivationsAllAsync(CancellationToken token = default);
+		IAsyncEnumerable<(string LayerId, bool IsActive)> GetLayerActivationsAllAsync(CancellationToken token = default);
 
 		Task SetLayerActivationAsync(string layerId, bool active, CancellationToken token = default);
 	}

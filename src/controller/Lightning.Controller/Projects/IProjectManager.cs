@@ -32,6 +32,9 @@ namespace Lightning.Controller.Projects
 
 		LayerGroupDefinition? TryAddLayerGroup();
 
+		bool TryRemoveLayerGroup(string renderTreeId);
+		bool TryRemoveLayer(string layerId);
+
 		IAsyncEnumerable<ConfigurationChangedContext> GetConfigurationChangedAllAsync(CancellationToken cancellationToken = default);
 
 	}

@@ -33,6 +33,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	position: relative;
+
+	> .icon-delete {
+		display: none;
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+	}
+
+	&:hover {
+		> .icon-delete {
+			display: block;
+		}
+	}
 }
 
 .layer {
@@ -42,6 +56,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	position: relative;
+
+	> .icon-delete {
+		display: none;
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+	}
+
+	&:hover {
+		> .icon-delete {
+			display: block;
+		}
+	}
 }
 
 .layer-add {

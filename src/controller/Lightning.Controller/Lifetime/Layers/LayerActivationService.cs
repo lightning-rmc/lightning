@@ -30,7 +30,7 @@ namespace Lightning.Controller.Lifetime
 			}, CancellationToken.None); //TODO: end if the service will be disposed.
 		}
 
-		public async IAsyncEnumerable<(string LayerId, bool Active)> GetLayerActivationsAllAsync([EnumeratorCancellation]CancellationToken token = default)
+		public async IAsyncEnumerable<(string LayerId, bool IsActive)> GetLayerActivationsAllAsync([EnumeratorCancellation]CancellationToken token = default)
 		{
 			var channel = Channel.CreateUnbounded<(string, bool)>();
 			_layerActivationUpdates.TryAdd(channel, null);
@@ -49,7 +49,7 @@ namespace Lightning.Controller.Lifetime
 		}
 
 		//TODO: Check Concurrence
-		public IEnumerable<(string LayerId, bool Active)> GetLayerActivationStates()
+		public IEnumerable<(string LayerId, bool IsActive)> GetLayerActivationStates()
 			=> _layerActivations.Select(kv => (kv.Key, kv.Value));
 
 		public async Task SetLayerActivationAsync(string layerId, bool active, CancellationToken token = default)

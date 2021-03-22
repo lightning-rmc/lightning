@@ -7,7 +7,6 @@ using Portable.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
 {
@@ -60,6 +59,20 @@ namespace Lightning.Controller.Host.Controller
 					Id = result.Id,
 					Layers = TransformLayers(result.RenderTree.Layers)
 				};
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
+
+		[HttpDelete("{renderTreeId}")]
+		public IActionResult DeleteRenderTree([FromRoute] string renderTreeId)
+		{
+			var success = _projectManager.TryRemoveLayerGroup(renderTreeId);
+			if (success)
+			{
+				return Ok();
 			}
 			else
 			{

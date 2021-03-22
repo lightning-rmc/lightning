@@ -17,7 +17,7 @@ namespace Lightning.Controller.Lifetime
 		private readonly ILogger<NodeLifetimeService>? _logger;
 		private readonly Dictionary<string, Channel<NodeState>> _nodeStateRequestChannels;
 		private readonly ConcurrentDictionary<string, NodeState> _nodeStates;
-		private readonly ConcurrentDictionary<Channel<NodeStateUpdate>, object?> _allUpdatesChannelBag;
+		private readonly ConcurrentDictionary<Channel<NodeStateUpdate>, object?> _allUpdatesChannels;
 		private readonly IProjectManager _projectManager;
 
 
@@ -25,7 +25,7 @@ namespace Lightning.Controller.Lifetime
 		{
 			_projectManager = projectManager;
 			_nodeStateRequestChannels = new Dictionary<string, Channel<NodeState>>();
-			_allUpdatesChannelBag = new ConcurrentDictionary<Channel<NodeStateUpdate>, object?>();
+			_allUpdatesChannels = new ConcurrentDictionary<Channel<NodeStateUpdate>, object?>();
 			_nodeStates = new ConcurrentDictionary<string, NodeState>();
 			_logger = logger;
 
@@ -43,7 +43,7 @@ namespace Lightning.Controller.Lifetime
 		public async IAsyncEnumerable<NodeStateUpdate> GetAllNodeStatesAllAsync([EnumeratorCancellation]CancellationToken token = default)
 		{
 			var channel = Channel.CreateUnbounded<NodeStateUpdate>();
-			_allUpdatesChannelBag.TryAdd(channel, null);
+			_allUpdatesChannels.TryAdd(channel, null);
 			try
 			{
 				await foreach (var state in channel.Reader.ReadAllAsync(token))
@@ -54,7 +54,7 @@ namespace Lightning.Controller.Lifetime
 			finally
 			{
 				channel.Writer.Complete();
-				_allUpdatesChannelBag.TryRemove(channel, out _);
+				_allUpdatesChannels.TryRemove(channel, out _);
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace Lightning.Controller.Lifetime
 		public async Task SetNodeStateResponseAsync(string nodeId, NodeState state, CancellationToken token = default)
 		{
 			_logger?.LogInformation("Node {nodeId} state update: {state}", nodeId, state);
-			var list = _allUpdatesChannelBag.Keys.ToArray();
+			var list = _allUpdatesChannels.Keys.ToArray();
 			foreach (var channel in list)
 			{
 				try

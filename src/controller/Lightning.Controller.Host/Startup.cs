@@ -72,6 +72,7 @@ namespace Lightning.Controller.Host
 
 				//SignalR Services
 				endpoints.MapHub<NodesHubReceiver>("/hubs/nodes");
+				endpoints.MapHub<LiveHubReceiver>("/hubs/live");
 			});
 		}
 	}

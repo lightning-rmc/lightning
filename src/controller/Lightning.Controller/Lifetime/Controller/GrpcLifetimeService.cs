@@ -86,7 +86,7 @@ namespace Lightning.Controller.Lifetime
 			{
 				await foreach (var layer in _layerActivationService.GetLayerActivationsAllAsync(context.CancellationToken))
 				{
-					await responseStream.WriteAsync(new LayerActivationMessage { Active = layer.Active, LayerId = layer.LayerId });
+					await responseStream.WriteAsync(new LayerActivationMessage { Active = layer.IsActive, LayerId = layer.LayerId });
 				}
 			}
 			catch 

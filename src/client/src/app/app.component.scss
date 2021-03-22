@@ -30,10 +30,10 @@ $navbar-item-transition: all 0.2s ease-out;
 		height: 2.5rem;
 		width: 2.5rem;
 		fill: rgba(255, 255, 255, 0.25);
-		transition: all 0.2s ease-out;
+		transition: all 0.1s ease-out;
 		&:hover {
 			fill: #fbcf3d;
-			transform: scale(1.1);
+			transform: scale(1.05);
 		}
 	}
 
@@ -46,6 +46,7 @@ $navbar-item-transition: all 0.2s ease-out;
 		background: $color-dark;
 		border: 2px solid darken($color-dark, 5%);
 		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
+		z-index: 100;
 
 		.popup__item {
 			padding: 1rem;
