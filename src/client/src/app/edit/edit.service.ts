@@ -13,6 +13,10 @@ export class EditService {
 		return this.http.get<LayerGroup[]>(`${env.api.url}/layergroups`).toPromise();
 	}
 
+	async getLayerGroup(groupId: string) {
+		return this.http.get<object>(`${env.api.url}/`);
+	}
+
 	async getLayer(layerId: string): Promise<Layer> {
 		return this.http.get<Layer>(`${env.api.url}/layers/${layerId}`).toPromise();
 	}

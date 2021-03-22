@@ -78,11 +78,11 @@ namespace Lightning.Controller.Projects
 
 		public LayerBaseDefinition? TryGetLayer(string id)
 		{
-			if (_project?.LayerGroups is IEnumerable<RenderTreeDefinition> renderTrees)
+			if (_project?.LayerGroups is IEnumerable<LayerGroupDefinition> layerGroups)
 			{
-				foreach (var renderTree in renderTrees)
+				foreach (var layerGroup in layerGroups)
 				{
-					var result = renderTree.TryGetLayer(id);
+					var result = layerGroup.RenderTree.TryGetLayer(id);
 					if (result is not null)
 					{
 						return result;
