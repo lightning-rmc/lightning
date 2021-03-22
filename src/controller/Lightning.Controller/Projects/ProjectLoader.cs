@@ -1,4 +1,4 @@
-using Lightning.Controller.Lifetime;
+using Lightning.Controller.Lifetime.Controller;
 using Lightning.Core.Lifetime;
 using Lightning.Core.Utils;
 using Microsoft.Extensions.Logging;
