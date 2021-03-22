@@ -19,9 +19,9 @@ namespace Lightning.Controller.Lifetime.Layers
 		public async override Task OnConnectedAsync()
 		{
 			var activationStates = _activationService.GetLayerActivationStates();
-			foreach (var state in activationStates)
+			foreach (var (LayerId, IsActive) in activationStates)
 			{
-				await SetLayerActivation(state.LayerId, state.IsActive);
+				await SetLayerActivation(LayerId, IsActive);
 			}
 		}
 
