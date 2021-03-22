@@ -1,6 +1,7 @@
 using Lightning.Controller.Host.Hubs;
 using Lightning.Controller.Lifetime;
 using Lightning.Controller.Lifetime.Contracts;
+using Lightning.Controller.Lifetime.Layers;
 using Lightning.Controller.Media;
 using Lightning.Controller.Projects;
 using Microsoft.AspNetCore.Builder;
