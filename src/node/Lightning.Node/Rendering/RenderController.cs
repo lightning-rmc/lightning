@@ -24,11 +24,8 @@ namespace Lightning.Node.Rendering
 		{
 			if (e.State == NodeState.Live)
 			{
-				_renderTimer.StartTimer();
-				e.AddTask(Task.Run(async () =>
-				{
-					await _renderHost.StartAsync();
-				}));
+				e.AddTask(_renderTimer.StartTimerAsync());
+				e.AddTask(_renderHost.StartAsync());
 
 			}
 

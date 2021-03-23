@@ -22,23 +22,13 @@ namespace Lightning.Core
 			if (services is null)
 				throw new ArgumentNullException(nameof(services));
 
-			services.TryAddSingleton<IConfigurationHandler<RenderConfiguration>, GrpcRenderConfigurationHandler>();
-
 			//TODO:  Make it transient or move it in RenderFactory or something similar.
 			//       To get the possibility for multi instances of a IRenderHost.
 			services.TryAddSingleton<IRenderHost, OpenCVRenderHost>();
-			services.AddGrpcTimer();
 			return services;
 		}
 
-		public static IServiceCollection AddGrpcTimer(this IServiceCollection services)
-		{
-			if (services is null)
-				throw new ArgumentNullException(nameof(services));
-
-			services.TryAddSingleton<IRenderTimer, RenderTimer>();
-			return services;
-		}
+		
 
 
 

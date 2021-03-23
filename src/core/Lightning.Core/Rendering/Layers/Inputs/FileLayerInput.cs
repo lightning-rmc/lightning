@@ -14,6 +14,8 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 		private readonly IMediaResolver _mediaResolver;
 		private readonly ILogger<FileLayerInput>? _logger;
 		private VideoCapture? _videoCapture;
+		private int _startTick = -1;
+		private int actualFrame = 0;
 
 		public FileLayerInput(FileInputLayerDefinition definition, IMediaResolver mediaResolver, ILogger<FileLayerInput>? logger)
 			: base(definition.Filename)
@@ -48,9 +50,19 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 
 		public override Mat Process(int tick)
 		{
+			if (_startTick == -1)
+			{
+				_startTick = tick;
+			}
+			var deltaBetweenTicks = tick - _startTick;
+			if (deltaBetweenTicks < 0)
+			{
+				//TODO: handle it
+				deltaBetweenTicks = 0;
+			}
+			_videoCapture?.Set(VideoCaptureProperties.PosFrames, deltaBetweenTicks);
 			var image = new Mat<Vec3b>();
-			_videoCapture?.Read(image);
-			if (image.Empty())
+			if (_videoCapture?.Read(image) ?? false)
 			{
 				//TODO: Handle Looping
 			}

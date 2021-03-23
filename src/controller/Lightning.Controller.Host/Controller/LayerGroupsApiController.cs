@@ -92,6 +92,18 @@ namespace Lightning.Controller.Host.Controller
 			return new ObjectResult(XamlServices.Save(result.RenderTree));
 		}
 
+		[HttpGet("timerfornode/{nodeId}")]
+		public IActionResult GetLayerGroupTimerForNode([FromRoute] string nodeId)
+		{
+			var result = _projectManager.TryGetLayerGroupForNode(nodeId);
+			if (result is null)
+			{
+				return BadRequest();
+			}
+			//TODO: change to LayerGroup
+			return new ObjectResult(XamlServices.Save(result.TimerConfig));
+		}
+
 
 		[HttpPost("{layerGroupId}/layers")]
 		public IActionResult AddLayerToLayerGroup([FromRoute] string layerGroupId)

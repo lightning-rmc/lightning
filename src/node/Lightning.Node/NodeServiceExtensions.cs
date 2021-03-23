@@ -1,6 +1,7 @@
 using Lightning.Core;
 using Lightning.Core.Media;
 using Lightning.Core.Rendering;
+using Lightning.Core.Rendering.Time;
 using Lightning.Core.Utils;
 using Lightning.Node.Communications;
 using Lightning.Node.Lifetime;
@@ -39,9 +40,18 @@ namespace Lightning.Node
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
 			services.AddCreateOnStartup<RenderController>();
 			services.AddCreateOnStartup<UnobservedExceptionsLoggerService>();
+			services.AddGrpcTimer();
 			return services;
 		}
 
+		public static IServiceCollection AddGrpcTimer(this IServiceCollection services)
+		{
+			if (services is null)
+				throw new ArgumentNullException(nameof(services));
+
+			services.TryAddSingleton<IRenderTimer, NodeRenderTimer>();
+			return services;
+		}
 		public static IServiceCollection AddNodeConfiguration(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.Configure<NodeConfiguration>(configuration.GetSection("Node"));
