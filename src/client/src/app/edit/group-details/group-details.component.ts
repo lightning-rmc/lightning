@@ -18,11 +18,11 @@ export class GroupDetailsComponent implements OnInit, OnDestroy {
 	sink = new SubSink();
 
 	async ngOnInit() {
-		this.sink.sink = this.route.params.subscribe(async (params) => {
-			this.groupId = params.groupId;
-			this.edit.getRenderTrees(this.groupId);
-			this.nodes = await this.nodesService.getNodes();
-		});
+		// this.sink.sink = this.route.params.subscribe(async (params) => {
+		// 	this.groupId = params.groupId;
+		// 	this.edit.getRenderTrees(this.groupId);
+		// 	this.nodes = await this.nodesService.getNodes();
+		// });
 	}
 
 	ngOnDestroy(): void {
