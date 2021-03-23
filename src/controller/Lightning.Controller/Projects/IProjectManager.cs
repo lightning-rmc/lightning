@@ -14,10 +14,12 @@ namespace Lightning.Controller.Projects
 		event EventHandler ProjectLoaded;
 
 		bool IsProjectLoaded { get; }
-		string? ExportProject();
+
+
 		void CreateNewProject();
-		bool ImportProject(string import);
 		void ImportProject(ProjectDefinition import);
+
+		ProjectDefinition? GetProject();
 
 		LayerGroupDefinition? TryGetLayerGroup(string renderTreeId);
 		LayerGroupDefinition? TryGetLayerGroupForNode(string nodeId);
