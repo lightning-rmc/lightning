@@ -26,36 +26,6 @@ namespace Lightning.Controller.Projects
 
 		public bool IsProjectLoaded { get; private set; }
 
-		public string? ExportProject()
-		{
-			if (_project is not null)
-			{
-				return XamlServices.Save(_project);
-			}
-			return null;
-		}
-
-		public bool ImportProject(string import)
-		{
-			//TODO: Check exception handling if Config is broken..
-			try
-			{
-				if (XamlServices.Parse(import) is not ProjectDefinition project)
-				{
-					_logger?.LogError("The project string could not be read in. It is broken! Check manually where the problem is.");
-					return false;
-				}
-				_logger?.LogInformation("Am existing project from string will be created.");
-				ImportProject(project);
-				return true;
-			}
-			catch (Exception e)
-			{
-				_logger?.LogWarning(e, "Could not deserialize the project file.");
-				return false;
-			}
-		}
-
 		public void CreateNewProject()
 		{
 			_logger?.LogInformation("A new project will be created.");
@@ -259,6 +229,11 @@ namespace Lightning.Controller.Projects
 				}
 			}
 			return false;
+		}
+
+		public ProjectDefinition? GetProject()
+		{
+			return _project;
 		}
 	}
 }

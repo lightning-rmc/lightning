@@ -1,8 +1,10 @@
 using Lightning.Controller.Lifetime.Controller;
+using Lightning.Core.Definitions;
 using Lightning.Core.Lifetime;
 using Lightning.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Portable.Xaml;
 using System;
 using System.IO;
 using System.Threading;
@@ -47,9 +49,8 @@ namespace Lightning.Controller.Projects
 						{
 							_logger?.LogWarning("Project with path: '{path}' is empty");
 						}
-						else if (_projectManager.ImportProject(content))
+						else if (ImportProjectFromXAML(content))
 						{
-							_logger?.LogInformation("Successfully import project file from: '{path}'", path);
 							importError = false;
 						}
 						else
@@ -65,19 +66,23 @@ namespace Lightning.Controller.Projects
 					}
 				}));
 			}
-			if (e.State == ControllerState.Shutdown)
-			{
-				//e.AddTask(Task.Run(async () =>
-				//{
-				//	await PersistProjectAsync(e.Token);
-				//},e.Token));
-			}
+
+			//Autosave on shutdown
+			//TODO:Change to flag
+			//if (e.State == ControllerState.Shutdown)
+			//{
+			//	e.AddTask(Task.Run(async () =>
+			//	{
+			//		await PersistProjectAsync(e.Token);
+			//	}, e.Token));
+			//}
 		}
+
 
 		public async Task PersistProjectAsync(CancellationToken token = default)
 		{
 			var path = Path.Combine(Environment.CurrentDirectory, _config.ProjectPath);
-			var project = _projectManager.ExportProject();
+			var project = ExportProjectToXAML();
 			if (project is null)
 			{
 				_logger?.LogWarning("Could not serialize the project. project will not be saved.");
@@ -87,6 +92,38 @@ namespace Lightning.Controller.Projects
 				_logger?.LogInformation("Save project in file: '{path}'", path);
 				//TODO: handle Exceptions
 				await File.WriteAllTextAsync(_config.ProjectPath, project, token);
+			}
+		}
+
+		public string? ExportProjectToXAML()
+		{
+			var project = _projectManager.GetProject();
+			if (project is not null)
+			{
+				return XamlServices.Save(project);
+			}
+			return null;
+		}
+
+		public bool ImportProjectFromXAML(string projectDefinition)
+		{
+			//TODO: Check exception handling if Config is broken..
+			try
+			{
+				if (XamlServices.Parse(projectDefinition) is not ProjectDefinition project)
+				{
+					_logger?.LogError("Error in project file definition, could not parse project");
+					return false;
+				}
+				_logger?.LogDebug("Project import STARTED");
+				_projectManager.ImportProject(project);
+				_logger?.LogDebug("Project import FINISHED");
+				return true;
+			}
+			catch (Exception e)
+			{
+				_logger?.LogWarning(e, "Could not deserialize the project file.");
+				return false;
 			}
 		}
 	}
