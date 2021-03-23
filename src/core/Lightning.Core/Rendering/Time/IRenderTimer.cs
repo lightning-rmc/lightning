@@ -9,10 +9,8 @@ namespace Lightning.Core.Rendering.Time
 	public interface IRenderTimer
 	{
 		bool IsRunning { get; }
-		void StartTimer();
+		Task StartTimerAsync();
 		void StopTimer();
-
-
 		IEnumerable<int> GetTimerTicks();
 	}
 }

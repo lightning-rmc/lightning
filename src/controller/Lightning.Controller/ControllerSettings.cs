@@ -9,5 +9,6 @@ namespace Lightning.Controller
 	public class ControllerSettings
 	{
 		public string ProjectPath { get; set; } = "LightningConfig.xaml";
+		public int TimerInterval { get; set; } = 60;
 	}
 }

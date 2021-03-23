@@ -4,6 +4,7 @@ using Lightning.Controller.Projects;
 using Lightning.Core.Lifetime;
 using Lightning.Core.Utils;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,14 +17,19 @@ namespace Lightning.Controller.Timer
 	{
 		private readonly IControllerStateNotifier _stateNotifier;
 		private readonly ILogger<TimerService>? _logger;
+		private readonly ControllerSettings _settings;
 		private readonly Channel<int> _timerTicksChannel;
 		private int _timerTick;
 
-		public TimerService(IControllerStateNotifier controllerStateNotifier, IProjectManager projectManager,  ILogger<TimerService>? logger = null)
+		public TimerService(IControllerStateNotifier controllerStateNotifier,
+			IOptions<ControllerSettings> options,
+			ILogger<TimerService>? logger = null)
 		{
 			_stateNotifier = controllerStateNotifier;
 			_logger = logger;
+			_settings = options.Value;
 			_stateNotifier.StateChangeRequested += StateNotifier_StateChangeRequested;
+			_timerTicksChannel = Channel.CreateUnbounded<int>();
 		}
 
 		public bool IsActive { get; private set; }
@@ -55,7 +61,7 @@ namespace Lightning.Controller.Timer
 						//Note:The loop has too few instructions
 						//     to benefit from a process time calculation with Stopwatch.
 						_timerTick++;
-						//Thread.Sleep((int)(1000 / (_configuration.FramesPerSecond * _timerInterpolation)));
+						Thread.Sleep((int)(1000f / _settings.TimerInterval));
 					}
 					_logger?.LogInformation("The timer stopped.");
 				}).Start();
