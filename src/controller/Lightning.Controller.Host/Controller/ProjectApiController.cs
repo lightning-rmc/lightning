@@ -1,6 +1,8 @@
 using Lightning.Controller.Projects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
 {
@@ -17,6 +19,22 @@ namespace Lightning.Controller.Host.Controller
 			_projectLoader = projectLoader;
 			_projectManager = projectManager;
 			_logger = logger;
+		}
+
+
+		[HttpPost("project/save")]
+		public async Task<ActionResult> SaveProject()
+		{
+			try
+			{
+				await _projectLoader.PersistProjectAsync();
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				_logger?.LogError(ex, "Error while persisting project");
+				throw;
+			}
 		}
 
 
@@ -56,6 +74,21 @@ namespace Lightning.Controller.Host.Controller
 				{
 					StatusCode = 404
 				};
+			}
+		}
+
+		[HttpDelete("project")]
+		public IActionResult DeleteProjectAndCreateEmpty()
+		{
+			try
+			{
+				_projectManager.CreateNewProject();
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Could not create empty project");
+				throw;
 			}
 		}
 	}

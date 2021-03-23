@@ -9,7 +9,10 @@
 			[class.node-state__error]="node.state === 'Error'"
 			[title]="node.state"
 		></span>
-		<span class="node-name">{{ node.name || node.id }}</span>
+		<span class="node-name">
+			<span *ngIf="node.name">{{ node.name }}</span>
+			<i *ngIf="!node.name">{{ node.id }}</i>
+		</span>
 	</div>
 	<div class="no-nodes-message" *ngIf="nodes?.length == 0">No nodes registered</div>
 </div>

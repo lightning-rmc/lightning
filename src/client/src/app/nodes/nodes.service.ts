@@ -49,4 +49,14 @@ export class NodesService {
 		const nodes = await this.http.get<Node[]>(`${env.api.url}/nodes`).toPromise();
 		return nodes;
 	}
+
+	async getNodeById(nodeId: string) {
+		return await this.http.get<Node>(`${env.api.url}/nodes/${nodeId}`).toPromise();
+	}
+
+	async setNodeName(nodeId: string, nodeName: string) {
+		return await this.http.put<Node>(`${env.api.url}/nodes/${nodeId}/name`, {
+			name: nodeName
+		}).toPromise();
+	}
 }

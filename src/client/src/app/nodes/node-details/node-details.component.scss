@@ -11,6 +11,7 @@
 .property {
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 
 	&__name {
 		flex: 0 0 10rem;

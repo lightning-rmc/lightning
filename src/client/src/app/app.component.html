@@ -7,10 +7,10 @@
 			/>
 		</svg>
 		<ul #menu class="navbar-top__popup" *ngIf="isMenuOpen">
-			<li class="popup__item">New Project</li>
+			<li class="popup__item" (click)="onNewProject()">New Project</li>
 			<li class="popup__item" (click)="onSave()">Save Project</li>
 			<li class="popup__item">Import Project</li>
-			<li class="popup__item">Export Project</li>
+			<li class="popup__item" (click)="onExport()">Export Project</li>
 		</ul>
 	</div>
 	<div class="navbar-items">

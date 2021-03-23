@@ -1,14 +1,5 @@
-<div class="details">
-	<div class="property">
-		<div class="property__name">Id</div>
-		<div class="property__value">{{ node?.id }}</div>
-	</div>
-	<div class="property">
-		<div class="property__name">Name</div>
-		<div class="property__value">{{ node?.name }}</div>
-	</div>
-	<div class="property">
-		<div class="property__name">State</div>
-		<div class="property__value">{{ node?.state }}</div>
-	</div>
-</div>
+<mat-form-field>
+	<mat-label>Name</mat-label>
+	<input matInput [value]="node?.name" (keydown.enter)="setNodeName(nameInput.value)" #nameInput />
+</mat-form-field>
+<button mat-raised-button (click)="setNodeName(nameInput.value)">Set</button>

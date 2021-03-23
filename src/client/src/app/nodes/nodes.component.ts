@@ -35,7 +35,6 @@ export class NodesComponent implements OnInit, OnDestroy {
 
 		// LIVE UPDATE SUBSCRIPTIONS
 		this.subs.sink = this.nodesService.nodeStateChange$.subscribe(async (update) => {
-			console.log('got node state update', update);
 			const node = this.nodes.find((n) => n.id === update.id);
 			if (node) {
 				node.state = update.state;

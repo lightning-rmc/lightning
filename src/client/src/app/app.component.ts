@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FileSaverService } from 'ngx-filesaver';
 import { SubSink } from 'subsink';
 import { EditService } from './edit/edit.service';
 import { NodesService } from './nodes/nodes.service';
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
 		private renderer: Renderer2,
 		private projectService: ProjectService,
 		private nodesService: NodesService,
-		private editService: EditService,
+		private fileSaver: FileSaverService,
 		private notify: NotificationService
 	) {
 		this.renderer.listen('window', 'click', (e: Event) => {
@@ -49,9 +50,30 @@ export class AppComponent implements OnInit {
 	async onSave(): Promise<void> {
 		try {
 			await this.projectService.saveProject();
+			this.notify.info('Saved project successfully');
 			this.isMenuOpen = false;
 		} catch (error) {
 			this.notify.error('Could not save project');
+		}
+	}
+
+	async onNewProject() {
+		try {
+			await this.projectService.newProject();
+			this.isMenuOpen = false;
+		} catch (error) {
+			this.notify.error('Could not create new project');
+		}
+	}
+
+	async onExport() {
+		try {
+			const projectBlob = await this.projectService.exportProject();
+			this.fileSaver.save(projectBlob, 'project.xml');
+			this.isMenuOpen = false;
+		} catch (error) {
+			console.error(error);
+			this.notify.error('Could not export project:\n' + error.message);
 		}
 	}
 }
