@@ -1,16 +1,11 @@
 using Lightning.Controller.Lifetime;
 using Lightning.Controller.Media;
 using Lightning.Controller.Projects;
+using Lightning.Controller.Timer;
 using Lightning.Core.Utils;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lightning.Controller
 {
@@ -27,6 +22,9 @@ namespace Lightning.Controller
 			services.TryAddSingleton<IProjectLoader>(p => p.GetRequiredService<ProjectLoader>());
 			services.AddCreateOnStartup(p => p.GetRequiredService<ProjectLoader>());
 			services.Configure<ControllerSettings>(configuration.GetSection("Controller"));
+			services.TryAddSingleton<TimerService>();
+			services.AddCreateOnStartup(p => p.GetRequiredService<TimerService>());
+			services.TryAddSingleton<ITimerService>(p => p.GetRequiredService<TimerService>());
 			return services;
 		}
 

@@ -32,7 +32,7 @@ namespace Lightning.Node.Rendering
 			{
 				if (e.State == NodeState.Start)
 				{
-					e.AddTask(Task.Run(() =>
+					e.AddTask("Show Window", Task.Run(() =>
 					{
 						ShowWindow();
 					}, e.Token));

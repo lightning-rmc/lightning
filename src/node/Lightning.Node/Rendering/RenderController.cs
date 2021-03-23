@@ -24,8 +24,8 @@ namespace Lightning.Node.Rendering
 		{
 			if (e.State == NodeState.Live)
 			{
-				e.AddTask(_renderTimer.StartTimerAsync());
-				e.AddTask(_renderHost.StartAsync());
+				e.AddTask("Start Timer",_renderTimer.StartTimerAsync());
+				e.AddTask("Start Renderhost",_renderHost.StartAsync());
 
 			}
 
@@ -33,6 +33,9 @@ namespace Lightning.Node.Rendering
 			{
 				_renderTimer.StopTimer();
 				_renderHost.Stop();
+				//Note: No need for Adding Task.CompletedTask, it's only for logging propose.
+				e.AddTask("Stop Timer",Task.CompletedTask);
+				e.AddTask("Stop RenderHost",Task.CompletedTask);
 			}
 		}
 	}

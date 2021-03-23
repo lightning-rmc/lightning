@@ -1,6 +1,4 @@
-using Lightning.Controller.Lifetime;
 using Lightning.Controller.Lifetime.Controller;
-using Lightning.Controller.Projects;
 using Lightning.Core.Lifetime;
 using Lightning.Core.Utils;
 using Microsoft.Extensions.Logging;
@@ -13,7 +11,7 @@ using System.Threading.Channels;
 
 namespace Lightning.Controller.Timer
 {
-	public class TimerService : ICreateOnStartup
+	public class TimerService : ICreateOnStartup, ITimerService
 	{
 		private readonly IControllerStateNotifier _stateNotifier;
 		private readonly ILogger<TimerService>? _logger;
@@ -53,7 +51,8 @@ namespace Lightning.Controller.Timer
 			if (!IsActive)
 			{
 				IsActive = true;
-				_ = new Thread(TimerCallback);
+				_logger?.LogDebug("Start global Timer with  timer interval: {interval}", _settings.TimerInterval);
+				new Thread(TimerCallback).Start();
 				new Thread(() =>
 				{
 					while (IsActive)
@@ -78,20 +77,19 @@ namespace Lightning.Controller.Timer
 		}
 
 
-		public IAsyncEnumerable<int> GetTimerTicks()
+		public IAsyncEnumerable<int> GetTimerTicks(CancellationToken token = default)
 		{
-			return _timerTicksChannel.Reader.ReadAllAsync();
+			return _timerTicksChannel.Reader.ReadAllAsync(token);
 		}
 
 		private void TimerCallback()
 		{
-			var timerTicks = 0;
 			var stopwatch = new Stopwatch();
 			var synchronisationInterval = 10;
 			stopwatch.Start();
-			while (!IsActive)
+			while (IsActive)
 			{
-				_timerTicksChannel.Writer.TryWrite(timerTicks);
+				_timerTicksChannel.Writer.TryWrite(_timerTick);
 
 				//Calculate next duration
 				var duration = stopwatch.ElapsedMilliseconds;
@@ -102,7 +100,7 @@ namespace Lightning.Controller.Timer
 
 				if (_logger?.IsEnabled(LogLevel.Debug) ?? false)
 				{
-					_logger?.ReportTimerCycle(sleepDuration, duration, timerTicks, DateTime.UtcNow);
+					_logger?.ReportTimerCycle(sleepDuration, duration, _timerTick, DateTime.UtcNow);
 				}
 
 				Thread.Sleep(sleepDuration);

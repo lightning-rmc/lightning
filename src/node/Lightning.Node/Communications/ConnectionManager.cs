@@ -39,7 +39,7 @@ namespace Lightning.Node.Communications
 			{
 				if (e.State == NodeState.Connected)
 				{
-					e.AddTask(SearchAndAuthenticateForServerAsync(e.Token));
+					e.AddTask("Connect to Server",SearchAndAuthenticateForServerAsync(e.Token));
 				}
 			};
 		}

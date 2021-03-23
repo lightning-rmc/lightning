@@ -91,7 +91,7 @@ namespace Lightning.Node.Rendering
 				IsRunning = true;
 				new Thread(TimerClock).Start();
 				_grpcCts = new CancellationTokenSource();
-				_ = SychroniseTimers(_grpcCts.Token);
+				_ = Task.Run(async () => await SychroniseTimersAsync(_grpcCts.Token), _grpcCts.Token);
 			}
 			else
 			{
@@ -107,7 +107,12 @@ namespace Lightning.Node.Rendering
 				//     to benefit from a process time calculation with Stopwatch.
 				if (_grpcTick is not null)
 				{
-					_timerTick = _grpcTick.Value;
+					var tempTick = _grpcTick.Value;
+					if (Math.Abs(tempTick - _timerTick) > 20)
+					{
+						_logger?.LogDebug("Controller tick and node tick getting synchronized, controller tick: '{ctick}' node tick: '{ntick}'", tempTick, _timerTick);
+						_timerTick = _grpcTick.Value;
+					}
 					_grpcTick = null;
 				}
 				else
@@ -132,13 +137,14 @@ namespace Lightning.Node.Rendering
 			}
 		}
 
-		private async Task SychroniseTimers(CancellationToken token = default)
+		private async Task SychroniseTimersAsync(CancellationToken token = default)
 		{
 			var client = _connectionManager.GetTimeServiceClient();
-			var stream = client.GetSychronisationStream(new());
+			var stream = client.GetSychronisationStream(new(), cancellationToken: token);
 
 			await foreach (var timeStamp in stream.ResponseStream.ReadAllAsync(token))
 			{
+				_logger?.LogDebug("New timer tick from controller tick: '{tick}'.", timeStamp.Tick);
 				_grpcTick = timeStamp.Tick;
 			}
 		}

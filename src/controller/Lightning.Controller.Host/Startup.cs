@@ -3,6 +3,7 @@ using Lightning.Controller.Lifetime.Layers;
 using Lightning.Controller.Lifetime.Nodes;
 using Lightning.Controller.Media;
 using Lightning.Controller.Projects;
+using Lightning.Controller.Timer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -66,6 +67,7 @@ namespace Lightning.Controller.Host
 				endpoints.MapGrpcService<GrpcNodeLifetimeService>();
 				endpoints.MapGrpcService<GrpcConfigurationService>();
 				endpoints.MapGrpcService<GrpcMediaService>();
+				endpoints.MapGrpcService<GrpcTimerService>();
 
 				//API Services
 				endpoints.MapControllers();

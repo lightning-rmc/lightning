@@ -36,7 +36,7 @@ namespace Lightning.Controller.Projects
 		{
 			if (e.State == ControllerState.Start)
 			{
-				e.AddTask(Task.Run(async () =>
+				e.AddTask("Load Project",Task.Run(async () =>
 				{
 					var importError = true;
 					var path = Path.Combine(Environment.CurrentDirectory, _config.ProjectPath);
