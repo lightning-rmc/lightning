@@ -1,10 +1,8 @@
-using Lightning.Core.Configuration;
 using Lightning.Core.Definitions;
 using Lightning.Core.Media;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using System;
-using System.IO;
 
 namespace Lightning.Core.Rendering.Layers.Inputs
 {
@@ -15,7 +13,7 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 		private readonly ILogger<FileLayerInput>? _logger;
 		private VideoCapture? _videoCapture;
 		private int _startTick = -1;
-		private int actualFrame = 0;
+		private int _lastFrame = 0;
 
 		public FileLayerInput(FileInputLayerDefinition definition, IMediaResolver mediaResolver, ILogger<FileLayerInput>? logger)
 			: base(definition.Filename)
@@ -54,13 +52,15 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 			{
 				_startTick = tick;
 			}
-			var deltaBetweenTicks = tick - _startTick;
-			if (deltaBetweenTicks < 0)
+			var actualFrame = tick - _startTick;
+			var delta = actualFrame - _lastFrame;
+			_lastFrame = actualFrame;
+			if (delta > 10)
 			{
-				//TODO: handle it
-				deltaBetweenTicks = 0;
+				_videoCapture?.Set(VideoCaptureProperties.PosFrames, actualFrame);
+				Console.WriteLine("set pos, actual frame: '" + actualFrame + "' and delta: '" + delta + "'");
 			}
-			_videoCapture?.Set(VideoCaptureProperties.PosFrames, deltaBetweenTicks);
+			//Console.WriteLine("deltaTicks:" + deltaBetweenTicks);
 			var image = new Mat<Vec3b>();
 			if (_videoCapture?.Read(image) ?? false)
 			{
@@ -72,6 +72,7 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 		public override void Reset()
 		{
 			_videoCapture = CreateVideoCapture(_definition.Filename);
+			_startTick = -1;
 		}
 	}
 }

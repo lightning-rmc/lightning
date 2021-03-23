@@ -14,5 +14,4 @@ message RequestTimestampStream {
 
 message TimestampMessage {
 	int32 tick = 1;
-	int32 type = 2;
 }

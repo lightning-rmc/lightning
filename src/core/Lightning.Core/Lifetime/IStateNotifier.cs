@@ -13,11 +13,11 @@ namespace Lightning.Core.Lifetime
 
 	public class StateChangeRequestEventArgs<TState> : EventArgs
 	{
-		private readonly List<Task> _tasks;
+		private readonly List<(string Name, Task Task)> _tasks;
 		public StateChangeRequestEventArgs(TState request, string? nodeId = null, CancellationToken token = default)
 		{
 			NodeId = nodeId;
-			_tasks = new List<Task>();
+			_tasks = new List<(string, Task)>();
 			State = request;
 			Token = token;
 		}
@@ -26,10 +26,10 @@ namespace Lightning.Core.Lifetime
 		public TState State { get; }
 		public CancellationToken Token { get; }
 
-		public void AddTask(Task task)
-			=> _tasks.Add(task);
+		public void AddTask(string name, Task task)
+			=> _tasks.Add((name, task));
 
-		public IReadOnlyCollection<Task> Tasks => _tasks;
+		public IReadOnlyCollection<(string Name, Task Task)> Tasks => _tasks;
 	}
 
 	public class StateChangedResponseEventArgs<TState> : EventArgs

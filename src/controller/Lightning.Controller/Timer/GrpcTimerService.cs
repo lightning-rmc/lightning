@@ -12,14 +12,25 @@ namespace Lightning.Controller.Timer
 
 	public class GrpcTimerService : Core.Generated.GrpcTimeService.GrpcTimeServiceBase
 	{
-		public GrpcTimerService()
-		{
+		private readonly ITimerService _timerService;
 
+		public GrpcTimerService(ITimerService timerService)
+		{
+			_timerService = timerService;
 		}
 
 		public override async Task GetSychronisationStream(RequestTimestampStream request, IServerStreamWriter<TimestampMessage> responseStream, ServerCallContext context)
 		{
-
+			try
+			{
+				await foreach (var tick in _timerService.GetTimerTicks(context.CancellationToken))
+				{
+					await responseStream.WriteAsync(new() { Tick = tick });
+				}
+			}
+			catch (OperationCanceledException e)
+			{
+			}
 		}
 	}
 }

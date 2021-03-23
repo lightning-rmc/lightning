@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -37,8 +38,15 @@ namespace Lightning.Core.Lifetime
 
 			if (eventArgs.Tasks.Count > 0)
 			{
-				_logger?.LogDebug("{count} services registered tasks for command request: {request}", eventArgs.Tasks.Count, state);
-				await Task.WhenAll(eventArgs.Tasks);
+				var namedTasks = eventArgs.Tasks;
+				string str = "";
+				foreach (var name in namedTasks.Select(n => n.Name))
+				{
+					str += $"{Environment.NewLine}   - Task with Name: '{name}'.";
+				}
+				_logger?.LogDebug("{count} services registered tasks for command request: {request}" + str, eventArgs.Tasks.Count, state);
+
+				await Task.WhenAll(namedTasks.Select(n => n.Task));
 			}
 			else
 			{
