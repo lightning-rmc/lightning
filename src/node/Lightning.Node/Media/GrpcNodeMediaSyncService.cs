@@ -1,12 +1,13 @@
 using Grpc.Core;
 using Lightning.Core.Generated;
+using Lightning.Core.Utils;
 using Lightning.Node.Communications;
 using Lightning.Node.Lifetime;
 using Microsoft.Extensions.Logging;
 
 namespace Lightning.Node.Media
 {
-	internal class GrpcNodeMediaSyncService
+	internal class GrpcNodeMediaSyncService : ICreateOnStartup
 	{
 		private readonly INodeStateNotifier _nodeStateNotifier;
 		private readonly IConnectionManager _connectionManager;
@@ -27,6 +28,7 @@ namespace Lightning.Node.Media
 
 					await foreach (var update in result.ResponseStream.ReadAllAsync())
 					{
+						logger.LogDebug("Media update: {type} {filename}", update.UpdateType.ToString(), update.FileName);
 						switch (update.UpdateType)
 						{
 							case UpdateType.Add:

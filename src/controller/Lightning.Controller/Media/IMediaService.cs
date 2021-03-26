@@ -14,7 +14,7 @@ namespace Lightning.Controller.Media
 
 		Task SaveFileAsync(IFormFile file);
 
-		void DeleteFile(string filename);
+		Task DeleteFileAsync(string filename);
 
 		bool ExistsMedia(string filename);
 

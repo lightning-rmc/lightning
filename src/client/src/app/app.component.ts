@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 	@ViewChild('toggleButton') toggleButton!: ElementRef;
 	@ViewChild('menu') menu!: ElementRef;
 
-	isMenuOpen = true;
+	isMenuOpen = false;
 
 	notifications: Notification[] = [];
 

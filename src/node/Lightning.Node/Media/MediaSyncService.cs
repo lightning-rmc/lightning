@@ -38,9 +38,9 @@ namespace Lightning.Node.Media
 			if (e.State == Core.Lifetime.NodeState.Connected)
 			{
 				var sw = Stopwatch.StartNew();
-				_logger.LogInformation("Node connected to controller, starting media sync");
+				_logger.LogInformation("STARTING media sync");
 				await TrySyncMediaAsync();
-				_logger.LogInformation("Media syncing finished after {elapsed}s", sw.Elapsed.TotalSeconds);
+				_logger.LogInformation("FINISHED media sync after {elapsed}s", sw.Elapsed.TotalSeconds);
 			}
 		}
 
