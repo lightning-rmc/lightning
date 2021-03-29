@@ -49,11 +49,10 @@ $navbar-item-transition: all 0.2s ease-out;
 		z-index: 100;
 
 		.popup__item {
+			display: block;
 			padding: 1rem;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 
-			&:not(:last-child) {
-				border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-			}
 			&:hover {
 				background: transparentize($color-primary, 0.8);
 				cursor: pointer;

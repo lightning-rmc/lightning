@@ -76,4 +76,18 @@ export class AppComponent implements OnInit {
 			this.notify.error('Could not export project:\n' + error.message);
 		}
 	}
+
+	async handleFileInput(files: FileList) {
+		if (files.length === 1) {
+			const file = files.item(0)!;
+			const projectText = await file.text();
+			try {
+				await this.projectService.importProject(projectText);
+				this.isMenuOpen = false;
+			} catch (error) {
+				console.error(error);
+				this.notify.error('Could not import project, check server log for details');
+			}
+		}
+	}
 }

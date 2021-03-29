@@ -36,6 +36,7 @@ namespace Lightning.Node
 			services.TryAddSingleton<INodeStateReceiver>(p => p.GetRequiredService<NodeCommandHandler>());
 			services.TryAddSingleton<INodeStateNotifier>(p => p.GetRequiredService<NodeCommandHandler>());
 			services.AddHostedService<NodeStateBootstrapper>();
+			//services.AddCreateOnStartup<GrpcNodeMediaSyncService>();
 			//TODO: Refactor find right place
 			services.TryAddSingleton<IMediaResolver, NodeMediaResolver>();
 			services.AddCreateOnStartup<RenderController>();

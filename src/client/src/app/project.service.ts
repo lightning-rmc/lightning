@@ -20,4 +20,14 @@ export class ProjectService {
 	async exportProject() {
 		return this.http.get(`${env.api.url}/project.xml`, { responseType: 'blob' }).toPromise();
 	}
+
+	async importProject(projectDefinition: string) {
+		return this.http
+			.post(`${env.api.url}/project`, JSON.stringify(projectDefinition), {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			.toPromise();
+	}
 }

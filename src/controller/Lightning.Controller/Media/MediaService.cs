@@ -72,11 +72,12 @@ namespace Lightning.Controller.Media
 			=> _updates.Reader.ReadAllAsync();
 
 
-		public void DeleteFile(string filename)
+		public async Task DeleteFileAsync(string filename)
 		{
 			var path = Path.Combine(_settings.StoragePath, filename);
 			_logger.LogDebug("path: {}", path);
 			File.Delete(path);
+			await _updates.Writer.WriteAsync((filename, UpdateType.DELETED));
 		}
 
 		public bool ExistsMedia(string filename)

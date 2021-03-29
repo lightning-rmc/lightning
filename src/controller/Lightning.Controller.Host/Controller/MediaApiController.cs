@@ -1,14 +1,14 @@
 using Lightning.Controller.Host.DTO;
 using Lightning.Controller.Media;
-using Lightning.Core.Definitions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Lightning.Controller.Host.Controller
 {
@@ -16,21 +16,24 @@ namespace Lightning.Controller.Host.Controller
 	[ApiController]
 	public class MediaApiController : ControllerBase
 	{
-		private readonly string MEDIA_ENDPOINT_PREFIX = "http://localhost:5000/media/";
 		private readonly IMediaService _mediaService;
 		private readonly ILogger _logger;
+		private readonly IConfiguration _configuration;
 
-		public MediaApiController(IMediaService mediaService, ILogger<MediaApiController> logger)
+		public MediaApiController(IMediaService mediaService, ILogger<MediaApiController> logger, IConfiguration configuration)
 		{
 			_mediaService = mediaService;
 			_logger = logger;
+			_configuration = configuration;
 		}
+
 
 		[HttpGet]
 		public IEnumerable<MediaDTO> GetStoredFiles([FromQuery] bool useCache = true)
 		{
 			_logger.LogDebug("use cache: {}", useCache);
 			var files = _mediaService.GetFiles(useCache);
+
 			return files.Select(f => new MediaDTO
 			{
 				Name = f.Name,
@@ -39,16 +42,19 @@ namespace Lightning.Controller.Host.Controller
 				ModifiedOn = f.ModifiedOn,
 				Size = f.Size,
 				Hash = f.Hash,
-				_self = new Uri(MEDIA_ENDPOINT_PREFIX + f.Name)
+				_self = _configuration["Media:AccessPath"].EndsWith("/")
+					? new Uri(_configuration["Media:AccessPath"] + f.Name)
+					: new Uri(_configuration["Media:AccessPath"] + "/" + f.Name)
 			});
 		}
 
+
 		[HttpDelete("{filename}")]
-		public IActionResult DeleteMedia([FromRoute] string filename)
+		public async Task<IActionResult> DeleteMedia([FromRoute] string filename)
 		{
 			try
 			{
-				_mediaService.DeleteFile(filename);
+				await _mediaService.DeleteFileAsync(filename);
 				return Ok();
 			}
 			catch (FileNotFoundException)
@@ -56,6 +62,7 @@ namespace Lightning.Controller.Host.Controller
 				return NotFound();
 			}
 		}
+
 
 		[HttpPost("upload")]
 		[DisableRequestSizeLimit]
@@ -80,6 +87,7 @@ namespace Lightning.Controller.Host.Controller
 			return Ok(results);
 		}
 	}
+
 
 	record UploadDetails(bool Success, string? ErrorMessage = null);
 }

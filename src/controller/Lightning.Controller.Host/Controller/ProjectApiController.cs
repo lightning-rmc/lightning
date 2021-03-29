@@ -38,6 +38,26 @@ namespace Lightning.Controller.Host.Controller
 		}
 
 
+		[HttpPost("project")]
+		public ActionResult ImportProject([FromBody] string body)
+		{
+			_logger?.LogDebug("Request body content: {project}", body);
+			if (body is null)
+			{
+				return BadRequest();
+			}
+
+			if (_projectLoader.ImportProjectFromXAML(body))
+			{
+				return Ok();
+			}
+			else
+			{
+				throw new Exception("Project could not be imported");
+			}
+		}
+
+
 		[HttpGet("project")]
 		[HttpGet("project.json")]
 		[Produces("application/json")]
@@ -53,6 +73,7 @@ namespace Lightning.Controller.Host.Controller
 				return NotFound();
 			}
 		}
+
 
 		[HttpGet("project.xml")]
 		[Produces("application/xml")]
