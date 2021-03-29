@@ -58,9 +58,7 @@ namespace Lightning.Core.Rendering.Layers.Inputs
 			if (delta > 10)
 			{
 				_videoCapture?.Set(VideoCaptureProperties.PosFrames, actualFrame);
-				Console.WriteLine("set pos, actual frame: '" + actualFrame + "' and delta: '" + delta + "'");
 			}
-			//Console.WriteLine("deltaTicks:" + deltaBetweenTicks);
 			var image = new Mat<Vec3b>();
 			if (_videoCapture?.Read(image) ?? false)
 			{

@@ -16,6 +16,11 @@ namespace Lightning.Controller.Host
 			GenericHost.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+					webBuilder.ConfigureKestrel(o =>
+					{
+						o.ListenAnyIP(5000);
+						o.ListenAnyIP(5001, opt => opt.UseHttps());
+					});
                     webBuilder.UseStartup<Startup>();
                 });
     }

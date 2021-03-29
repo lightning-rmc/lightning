@@ -88,29 +88,53 @@ namespace Lightning.Node.Communications
 			collection.AddGrpcClient<GrpcProjectEditService.GrpcProjectEditServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-
-
-			}).AddInterceptor<NodeIdInterceptor>();
+			}).AddInterceptor<NodeIdInterceptor>()
+			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			});
 			collection.AddGrpcClient<GrpcLifetimeService.GrpcLifetimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-			}).AddInterceptor<NodeIdInterceptor>();
+			}).AddInterceptor<NodeIdInterceptor>()
+			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			});
 			collection.AddGrpcClient<GrpcMediaSyncService.GrpcMediaSyncServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-			}).AddInterceptor<NodeIdInterceptor>();
+			}).AddInterceptor<NodeIdInterceptor>()
+			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			});
 			collection.AddGrpcClient<GrpcTimeService.GrpcTimeServiceClient>(opt =>
 			{
 				opt.Address = baseUri;
-			}).AddInterceptor<NodeIdInterceptor>();
+			}).AddInterceptor<NodeIdInterceptor>()
+			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			});
 			collection.AddHttpClient(_httpClientName, client =>
 			{
 				client.BaseAddress = baseUri;
 			});
+			//}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			//{
+			//	ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			//});
 			_serviceProvider = collection.BuildServiceProvider();
 
 			//TODO: Handle Response
-			_ = await GetLifetimeServiceClient().ConnectAsync(new());
+			var r = GetLifetimeServiceClient().ConnectAsync(new());
+			await r.ResponseAsync.ContinueWith(t =>
+			{
+				_logger?.LogInformation(t.Exception?.ToString());
+				_logger?.LogInformation(t.Exception?.InnerException?.ToString());
+				_logger?.LogInformation($"is faulted: {t.IsFaulted}");
+			});
 		}
 
 		public void Dispose()

@@ -19,6 +19,7 @@ namespace Lightning.Controller.Lifetime.Layers
 					await context.Clients.All.LayerActivationChangedAsync(layerId, isActive);
 				}
 			});
+			//TODO: continue with
 		}
 	}
 }
