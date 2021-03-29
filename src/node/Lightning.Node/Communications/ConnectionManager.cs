@@ -39,7 +39,7 @@ namespace Lightning.Node.Communications
 			{
 				if (e.State == NodeState.Connected)
 				{
-					e.AddTask("Connect to Server",SearchAndAuthenticateForServerAsync(e.Token));
+					e.AddTask("Connect to Server", SearchAndAuthenticateForServerAsync(e.Token));
 				}
 			};
 		}
@@ -120,11 +120,10 @@ namespace Lightning.Node.Communications
 			collection.AddHttpClient(_httpClientName, client =>
 			{
 				client.BaseAddress = baseUri;
+			}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 			});
-			//}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-			//{
-			//	ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-			//});
 			_serviceProvider = collection.BuildServiceProvider();
 
 			//TODO: Handle Response
