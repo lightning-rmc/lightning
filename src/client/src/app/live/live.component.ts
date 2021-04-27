@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ControllerService } from '../controller.service';
+import { ControllerService, ControllerState } from '../controller.service';
 import { NotificationService } from '../shared/notifications/notification.service';
 import { LiveService } from './live.service';
 
@@ -12,6 +12,11 @@ export class LiveComponent implements OnInit {
 	constructor(private notify: NotificationService, private controller: ControllerService) {}
 
 	ngOnInit(): void {}
+
+
+	canExit() {
+		return this.controller.state !== ControllerState.Live;
+	}
 
 
 	async setLive() {

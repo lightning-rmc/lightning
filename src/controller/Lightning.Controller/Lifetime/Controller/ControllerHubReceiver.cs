@@ -14,7 +14,6 @@ namespace Lightning.Controller.Lifetime.Controller
 
 		public async Task GoLive()
 		{
-
 			await _controllerStateReceiver.InvokeStateChangeAsync(ControllerState.Live);
 		}
 

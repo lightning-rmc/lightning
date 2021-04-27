@@ -10,7 +10,7 @@ import { NotificationService } from '../shared/notifications/notification.servic
 export class LiveService {
 	connection: HubConnection;
 
-	private layerActivationChangedSubject = new Subject<{ layerId: string, isActive: boolean }>();
+	private layerActivationChangedSubject = new Subject<{ layerId: string; isActive: boolean }>();
 
 	constructor(private notify: NotificationService) {
 		this.connection = new HubConnectionBuilder().withUrl(`${env.controller.url}/hubs/live`).build();

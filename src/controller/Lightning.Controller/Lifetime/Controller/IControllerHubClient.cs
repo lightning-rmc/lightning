@@ -8,5 +8,6 @@ namespace Lightning.Controller.Lifetime.Controller
 {
 	public interface IControllerHubClient
 	{
+		Task ControllerStateUpdate(ControllerState state);
 	}
 }
